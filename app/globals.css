@@ -16,6 +16,7 @@
   --rule: rgba(219, 237, 255, 0.42);
   --edge: rgba(219, 237, 255, 0.16);
   --edge-strong: rgba(140, 200, 255, 0.42);
+  --dither-step: 3px;
   --font-serif: "Newsreader Variable", Newsreader, Georgia, serif;
   --font-mono: "Azeret Mono Variable", "SFMono-Regular", Consolas, monospace;
   --display-xl: clamp(3.6rem, 5.5vw, 6.6rem);
@@ -142,7 +143,7 @@ button { color: inherit; }
   background-image: linear-gradient(90deg, var(--rule) 1px, transparent 1px);
   background-position: 0 100%;
   background-repeat: repeat-x;
-  background-size: 3px 1px;
+  background-size: var(--dither-step) 1px;
 }
 
 .section-heading { max-width: 55rem; margin-bottom: clamp(2.8rem, 6vw, 5.5rem); }
@@ -175,6 +176,14 @@ button { color: inherit; }
 }
 
 [data-reveal].is-visible { opacity: 1; transform: none; }
+
+/* A restrained, springy reveal gives the capability objects physical arrival
+   without turning the page into a perpetual motion demo. */
+.feature-card[data-reveal] {
+  transform: translateY(1.875rem) scale(0.96);
+  transition: opacity 0.85s var(--settle) var(--delay, 0ms), transform 0.85s var(--spring) var(--delay, 0ms), border-color 280ms ease, box-shadow 300ms ease;
+}
+.feature-card[data-reveal].is-visible { transform: none; }
 
 /* Header */
 .site-header {
@@ -317,6 +326,16 @@ button { color: inherit; }
   place-items: center;
   padding: 7rem 0 1.75rem;
 }
+.hero-sticky::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(1, 5, 13, 0.76) 0%, rgba(1, 7, 16, 0.48) 34%, transparent 62%),
+    linear-gradient(180deg, rgba(1, 4, 10, 0.28), transparent 22%, rgba(1, 5, 12, 0.34));
+}
 .hero-sky {
   position: absolute;
   inset: -8%;
@@ -348,25 +367,24 @@ button { color: inherit; }
 }
 .sun-haze {
   position: absolute;
-  z-index: -5;
+  z-index: -3;
   width: min(42rem, 58vw);
   aspect-ratio: 1;
   right: 7%;
   top: -24%;
   border-radius: 50%;
-  opacity: calc(0.12 + var(--hero-progress) * 0.28);
+  opacity: calc(0.1 + var(--hero-progress) * 0.22);
   background: rgba(155,211,250,0.3);
   filter: blur(70px);
 }
-.webgl-clouds {
+.hero-shader {
   position: absolute;
   inset: 0;
-  z-index: -2;
+  z-index: -4;
   display: block;
-  opacity: calc(0.68 - var(--cloud-progress) * 0.5);
-  mix-blend-mode: screen;
+  opacity: 0.96;
   pointer-events: none;
-  transition: opacity 80ms linear;
+  transition: opacity 160ms linear;
 }
 .hero-grain {
   position: absolute;
@@ -384,9 +402,9 @@ button { color: inherit; }
   position: absolute;
   width: 76vw;
   height: 88vh;
-  filter: blur(18px) drop-shadow(0 2rem 5rem rgba(0,20,60,0.26));
+  filter: blur(16px) drop-shadow(0 2rem 4rem rgba(0,20,60,0.22));
   will-change: transform, opacity;
-  opacity: calc(0.98 - var(--cloud-progress) * 1.15);
+  opacity: calc(0.42 - var(--cloud-progress) * 0.72);
   background:
     radial-gradient(ellipse at 22% 50%, rgba(244,250,255,0.94) 0 11%, rgba(225,241,251,0.8) 22%, transparent 42%),
     radial-gradient(ellipse at 52% 32%, rgba(235,247,255,0.96) 0 16%, rgba(206,231,248,0.75) 28%, transparent 50%),
@@ -458,11 +476,11 @@ button { color: inherit; }
   align-items: center;
   gap: clamp(0.65rem, 1vw, 1.25rem);
   min-height: calc(100svh - 8.75rem);
-  opacity: calc(0.06 + var(--hero-progress) * 0.94);
+  opacity: calc(0.08 + var(--hero-progress) * 0.92);
   transform: translateY(calc((1 - var(--hero-progress)) * 2.2rem));
   will-change: opacity, transform;
 }
-.hero-content.shell { width: min(100% - clamp(3rem, 10vw, 18rem), 102rem); }
+.hero-content.shell { width: min(100% - clamp(3rem, 10vw, 18rem), 96rem); }
 .hero-copy { grid-column: 1 / span 5; max-width: 43rem; }
 .hero-kicker {
   display: flex;
@@ -712,6 +730,17 @@ button { color: inherit; }
 
 /* Capability cards */
 .agent-section { background: var(--void); }
+.agent-section > .agent-dither-field {
+  position: absolute;
+  inset: -12rem -8rem auto;
+  z-index: 0;
+  display: block;
+  height: 34rem;
+  opacity: 0.16;
+  pointer-events: none;
+  mask-image: radial-gradient(ellipse at 46% 8%, #000 0%, rgba(0,0,0,0.72) 37%, transparent 74%);
+}
+.agent-section > .shell { position: relative; z-index: 1; }
 .agent-section::before {
   content: "";
   position: absolute;
@@ -849,7 +878,7 @@ button { color: inherit; }
 @keyframes appGridPulse { 50%{background:rgba(24,72,116,.78);border-color:rgba(140,200,255,.4);transform:translateY(-.15rem)} }
 @keyframes signalMove { to{transform:translateX(calc(-50% - .5rem))} }
 
-@media (max-width: 1024px) {
+@media (max-width: 900px) {
   .hero-scroll { height: auto; }
   .hero-sticky { position: relative; min-height: auto; display: block; padding: 7.5rem 0 5.5rem; }
   .hero-content.shell { width: min(100% - 3rem, 56rem); }
@@ -858,7 +887,7 @@ button { color: inherit; }
   .phone-stage { grid-column: auto; width: min(100%, 52rem); min-height: 62rem; padding: 1rem 1.5rem; }
   .iphone-shell { width: min(28rem, calc(100vw - 6rem)); max-width: none; }
   .cloud-curtain { display: none; }
-  .webgl-clouds { opacity: 0.16; }
+  .hero-shader { opacity: 0.18; }
   .hero-frame { opacity: 1; }
   .hero-sky::before { opacity: 0.18; }
   .sun-haze { opacity: 0.3; }
@@ -909,5 +938,5 @@ button { color: inherit; }
   html { scroll-behavior:auto }
   *,*::before,*::after { animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important }
   [data-reveal] { opacity:1;transform:none;transition:none }
-  .signal-track,.app-icon{animation:none}.webgl-clouds{display:none}.cloud-curtain{display:none}.hero-scroll{height:auto}.hero-sticky{position:relative}.hero-content{opacity:1;transform:none}.hero-frame{opacity:1}
+  .signal-track,.app-icon{animation:none}.hero-shader{display:none}.cloud-curtain{display:none}.hero-scroll{height:auto}.hero-sticky{position:relative}.hero-content{opacity:1;transform:none}.hero-frame{opacity:1}
 }

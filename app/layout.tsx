@@ -46,6 +46,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <Analytics />
         <SpeedInsights />
         <Script src="/vendor/dither-kit.js" strategy="afterInteractive" />
+        <Script src="/vendor/wz-atmosphere.js" strategy="afterInteractive" />
       </body>
     </html>
   );

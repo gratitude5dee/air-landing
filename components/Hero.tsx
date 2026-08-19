@@ -212,17 +212,19 @@ function IPhoneDemo() {
 
 export function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
+  const skyRef = useRef<HTMLElement>(null);
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const staticHero = window.matchMedia("(max-width: 900px)");
     let frame = 0;
 
     const update = () => {
       frame = 0;
       const section = sectionRef.current;
       if (!section) return;
-      if (reduced.matches) {
+      if (reduced.matches || staticHero.matches) {
         setProgress(1);
         return;
       }
@@ -237,13 +239,35 @@ export function Hero() {
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onScroll);
     reduced.addEventListener("change", update);
+    staticHero.addEventListener("change", update);
     return () => {
       if (frame) cancelAnimationFrame(frame);
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
       reduced.removeEventListener("change", update);
+      staticHero.removeEventListener("change", update);
     };
   }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+    const setShaderProgress = () => {
+      if (cancelled || !skyRef.current) return;
+      // `progress` is a custom-element property, not an attribute. Waiting for
+      // definition avoids shadowing its setter while the afterInteractive script loads.
+      (skyRef.current as HTMLElement & { progress: number }).progress = progress;
+    };
+
+    if (customElements.get("wz-sky")) {
+      setShaderProgress();
+    } else {
+      customElements.whenDefined("wz-sky").then(setShaderProgress);
+    }
+
+    return () => {
+      cancelled = true;
+    };
+  }, [progress]);
 
   const heroStyle = {
     "--cloud-progress": progress,
@@ -255,18 +279,11 @@ export function Hero() {
       <div className="hero-sticky">
         <div className="hero-sky" aria-hidden />
         <div className="sun-haze" aria-hidden />
-        {createElement("dk-clouds", {
+        {createElement("wz-sky", {
+          ref: skyRef,
           "aria-hidden": "true",
-          className: "webgl-clouds",
-          from: "blue",
-          fade: "",
-          pixel: "6",
-          scale: "1.12",
-          speed: "0.45",
-          cover: "0.24",
-          density: "2.7",
-          wind: "0.6",
-          "wind-radius": "360",
+          className: "hero-shader",
+          rays: "0.86",
         })}
         <div className="cloud-curtain" aria-hidden>
           <div className="cloud-bank bank-one" />

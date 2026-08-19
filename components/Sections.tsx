@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { createElement } from "react";
 import {
   LuArrowRight,
   LuBot,
@@ -128,6 +129,15 @@ const signals = [
 export function AgentFeatures() {
   return (
     <section className="agent-section section" aria-labelledby="agent-title">
+      {createElement("dk-gradient", {
+        "aria-hidden": "true",
+        className: "agent-dither-field",
+        from: "blue",
+        direction: "radial",
+        pixel: "5",
+        bloom: "low",
+        fade: "",
+      })}
       <div className="shell">
         <div className="section-rail"><span>Every agent gets a:</span><span>06 capabilities / one Air</span></div>
         <div className="section-heading" data-reveal>
