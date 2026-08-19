@@ -140,7 +140,7 @@ export function AgentFeatures() {
             <article
               className={`feature-card feature-${visual}`}
               data-reveal
-              style={{ "--delay": `${index * 75}ms` } as React.CSSProperties}
+              style={{ "--delay": `${index * 95}ms` } as React.CSSProperties}
               key={title}
             >
               <div className="feature-top">
