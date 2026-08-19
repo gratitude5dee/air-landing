@@ -269,6 +269,14 @@ export function Hero() {
     };
   }, [progress]);
 
+  useEffect(() => {
+    document.documentElement.dataset.airHeroHeader = progress >= 0.52 ? "revealed" : "covered";
+  }, [progress]);
+
+  useEffect(() => () => {
+    delete document.documentElement.dataset.airHeroHeader;
+  }, []);
+
   const heroStyle = {
     "--cloud-progress": progress,
     "--hero-progress": Math.min(1, progress * 1.55),
