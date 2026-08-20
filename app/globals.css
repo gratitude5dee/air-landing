@@ -207,7 +207,7 @@ button { color: inherit; }
 
 /* The header starts in the hero's lower stacking plane, then settles into its
    usual rail as the foreground cloud curtain has cleared. */
-html[data-air-hero-header="covered"] .site-header {
+html[data-air-hero-header="covered"]:has(.hero-scroll) .site-header {
   z-index: 0;
   opacity: 0.12;
   pointer-events: none;
@@ -1047,7 +1047,7 @@ html[data-air-hero-header="covered"] .site-header:focus-within {
 @keyframes filmPlayhead { from{left:0}to{left:100%} }
 
 @media (max-width: 900px) {
-  html[data-air-hero-header="covered"] .site-header {
+  html[data-air-hero-header="covered"]:has(.hero-scroll) .site-header {
     z-index: 80;
     opacity: 1;
     pointer-events: auto;
@@ -1114,6 +1114,6 @@ html[data-air-hero-header="covered"] .site-header:focus-within {
   html { scroll-behavior:auto }
   *,*::before,*::after { animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important }
   [data-reveal] { opacity:1;transform:none;transition:none }
-  html[data-air-hero-header="covered"] .site-header{z-index:80;opacity:1;pointer-events:auto;filter:none;transform:none;transition:none}
+  html[data-air-hero-header="covered"]:has(.hero-scroll) .site-header{z-index:80;opacity:1;pointer-events:auto;filter:none;transform:none;transition:none}
   .signal-track,.app-icon{animation:none}.hero-shader{display:none}.cloud-curtain{display:none}.hero-scroll{height:auto}.hero-sticky{position:relative}.hero-content{opacity:1;transform:none}.hero-frame{opacity:1}.film-timeline i{animation:none;left:64%}
 }

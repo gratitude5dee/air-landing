@@ -190,7 +190,15 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
 
     const setSkyProgress = () => {
       if (cancelled || !skyRef.current || !customElements.get("wz-sky")) return;
-      (skyRef.current as SkyElement).progress = latestRevealProgress;
+      const sky = skyRef.current as SkyElement;
+      // The opening owns the only full-screen shader while it is actually
+      // revealing the finframe. Once clear, release its render loop so the
+      // page-level atmosphere can take over below the fold without two
+      // full-screen canvases animating at once.
+      const mode = latestRevealProgress >= 0.995 ? "off" : "full";
+      sky.setAttribute("rays", "0.86");
+      if (sky.getAttribute("mode") !== mode) sky.setAttribute("mode", mode);
+      sky.progress = latestRevealProgress;
     };
 
     const handleSkyStatus = (event: Event) => {
@@ -385,8 +393,6 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
             ref: skyRef,
             "aria-hidden": "true",
             className: "hero-shader",
-            mode: cinematicActive ? "full" : "off",
-            rays: "0.86",
           })}
         {cinematicEnabled && (
           <div className="cloud-curtain" aria-hidden>

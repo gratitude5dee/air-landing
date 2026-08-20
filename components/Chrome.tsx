@@ -1,16 +1,19 @@
 import Image from "next/image";
+import Link from "next/link";
 
 import { PreorderButton } from "@/components/Preorder";
 
 export function Header() {
   return (
     <header className="site-header">
-      <a className="brand" href="#top" aria-label="Air by WZRD.tech home">
+      <Link className="brand" href="/" aria-label="Air by WZRD.tech home">
         <span>air by</span>
         <Image src="/images/wzrd-wordmark.png" alt="WZRD.tech" width={1600} height={396} priority />
-      </a>
+      </Link>
       <nav aria-label="Primary navigation">
-        <a href="#how-it-works">how it works</a>
+        <Link href="/how-it-works">how it works</Link>
+        <Link className="nav-optional" href="/text-to-film">text to film</Link>
+        <Link className="nav-optional" href="/capabilities">capabilities</Link>
         <PreorderButton compact />
       </nav>
     </header>
@@ -22,15 +25,17 @@ export function Footer() {
     <footer className="site-footer">
       <div className="shell footer-grid">
         <div>
-          <a className="brand footer-brand" href="#top" aria-label="Air by WZRD.tech home">
+          <Link className="brand footer-brand" href="/" aria-label="Air by WZRD.tech home">
             <span>air by</span>
             <Image src="/images/wzrd-wordmark.png" alt="WZRD.tech" width={1600} height={396} />
-          </a>
+          </Link>
           <p>Your personal creative assistant in your iMessages.</p>
         </div>
         <nav aria-label="Footer navigation">
           <a href="#top">Top</a>
-          <a href="#how-it-works">How it works</a>
+          <Link href="/how-it-works">How it works</Link>
+          <Link href="/text-to-film">Text to film</Link>
+          <Link href="/capabilities">Capabilities</Link>
           <a href="https://wzrd.tech" target="_blank" rel="noreferrer">WZRD.tech ↗</a>
         </nav>
         <div className="footer-meta">

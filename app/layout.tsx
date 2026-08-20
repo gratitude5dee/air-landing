@@ -4,6 +4,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
 import { AmbientCursor } from "@/components/AmbientCursor";
+import { PageAtmosphere } from "@/components/PageAtmosphere";
 import { PreorderProvider } from "@/components/Preorder";
 import { resolveAirFeatureFlags } from "@/lib/feature-flags";
 import "@fontsource-variable/azeret-mono";
@@ -48,6 +49,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body>
         <a className="skip-link" href="#main">Skip to content</a>
         <AmbientCursor />
+        <PageAtmosphere enabled={cinematicEnabled} />
         <noscript>
           <style>{`
             html[data-air-hero-header="covered"] .site-header{z-index:80;opacity:1;pointer-events:auto;filter:none;transform:none}

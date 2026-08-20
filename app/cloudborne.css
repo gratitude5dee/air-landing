@@ -116,7 +116,7 @@ body {
   backdrop-filter: blur(18px) saturate(120%);
 }
 
-html[data-air-hero-header="covered"] .site-header {
+html[data-air-hero-header="covered"]:has(.hero-scroll) .site-header {
   z-index: 0;
   opacity: 0.26;
   filter: blur(8px) saturate(76%);
@@ -1328,6 +1328,10 @@ html[data-air-hydrated="timeout"] .hero-content {
 }
 
 @media (max-width: 1100px) and (min-width: 901px) {
+  .site-header .nav-optional {
+    display: none;
+  }
+
   .hero-content.shell {
     width: min(100% - 3rem, 72rem);
   }
@@ -1346,7 +1350,7 @@ html[data-air-hydrated="timeout"] .hero-content {
 }
 
 @media (max-width: 900px) {
-  html[data-air-hero-header="covered"] .site-header {
+  html[data-air-hero-header="covered"]:has(.hero-scroll) .site-header {
     z-index: 80;
     opacity: 1;
     pointer-events: auto;

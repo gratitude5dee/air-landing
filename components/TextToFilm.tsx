@@ -156,6 +156,10 @@ export function TextToFilm() {
     <section
       ref={sectionRef}
       className="film-section section"
+      data-air-scene="ink"
+      data-air-cloud-progress="0.8"
+      data-air-cloud-rays="0.1"
+      data-air-cloud-opacity="0.15"
       aria-labelledby="film-title"
       data-film-direction={selectedDirection.id}
       data-film-mode={playbackMode}

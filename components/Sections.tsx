@@ -133,7 +133,14 @@ const signals = [
 
 export function AgentFeatures() {
   return (
-    <section className="agent-section section" aria-labelledby="agent-title">
+    <section
+      className="agent-section section"
+      data-air-scene="pearl"
+      data-air-cloud-progress="0.86"
+      data-air-cloud-rays="0.12"
+      data-air-cloud-opacity="0.16"
+      aria-labelledby="agent-title"
+    >
       {createElement("dk-gradient", {
         "aria-hidden": "true",
         className: "agent-dither-field",
@@ -185,7 +192,15 @@ export function AgentFeatures() {
 
 export function WorkflowSignals() {
   return (
-    <section className="signals-section section" id="how-it-works" aria-labelledby="signals-title">
+    <section
+      className="signals-section section"
+      id="how-it-works"
+      data-air-scene="ink"
+      data-air-cloud-progress="0.78"
+      data-air-cloud-rays="0.12"
+      data-air-cloud-opacity="0.16"
+      aria-labelledby="signals-title"
+    >
       <div className="shell signals-heading">
         <div className="section-rail"><span>One thought</span><span>One private thread · Interface preview</span></div>
         <div className="section-heading split" data-reveal>
@@ -256,7 +271,14 @@ export function WorkflowSignals() {
 
 export function ThreadProof() {
   return (
-    <section className="proof-section section" aria-labelledby="proof-title">
+    <section
+      className="proof-section section"
+      data-air-scene="pearl"
+      data-air-cloud-progress="0.88"
+      data-air-cloud-rays="0.08"
+      data-air-cloud-opacity="0.12"
+      aria-labelledby="proof-title"
+    >
       <div className="shell proof-grid">
         <div className="proof-copy" data-reveal>
           <div className="section-rail"><span>The interface</span><span>Messages.app</span></div>
@@ -290,7 +312,14 @@ export function ThreadProof() {
 
 export function ClosingCta() {
   return (
-    <section className="closing-section section" aria-labelledby="closing-title">
+    <section
+      className="closing-section section"
+      data-air-scene="cloud"
+      data-air-cloud-progress="0.74"
+      data-air-cloud-rays="0.2"
+      data-air-cloud-opacity="0.2"
+      aria-labelledby="closing-title"
+    >
       <div className="closing-clouds" aria-hidden />
       <div className="shell closing-inner" data-reveal>
         <div className="closing-orb"><LuSparkles aria-hidden /></div>
