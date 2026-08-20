@@ -26,7 +26,7 @@ export function Footer() {
             <span>air by</span>
             <Image src="/images/wzrd-wordmark.png" alt="WZRD.tech" width={1600} height={396} />
           </a>
-          <p>A creative assistant in your iMessage.</p>
+          <p>Your personal creative assistant in your iMessages.</p>
         </div>
         <nav aria-label="Footer navigation">
           <a href="#top">Top</a>

@@ -1,7 +1,8 @@
 /*
  * Air atmosphere — a focused, lifecycle-aware implementation of the supplied
  * WZRD sky shader. It deliberately owns one WebGL canvas only; the landing's
- * CSS remains the visual fallback when WebGL is unavailable.
+ * CSS remains the visual fallback when WebGL is unavailable. The canvas is
+ * transparent so its cloud veil can reveal the canonical opening artwork.
  */
 (() => {
   "use strict";
@@ -45,9 +46,9 @@ float fB=fbm(uv*vec2(4.8,2.3)-drift*0.65);
 float cloud=smoothstep(0.42,0.78,fA*0.72+fB*0.38+uv.y*0.12);
 float mist=smoothstep(0.18,0.92,fbm(uv*vec2(1.15,2.1)+drift*0.4));
 
-vec3 cloudColor=mix(vec3(0.68,0.82,0.93),vec3(0.98,0.99,1.0),smoothstep(0.38,1.0,fB+uv.y*0.24));
-sky=mix(sky,cloudColor,cloud*(0.92-j*0.7));
-sky+=mist*0.055*vec3(0.75,0.89,1.0)*(1.0-j*0.45);
+vec3 cloudColor=mix(vec3(0.64,0.80,0.93),vec3(0.99,0.995,1.0),smoothstep(0.38,1.0,fB+uv.y*0.24));
+sky=mix(sky,cloudColor,cloud*0.92);
+sky+=mist*0.055*vec3(0.75,0.89,1.0);
 
 vec2 sunP=vec2(0.18,0.84);
 float sun=smoothstep(0.28,0.0,distance(uv,sunP));
@@ -58,13 +59,19 @@ vec2 rc=uv*asp;vec2 rs=sunP*asp;
 vec2 rdir=normalize(vec2(0.42,-1.0));
 float r1=rayStrength(rs,rdir,rc,36.2214,21.11349,1.1);
 float r2=rayStrength(rs,rdir,rc,22.3991,18.0234,0.8);
-float rays=(r1*0.5+r2*0.4)*uRays*(1.0-j*0.55);
+float rays=(r1*0.5+r2*0.4)*uRays;
 sky+=rays*vec3(0.96,0.99,1.0)*(0.62+0.38*cloud);
 
 sky+=(hash(gl_FragCoord.xy+uTime)*2.0-1.0)*0.004;
-sky=mix(sky,vec3(0.51,0.75,0.91),smoothstep(0.74,1.0,j)*0.08);
 sky*=0.96+0.04*smoothstep(0.0,0.45,uv.y);
-gl_FragColor=vec4(sky,1.0);}`;
+float clear=smoothstep(0.0,1.0,j);
+float cloudMass=clamp(0.38+cloud*0.70+mist*0.18,0.0,1.0);
+// Start as a complete cloud cover, then let the procedural cloud structure
+// dissolve away rather than fading an opaque sky rectangle over the poster.
+float veil=mix(0.98,cloudMass*0.84,clear)*(1.0-clear);
+float rayVeil=rays*0.34*(1.0-clear);
+float alpha=clamp(max(veil,rayVeil),0.0,1.0);
+gl_FragColor=vec4(sky*alpha,alpha);}`;
 
   function compile(gl, type, source) {
     const shader = gl.createShader(type);
@@ -104,7 +111,7 @@ gl_FragColor=vec4(sky,1.0);}`;
       super();
       this.attachShadow({ mode: "open" });
       const styles = document.createElement("style");
-      styles.textContent = ":host{position:absolute;inset:0;display:block;overflow:hidden;pointer-events:none}canvas{position:absolute;inset:0;display:block;width:100%;height:100%}";
+      styles.textContent = ":host{position:absolute;inset:0;display:block;overflow:hidden;pointer-events:none}canvas{position:absolute;inset:0;display:block;width:100%;height:100%;background:transparent}";
       this.shadowRoot.appendChild(styles);
       this.canvas = document.createElement("canvas");
       this.shadowRoot.appendChild(this.canvas);
@@ -121,6 +128,7 @@ gl_FragColor=vec4(sky,1.0);}`;
       this.width = 1;
       this.height = 1;
       this.skyStatus = "idle";
+      this.releasingContext = false;
     }
 
     get progress() {
@@ -154,6 +162,7 @@ gl_FragColor=vec4(sky,1.0);}`;
 
     connectedCallback() {
       if (this.connected) return;
+      this.upgradeProperty("progress");
       this.connected = true;
       this.resizeObserver = new ResizeObserver(() => this.resize());
       this.resizeObserver.observe(this);
@@ -197,8 +206,19 @@ gl_FragColor=vec4(sky,1.0);}`;
     attributeChangedCallback() {
       if (!this.connected) return;
       if (this.mode === "off") this.stop();
+      else this.ensureContext();
       this.sync();
       this.draw(this.time);
+    }
+
+    // Property assignments made before a custom element upgrades become own
+    // properties. Replaying the value through the prototype setter prevents a
+    // pre-hydration scroll update from permanently shadowing `progress`.
+    upgradeProperty(name) {
+      if (!Object.prototype.hasOwnProperty.call(this, name)) return;
+      const value = this[name];
+      delete this[name];
+      this[name] = value;
     }
 
     get shouldRun() {
@@ -244,18 +264,18 @@ gl_FragColor=vec4(sky,1.0);}`;
       if (this.dead || this.mode === "off" || (this.gl && !this.contextLost)) return;
       if (this.contextLost) this.rebuildCanvas();
       const gl = this.canvas.getContext("webgl", {
-        alpha: false,
+        alpha: true,
         antialias: false,
         depth: false,
         stencil: false,
-        premultipliedAlpha: false,
+        premultipliedAlpha: true,
         powerPreference: "low-power",
       }) || this.canvas.getContext("experimental-webgl", {
-        alpha: false,
+        alpha: true,
         antialias: false,
         depth: false,
         stencil: false,
-        premultipliedAlpha: false,
+        premultipliedAlpha: true,
       });
       if (!gl) {
         this.latchFallback("webgl-unavailable");
@@ -264,6 +284,7 @@ gl_FragColor=vec4(sky,1.0);}`;
 
       try {
         this.gl = gl;
+        gl.clearColor(0, 0, 0, 0);
         this.program = makeProgram(gl);
         gl.useProgram(this.program);
         const buffer = gl.createBuffer();
@@ -284,6 +305,11 @@ gl_FragColor=vec4(sky,1.0);}`;
           this.gl = null;
           this.program = null;
           this.uniforms = null;
+          if (this.releasingContext) {
+            this.releasingContext = false;
+            this.announceStatus("released", "offscreen-release");
+            return;
+          }
           this.latchFallback(event.statusMessage || "context-lost");
         }, { once: true });
         this.resize();
@@ -308,6 +334,7 @@ gl_FragColor=vec4(sky,1.0);}`;
       if (!this.gl || !this.program || !this.uniforms || this.mode === "off") return;
       const gl = this.gl;
       gl.useProgram(this.program);
+      gl.clear(gl.COLOR_BUFFER_BIT);
       gl.uniform2f(this.uniforms.resolution, this.width, this.height);
       gl.uniform1f(this.uniforms.time, time);
       gl.uniform1f(this.uniforms.progress, this.progressValue);
@@ -358,7 +385,10 @@ gl_FragColor=vec4(sky,1.0);}`;
       this.releaseTimer = window.setTimeout(() => {
         if (this.visible || !this.gl) return;
         const extension = this.gl.getExtension("WEBGL_lose_context");
-        if (extension) extension.loseContext();
+        if (extension) {
+          this.releasingContext = true;
+          extension.loseContext();
+        }
       }, 5000);
     }
   }

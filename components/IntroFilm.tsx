@@ -147,7 +147,9 @@ export function IntroFilm() {
           <div className="intro-brand">
             <span id="air-intro-title">air by WZRD.tech</span>
             <small id="air-intro-description">
-              {mediaState === "error" ? "intro unavailable — continue to Air" : "your creative assistant is arriving"}
+              {mediaState === "error"
+                ? "intro unavailable — continue to Air"
+                : "your personal creative assistant is arriving"}
             </small>
           </div>
           <div className="intro-controls">

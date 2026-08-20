@@ -48,6 +48,7 @@ import {
   getDirection,
   type DirectionSpec,
 } from "@/content/directions";
+import { resolveHeroTimeline } from "@/lib/hero-timeline";
 
 export type { AirDemoAction, AirDemoState } from "@/components/air-demo-state";
 
@@ -71,9 +72,14 @@ type AirExperienceProps = {
 type HeroVariables = CSSProperties & {
   "--cloud-progress": number;
   "--hero-progress": number;
+  "--reveal-progress": number;
+  "--handoff-progress": number;
+  "--orbit-progress": number;
+  "--orbit-angle": string;
+  "--counter-orbit-angle": string;
 };
 
-type SkyElement = HTMLElement & { progress: number };
+type SkyElement = HTMLElement & { progress: number; skyStatus?: string };
 
 const AirExperienceContext = createContext<AirExperienceValue | null>(null);
 
@@ -177,12 +183,20 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
     ).connection;
     let animationFrame = 0;
     let focusFloorActive = false;
-    let latestProgress = 1;
+    let headerFocusActive = false;
+    let latestRevealProgress = 1;
     let cancelled = false;
+    let shaderStatus: "pending" | "ready" | "fallback" = "pending";
 
     const setSkyProgress = () => {
-      if (cancelled || !skyRef.current) return;
-      (skyRef.current as SkyElement).progress = latestProgress;
+      if (cancelled || !skyRef.current || !customElements.get("wz-sky")) return;
+      (skyRef.current as SkyElement).progress = latestRevealProgress;
+    };
+
+    const handleSkyStatus = (event: Event) => {
+      const detail = (event as CustomEvent<{ status?: string }>).detail;
+      shaderStatus = detail?.status === "fallback" ? "fallback" : "ready";
+      section.dataset.airShader = shaderStatus;
     };
 
     const update = () => {
@@ -200,10 +214,11 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
         const rect = section.getBoundingClientRect();
         const travel = Math.max(1, rect.height - window.innerHeight);
         progress = Math.min(1, Math.max(0, -rect.top / travel));
-        if (focusFloorActive) progress = Math.max(0.78, progress);
+        if (focusFloorActive || headerFocusActive) progress = 1;
       }
 
-      latestProgress = progress;
+      const timeline = resolveHeroTimeline(progress);
+      latestRevealProgress = timeline.revealProgress;
       if (cinematicActiveRef.current !== cinematicEligible) {
         cinematicActiveRef.current = cinematicEligible;
         setCinematicActive(cinematicEligible);
@@ -211,13 +226,18 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
       section.dataset.airPresentation = cinematicEligible
         ? "cinematic"
         : "static";
-      section.style.setProperty("--cloud-progress", String(progress));
-      section.style.setProperty(
-        "--hero-progress",
-        String(Math.min(1, progress * 1.42)),
-      );
+      section.dataset.airShader = cinematicEligible ? shaderStatus : "off";
+      section.style.setProperty("--reveal-progress", String(timeline.revealProgress));
+      section.style.setProperty("--handoff-progress", String(timeline.handoffProgress));
+      section.style.setProperty("--orbit-progress", String(timeline.orbitProgress));
+      section.style.setProperty("--orbit-angle", `${timeline.orbitProgress * 25}deg`);
+      section.style.setProperty("--counter-orbit-angle", `${timeline.orbitProgress * -25}deg`);
+      // Legacy custom properties retain the existing non-cinematic fallback
+      // rules while the named timeline tracks drive the cloudborne sequence.
+      section.style.setProperty("--cloud-progress", String(timeline.revealProgress));
+      section.style.setProperty("--hero-progress", String(timeline.handoffProgress));
       document.documentElement.dataset.airHeroHeader =
-        progress >= 0.62 ? "revealed" : "covered";
+        timeline.headerRevealed ? "revealed" : "covered";
       setSkyProgress();
     };
 
@@ -238,18 +258,43 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
       focusFloorActive = false;
       scheduleUpdate();
     };
+    const handleDocumentFocusIn = (event: FocusEvent) => {
+      const target = event.target;
+      if (!(target instanceof Element) || !target.closest(".site-header")) return;
+      headerFocusActive = true;
+      scheduleUpdate();
+    };
+    const handleDocumentFocusOut = () => {
+      window.requestAnimationFrame(() => {
+        if (cancelled) return;
+        headerFocusActive = Boolean(
+          document.activeElement instanceof Element &&
+            document.activeElement.closest(".site-header"),
+        );
+        scheduleUpdate();
+      });
+    };
 
     update();
     window.addEventListener("scroll", scheduleUpdate, { passive: true });
     window.addEventListener("resize", scheduleUpdate);
     section.addEventListener("focusin", handleFocusIn);
     section.addEventListener("focusout", handleFocusOut);
+    document.addEventListener("focusin", handleDocumentFocusIn);
+    document.addEventListener("focusout", handleDocumentFocusOut);
+    skyRef.current?.addEventListener("wz-sky-status", handleSkyStatus);
+    const initialSkyStatus = (skyRef.current as SkyElement | null)?.skyStatus;
+    if (initialSkyStatus === "ready" || initialSkyStatus === "fallback") {
+      handleSkyStatus(
+        new CustomEvent("wz-sky-status", { detail: { status: initialSkyStatus } }),
+      );
+    }
     reducedMotion.addEventListener("change", scheduleUpdate);
     compactViewport.addEventListener("change", scheduleUpdate);
     finePointer.addEventListener("change", scheduleUpdate);
     forcedColors.addEventListener("change", scheduleUpdate);
 
-    if (cinematicEnabled && !customElements.get("wz-sky")) {
+    if (cinematicEnabled) {
       customElements.whenDefined("wz-sky").then(setSkyProgress);
     }
 
@@ -260,6 +305,9 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
       window.removeEventListener("resize", scheduleUpdate);
       section.removeEventListener("focusin", handleFocusIn);
       section.removeEventListener("focusout", handleFocusOut);
+      document.removeEventListener("focusin", handleDocumentFocusIn);
+      document.removeEventListener("focusout", handleDocumentFocusOut);
+      skyRef.current?.removeEventListener("wz-sky-status", handleSkyStatus);
       reducedMotion.removeEventListener("change", scheduleUpdate);
       compactViewport.removeEventListener("change", scheduleUpdate);
       finePointer.removeEventListener("change", scheduleUpdate);
@@ -272,10 +320,20 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
     ? {
         "--cloud-progress": 0,
         "--hero-progress": 0,
+        "--reveal-progress": 0,
+        "--handoff-progress": 0,
+        "--orbit-progress": 0,
+        "--orbit-angle": "0deg",
+        "--counter-orbit-angle": "0deg",
       }
     : {
         "--cloud-progress": 1,
         "--hero-progress": 1,
+        "--reveal-progress": 1,
+        "--handoff-progress": 1,
+        "--orbit-progress": 1,
+        "--orbit-angle": "25deg",
+        "--counter-orbit-angle": "-25deg",
         height: "auto",
       };
 
@@ -322,29 +380,18 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
             bloom: "low",
             fade: "",
           })}
-        {cinematicActive &&
-          createElement("dk-bubble", {
-            "aria-hidden": "true",
-            className: "hero-pointer-trail",
-            from: "blue",
-            pixel: "4",
-            size: "44",
-            trail: "18",
-            bloom: "low",
-            glow: "#a8ddff",
-          })}
         {cinematicEnabled &&
           createElement("wz-sky", {
             ref: skyRef,
             "aria-hidden": "true",
             className: "hero-shader",
+            mode: cinematicActive ? "full" : "off",
             rays: "0.86",
           })}
         {cinematicEnabled && (
           <div className="cloud-curtain" aria-hidden>
             <div className="cloud-bank bank-one" />
             <div className="cloud-bank bank-two" />
-            <div className="cloud-bank bank-three" />
             <p>scroll to clear the clouds <LuChevronDown /></p>
           </div>
         )}
@@ -359,22 +406,29 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
           <div className="hero-copy">
             <div className="hero-kicker">
               <span className="pulse-dot" aria-hidden /> air by WZRD.tech
-              <span>Interface preview</span>
+              <span>Private beta</span>
             </div>
-            <h1 id="hero-title">
-              <span>Text the beginning.</span>
-              <em>Get the first visual back.</em>
+            <h1
+              id="hero-title"
+              aria-label="Your personal creative assistant in your iMessages."
+            >
+              <span>Your personal creative </span>
+              <span>assistant in your </span>
+              <em>iMessages.</em>
             </h1>
             <p>
-              Air is a private creative assistant in iMessage. Send the beginning,
-              react to the first visual, and keep the creative conversation in one
-              thread.
+              Text a thought, a reference, or a rough brief. Air helps shape the
+              next creative move and brings it back to the thread—without another
+              dashboard.
+            </p>
+            <p className="hero-status">
+              Interface preview · one private thread · approval stays in the loop.
             </p>
 
             <div
               className="direction-cues"
               role="group"
-              aria-label="Choose a curated direction · Interface preview"
+              aria-label="Choose a creative cue · Interface preview"
             >
               {directions.map((direction) => {
                 const selected = state.directionId === direction.id;
@@ -403,62 +457,62 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
               <PreorderButton />
             </div>
             <ul className="hero-proof" aria-label="Air preview status">
-              <li><LuCheck aria-hidden /> first visual · ready</li>
-              <li><LuCheck aria-hidden /> storyboard · private beta preview</li>
-              <li><LuCheck aria-hidden /> one private thread</li>
+              <li><LuCheck aria-hidden /> private beta</li>
+              <li><LuCheck aria-hidden /> storyboard · approval required</li>
+              <li><LuCheck aria-hidden /> connector catalog · expanding</li>
             </ul>
           </div>
 
           <div className="phone-stage" role="region" aria-label="Air in iMessage">
             <div className="app-orbit" aria-hidden="true">
-              <svg
-                className="orbit-map"
-                viewBox="0 0 720 820"
-                preserveAspectRatio="none"
-                focusable="false"
-              >
-                <path d="M42 238C168 58 431 26 666 190" />
-                <path d="M18 398C121 171 472 109 704 336" />
-                <path d="M25 583C171 778 474 812 692 632" />
-                <path d="M120 690C274 844 519 826 650 708" />
-                {[145, 268, 392, 518, 631].map((cx, index) => (
-                  <circle
-                    key={cx}
-                    cx={cx}
-                    cy={[174, 106, 92, 116, 174][index]}
-                    r="3.25"
-                  />
-                ))}
-                {[96, 206, 520, 650].map((cx, index) => (
-                  <circle
-                    key={cx}
-                    cx={cx}
-                    cy={[526, 700, 752, 654][index]}
-                    r="3.25"
-                  />
-                ))}
-              </svg>
-              {appIcons.map(
-                ({ Icon, name, color, x, y, size, rotate }, index) => (
-                  <span
-                    key={name}
-                    className="app-icon"
-                    style={
-                      {
-                        "--app-x": x,
-                        "--app-y": y,
-                        "--app-color": color,
-                        "--app-size": size,
-                        "--app-rotate": rotate,
-                        "--app-delay": `${index * -0.42}s`,
-                      } as CSSProperties
-                    }
-                    title={name}
-                  >
-                    <Icon />
-                  </span>
-                ),
-              )}
+              <div className="app-orbit-motion">
+                <svg
+                  className="orbit-map"
+                  viewBox="0 0 720 820"
+                  preserveAspectRatio="none"
+                  focusable="false"
+                >
+                  <path d="M42 238C168 58 431 26 666 190" />
+                  <path d="M25 583C171 778 474 812 692 632" />
+                  {[145, 268, 392, 518, 631].map((cx, index) => (
+                    <circle
+                      key={cx}
+                      cx={cx}
+                      cy={[174, 106, 92, 116, 174][index]}
+                      r="3.25"
+                    />
+                  ))}
+                  {[96, 206, 520, 650].map((cx, index) => (
+                    <circle
+                      key={cx}
+                      cx={cx}
+                      cy={[526, 700, 752, 654][index]}
+                      r="3.25"
+                    />
+                  ))}
+                </svg>
+                {appIcons.map(
+                  ({ Icon, name, color, x, y, size, rotate }, index) => (
+                    <span
+                      key={name}
+                      className="app-icon"
+                      style={
+                        {
+                          "--app-x": x,
+                          "--app-y": y,
+                          "--app-color": color,
+                          "--app-size": size,
+                          "--app-rotate": rotate,
+                          "--app-delay": `${index * -0.42}s`,
+                        } as CSSProperties
+                      }
+                      title={name}
+                    >
+                      <span className="app-icon-face"><Icon /></span>
+                    </span>
+                  ),
+                )}
+              </div>
             </div>
             {phoneDemo}
           </div>

@@ -1,6 +1,12 @@
 /* Cloudborne visual system — derived from the supplied Air finframe. */
 
 :root {
+  --cloud-pearl: #f7fbfd;
+  --open-sky-blue: #b9def5;
+  --horizon-blue: #7fbfe8;
+  --wzrd-ink: #082b60;
+  --chrome-navy: #092f67;
+  --signal-blue: #176db6;
   --void: #dceef9;
   --night: #b9def5;
   --sky: #8ec8ec;
@@ -117,6 +123,29 @@ html[data-air-hero-header="covered"] .site-header {
   transform: translateY(-0.9rem) scale(0.98);
 }
 
+/* Header focus is an explicit escape hatch from the atmospheric opening. A
+   keyboard user never needs to scroll through opaque clouds to reach chrome. */
+html:has(.site-header:focus-within) .site-header {
+  z-index: 80;
+  opacity: 1;
+  pointer-events: auto;
+  filter: none;
+  transform: none;
+  transition: none;
+}
+
+html:has(.site-header:focus-within) .hero-opening,
+html:has(.site-header:focus-within) .hero-shader,
+html:has(.site-header:focus-within) .cloud-curtain {
+  opacity: 0 !important;
+}
+
+html:has(.site-header:focus-within) .hero-content,
+html:has(.site-header:focus-within) .hero-frame {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
 .site-header::after {
   background: linear-gradient(90deg, transparent, rgba(23, 91, 151, 0.24), transparent);
 }
@@ -149,8 +178,8 @@ html[data-air-hero-header="covered"] .site-header {
 
 /* Opening world and scroll reveal. */
 .hero-scroll {
-  height: 250svh;
-  background: #b8dff6;
+  height: 320svh;
+  background: var(--open-sky-blue);
 }
 
 /* The cinematic journey is opt-in at runtime. Save-data, reduced-motion, and
@@ -166,9 +195,32 @@ html[data-air-hero-header="covered"] .site-header {
 .hero-scroll[data-air-presentation="static"] .hero-opening,
 .hero-scroll[data-air-presentation="static"] .hero-shader,
 .hero-scroll[data-air-presentation="static"] .hero-dither-lens,
-.hero-scroll[data-air-presentation="static"] .hero-pointer-trail,
 .hero-scroll[data-air-presentation="static"] .cloud-curtain {
   display: none;
+}
+
+/* `wz-sky` reports this one-way state after any WebGL failure. Do not leave a
+   partially veiled page behind: settle into the same complete composition that
+   save-data and reduced-motion visitors receive. */
+.hero-scroll[data-air-shader="fallback"] {
+  height: auto !important;
+}
+
+.hero-scroll[data-air-shader="fallback"] .hero-sticky {
+  position: relative !important;
+}
+
+.hero-scroll[data-air-shader="fallback"] .hero-opening,
+.hero-scroll[data-air-shader="fallback"] .hero-shader,
+.hero-scroll[data-air-shader="fallback"] .hero-dither-lens,
+.hero-scroll[data-air-shader="fallback"] .cloud-curtain {
+  display: none !important;
+}
+
+.hero-scroll[data-air-shader="fallback"] .hero-content,
+.hero-scroll[data-air-shader="fallback"] .hero-frame {
+  opacity: 1 !important;
+  transform: none !important;
 }
 
 .hero-sticky {
@@ -178,7 +230,7 @@ html[data-air-hero-header="covered"] .site-header {
 
 .hero-sticky::before {
   z-index: 0;
-  opacity: clamp(0, calc((var(--hero-progress) - 0.42) * 2.1), 1);
+  opacity: var(--handoff-progress);
   background:
     linear-gradient(90deg, rgba(242, 250, 255, 0.82), rgba(239, 249, 255, 0.42) 42%, transparent 67%),
     linear-gradient(180deg, rgba(255, 255, 255, 0.28), transparent 24%, rgba(75, 141, 193, 0.12));
@@ -191,8 +243,8 @@ html[data-air-hero-header="covered"] .site-header {
   overflow: hidden;
   display: grid;
   place-items: center;
-  opacity: clamp(0, calc(1.5 - var(--cloud-progress) * 2.55), 1);
-  transform: scale(calc(1 + var(--cloud-progress) * 0.035));
+  opacity: calc(1 - var(--handoff-progress));
+  transform: scale(calc(1 + var(--handoff-progress) * 0.035));
   transform-origin: 50% 52%;
   pointer-events: none;
   will-change: opacity, transform;
@@ -231,7 +283,7 @@ html[data-air-hero-header="covered"] .site-header {
 }
 
 .hero-sky::before {
-  opacity: calc(0.34 + var(--hero-progress) * 0.22);
+  opacity: calc(0.34 + var(--handoff-progress) * 0.22);
   background:
     radial-gradient(ellipse at -6% 23%, rgba(255, 255, 255, 0.94), transparent 29%),
     radial-gradient(ellipse at 105% 71%, rgba(246, 252, 255, 0.92), transparent 26%),
@@ -248,15 +300,18 @@ html[data-air-hero-header="covered"] .site-header {
   right: auto;
   left: -8%;
   top: -38%;
-  opacity: calc(0.28 + var(--hero-progress) * 0.18);
+  opacity: calc(0.28 + var(--handoff-progress) * 0.18);
   background: rgba(255, 255, 255, 0.88);
   filter: blur(74px);
 }
 
 .hero-shader {
   z-index: 2;
-  opacity: clamp(0.08, calc(0.3 - var(--cloud-progress) * 0.2), 0.3);
-  mix-blend-mode: soft-light;
+  /* A CSS alpha guard keeps the poster visibly clear in compositors that do
+     not blend a transparent WebGL shadow-root canvas correctly. The shader
+     still receives reveal progress and performs the cloud dissolution. */
+  opacity: clamp(0, calc(1 - var(--reveal-progress)), 1);
+  mix-blend-mode: normal;
 }
 
 /* A single static DitherKit wash gives the hero its pixel language without
@@ -269,24 +324,11 @@ html[data-air-hero-header="covered"] .site-header {
   width: min(62vw, 52rem);
   height: min(68svh, 48rem);
   border-radius: 50%;
-  opacity: clamp(0, calc((var(--cloud-progress) - 0.18) * 0.65), 0.34);
+  opacity: clamp(0, calc((var(--handoff-progress) - 0.08) * 0.38), 0.34);
   pointer-events: none;
   mix-blend-mode: soft-light;
   transform: translateY(-50%);
   mask-image: radial-gradient(ellipse at 50% 50%, #000 0%, rgba(0, 0, 0, 0.82) 42%, transparent 72%);
-}
-
-/* Fine-pointer only: DitherKit's pixelated droplet trails the cursor through
-   the sky without replacing the platform cursor or sitting above controls. */
-.hero-pointer-trail {
-  position: absolute !important;
-  z-index: 4;
-  inset: 0;
-  display: block;
-  opacity: clamp(0, calc((var(--hero-progress) - 0.18) * 0.86), 0.74);
-  pointer-events: none;
-  mix-blend-mode: screen;
-  mask-image: radial-gradient(ellipse at 54% 52%, #000 0%, rgba(0, 0, 0, 0.88) 46%, transparent 82%);
 }
 
 .hero-grain {
@@ -299,20 +341,20 @@ html[data-air-hero-header="covered"] .site-header {
   z-index: 70;
 }
 
-.hero-scroll:focus-within .cloud-curtain {
+.hero-scroll[data-air-shader="ready"] .cloud-curtain {
+  opacity: 0.32;
+}
+
+.hero-scroll[data-air-shader="pending"] .cloud-curtain,
+.hero-scroll[data-air-shader="fallback"] .cloud-curtain {
   opacity: 1;
 }
 
-.hero-scroll:focus-within .hero-content {
-  opacity: clamp(0, calc((var(--hero-progress) - 0.55) * 2.25), 1);
-  transform: translateY(calc((1 - var(--hero-progress)) * 2.4rem));
-}
-
-.hero-scroll:has(.hero-content:focus-within) .cloud-curtain {
+.hero-scroll:focus-within .cloud-curtain {
   opacity: 0;
 }
 
-.hero-scroll:has(.hero-content:focus-within) .hero-content {
+.hero-scroll:focus-within .hero-content {
   opacity: 1;
   transform: none;
 }
@@ -336,7 +378,6 @@ html[data-air-hydrated="timeout"] .hero-sticky {
 html[data-air-hydrated="timeout"] .hero-opening,
 html[data-air-hydrated="timeout"] .hero-shader,
 html[data-air-hydrated="timeout"] .hero-dither-lens,
-html[data-air-hydrated="timeout"] .hero-pointer-trail,
 html[data-air-hydrated="timeout"] .cloud-curtain {
   display: none !important;
 }
@@ -349,7 +390,7 @@ html[data-air-hydrated="timeout"] .hero-content {
 .cloud-bank {
   width: 82vw;
   height: 98vh;
-  opacity: clamp(0, calc(0.82 - var(--cloud-progress) * 1.15), 0.82);
+  opacity: clamp(0, calc(0.82 - var(--reveal-progress) * 0.82), 0.82);
   filter: blur(13px) drop-shadow(0 2rem 4rem var(--cloud-shadow));
   background:
     radial-gradient(ellipse at 18% 53%, rgba(255, 255, 255, 0.98) 0 13%, rgba(234, 247, 254, 0.92) 24%, transparent 45%),
@@ -361,32 +402,25 @@ html[data-air-hydrated="timeout"] .hero-content {
 .bank-one {
   left: -23vw;
   top: -28vh;
-  transform: translate3d(calc(var(--cloud-progress) * -72vw), calc(var(--cloud-progress) * -12vh), 0) rotate(-4deg);
+  transform: translate3d(calc(var(--reveal-progress) * -72vw), calc(var(--reveal-progress) * -12vh), 0) rotate(-4deg);
 }
 
 .bank-two {
   right: -25vw;
   top: -18vh;
-  transform: translate3d(calc(var(--cloud-progress) * 74vw), calc(var(--cloud-progress) * -9vh), 0) scale(1.16) rotate(4deg);
-}
-
-.bank-three {
-  left: 4vw;
-  bottom: -54vh;
-  width: 92vw;
-  transform: translate3d(0, calc(var(--cloud-progress) * 70vh), 0) scale(1.32);
+  transform: translate3d(calc(var(--reveal-progress) * 74vw), calc(var(--reveal-progress) * -9vh), 0) scale(1.16) rotate(4deg);
 }
 
 .cloud-curtain > p {
   color: #0b477e;
   text-shadow: 0 1px rgba(255, 255, 255, 0.76);
-  opacity: clamp(0, calc(1 - var(--cloud-progress) * 2.15), 1);
+  opacity: calc(1 - var(--reveal-progress));
 }
 
 .hero-frame {
   z-index: 6;
   border-color: rgba(6, 62, 111, 0.18);
-  opacity: clamp(0, calc((var(--hero-progress) - 0.42) * 1.75), 1);
+  opacity: clamp(0, calc((var(--handoff-progress) - 0.04) * 1.12), 1);
 }
 
 .hero-frame::before,
@@ -401,8 +435,8 @@ html[data-air-hydrated="timeout"] .hero-content {
 .hero-content {
   z-index: 7;
   min-height: calc(100svh - 8.25rem);
-  opacity: clamp(0, calc((var(--hero-progress) - 0.55) * 2.25), 1);
-  transform: translateY(calc((1 - var(--hero-progress)) * 2.4rem));
+  opacity: clamp(0, calc((var(--handoff-progress) - 0.04) * 1.12), 1);
+  transform: translateY(calc((1 - var(--handoff-progress)) * 2.4rem));
 }
 
 .hero-content.shell {
@@ -443,6 +477,17 @@ html[data-air-hydrated="timeout"] .hero-content {
 .hero-copy > p {
   color: rgba(4, 35, 72, 0.8);
   text-shadow: 0 1px rgba(255, 255, 255, 0.72);
+}
+
+.hero-status {
+  margin: 1rem 0 0;
+  color: rgba(5, 52, 98, 0.74) !important;
+  font-family: var(--font-mono);
+  font-size: 0.58rem !important;
+  font-weight: 620;
+  letter-spacing: 0.1em;
+  line-height: 1.55;
+  text-transform: uppercase;
 }
 
 .direction-cues {
@@ -499,6 +544,15 @@ html[data-air-hydrated="timeout"] .hero-content {
   padding: 0.25rem 0 0 2.8rem;
 }
 
+.app-orbit-motion {
+  position: absolute;
+  inset: 0;
+  transform: rotate(var(--orbit-angle));
+  transform-origin: 50% 52%;
+  opacity: clamp(0, calc((var(--orbit-progress) - 0.04) * 1.05), 1);
+  will-change: transform, opacity;
+}
+
 .orbit-map path {
   stroke: rgba(9, 76, 132, 0.26);
 }
@@ -514,6 +568,16 @@ html[data-air-hydrated="timeout"] .hero-content {
     0 1rem 2.6rem rgba(34, 96, 148, 0.2),
     inset 0 1px rgba(255, 255, 255, 0.72),
     0 0 0 1px rgba(10, 67, 116, 0.16);
+  animation: none;
+}
+
+.app-icon-face {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  transform: rotate(var(--counter-orbit-angle));
+  transition: transform 80ms linear;
 }
 
 .iphone-shell {
@@ -1303,7 +1367,6 @@ html[data-air-hydrated="timeout"] .hero-content {
 
   .hero-opening,
   .hero-dither-lens,
-  .hero-pointer-trail,
   .cloud-curtain {
     display: none;
   }
@@ -1315,6 +1378,15 @@ html[data-air-hydrated="timeout"] .hero-content {
   .hero-content {
     opacity: 1;
     transform: none;
+  }
+
+  .app-orbit-motion {
+    transform: none;
+    opacity: 1;
+  }
+
+  .app-icon:nth-of-type(n + 9) {
+    display: none;
   }
 
   .hero-copy,
@@ -1479,7 +1551,6 @@ html[data-air-hydrated="timeout"] .hero-content {
 
   .hero-shader,
   .hero-dither-lens,
-  .hero-pointer-trail,
   .cloud-curtain {
     display: none;
   }
@@ -1494,7 +1565,6 @@ html[data-air-hydrated="timeout"] .hero-content {
   .hero-opening,
   .hero-shader,
   .hero-dither-lens,
-  .hero-pointer-trail,
   .cloud-curtain,
   .app-orbit,
   dk-gradient {

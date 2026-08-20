@@ -147,7 +147,7 @@ export function AgentFeatures() {
         <div className="section-rail"><span>Every agent gets a:</span><span>06 capabilities / one Air</span></div>
         <div className="section-heading" data-reveal>
           <p className="eyebrow">Six foundations · availability labeled</p>
-          <h2 id="agent-title">The operating surface behind one familiar conversation.</h2>
+          <h2 id="agent-title">The operating surface behind your creative thread.</h2>
           <p>Each capability is labeled by its current private-beta or catalog status.</p>
         </div>
         <div className="feature-grid">
@@ -260,11 +260,11 @@ export function ThreadProof() {
       <div className="shell proof-grid">
         <div className="proof-copy" data-reveal>
           <div className="section-rail"><span>The interface</span><span>Messages.app</span></div>
-          <p className="eyebrow">Interface preview · the thread is the workspace</p>
-          <h2 id="proof-title">Creative momentum without another dashboard.</h2>
+          <p className="eyebrow">Interface preview · private beta</p>
+          <h2 id="proof-title">The conversation is the creative workspace.</h2>
           <p>
             This curated private-beta preview shows how campaign analysis, creator outreach, edits,
-            and research can stay legible through native messages, reactions, and compact mini-apps.
+            and research can stay legible in the same thread through messages, reactions, and compact mini-apps.
           </p>
           <ul className="proof-list">
             <li><LuBot aria-hidden /><span><b>Conversation-first.</b> Direct the work the way you’d brief a teammate.</span></li>
@@ -295,7 +295,7 @@ export function ClosingCta() {
       <div className="shell closing-inner" data-reveal>
         <div className="closing-orb"><LuSparkles aria-hidden /></div>
         <p className="eyebrow">Air is taking shape now</p>
-        <h2 id="closing-title">Your next great idea should be one text away.</h2>
+        <h2 id="closing-title">Keep the next idea moving.</h2>
         <p>Preorder Air, save your place, and book a short onboarding conversation with WZRD.</p>
         <PreorderButton />
         <small>No payment today · founding access is limited</small>

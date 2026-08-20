@@ -434,12 +434,6 @@ html[data-air-hero-header="covered"] .site-header:focus-within {
 }
 .bank-one { left: -25vw; top: -21vh; transform: translate3d(calc(var(--cloud-progress) * -68vw), calc(var(--cloud-progress) * -8vh), 0); }
 .bank-two { right: -28vw; top: -12vh; transform: translate3d(calc(var(--cloud-progress) * 70vw), calc(var(--cloud-progress) * -5vh), 0) scale(1.12); }
-.bank-three {
-  left: 9vw;
-  bottom: -54vh;
-  width: 84vw;
-  transform: translate3d(0, calc(var(--cloud-progress) * 62vh), 0) scale(1.25);
-}
 .cloud-curtain > p {
   position: absolute;
   left: 50%;
@@ -608,12 +602,8 @@ html[data-air-hero-header="covered"] .site-header:focus-within {
   background: color-mix(in srgb, var(--app-color) 82%, white 18%);
   box-shadow: 0 0.9rem 2.3rem rgba(2,12,35,0.46), inset 0 1px rgba(255,255,255,0.45), 0 0 0 1px rgba(4,17,36,0.22);
   transform: rotate(var(--app-rotate));
-  animation: appFloat 20s ease-in-out infinite;
-  animation-delay: var(--app-delay);
   transition: box-shadow 200ms ease, filter 200ms ease;
 }
-.app-icon:nth-of-type(3n) { animation-duration: 24s; }
-.app-icon:nth-of-type(3n + 1) { animation-duration: 17s; }
 .app-icon:hover { z-index: 3; filter: brightness(1.08); box-shadow: 0 1rem 2.6rem rgba(2,12,35,0.56), 0 0 0 1px rgba(219,237,255,0.58); }
 .app-icon svg { width: 1.32rem; height: 1.32rem; }
 .iphone-shell {
@@ -1048,7 +1038,6 @@ html[data-air-hero-header="covered"] .site-header:focus-within {
 @keyframes introIn { from{opacity:0}to{opacity:1} }
 @keyframes bob { 50%{transform:translateY(.35rem)} }
 @keyframes pulse { 70%{box-shadow:0 0 0 .5rem rgba(189,229,255,0)} }
-@keyframes appFloat { 0%,100%{transform:translate3d(0,0,0) rotate(var(--app-rotate))}50%{transform:translate3d(0,-.45rem,0) rotate(calc(var(--app-rotate) + 1deg))} }
 @keyframes typing { 0%,60%,100%{transform:translateY(0);opacity:.45}30%{transform:translateY(-.2rem);opacity:1} }
 @keyframes progressBreathe { 50%{width:86%} }
 @keyframes cursorFloat { 50%{transform:translateY(-.4rem)} }
@@ -1077,7 +1066,6 @@ html[data-air-hero-header="covered"] .site-header:focus-within {
   .hero-frame { opacity: 1; }
   .hero-sky::before { opacity: 0.18; }
   .sun-haze { opacity: 0.3; }
-  .app-icon:nth-of-type(n + 11) { display: none; }
 }
 
 @media (max-width: 980px) {

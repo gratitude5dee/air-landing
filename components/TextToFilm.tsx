@@ -180,10 +180,10 @@ export function TextToFilm() {
         <div className="film-grid">
           <div className="film-copy" data-reveal>
             <p className="eyebrow">Turn one text into a storyboard and first cut.</p>
-            <h2 id="film-title">See the thought before it leaves the thread.</h2>
+            <h2 id="film-title">Give the thought a first frame.</h2>
             <p>
-              Air shapes one text into something visible enough to direct. This is a curated
-              interface preview, not live browser generation.
+              A later private-beta creative proof: Air shapes one text into something visible enough
+              to direct. This is a curated interface preview, not live browser generation.
             </p>
             <ol className="film-path" aria-label="Text-to-film preview path">
               {filmSteps.map((step) => (
