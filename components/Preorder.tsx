@@ -12,44 +12,56 @@ import {
 import { LuArrowUpRight, LuCalendarDays, LuCheck, LuX } from "react-icons/lu";
 
 type PreorderContextValue = { openPreorder: () => void };
+type PreorderStage = "form" | "saving" | "saved";
+type CalendarState = "loading" | "ready" | "blocked";
+type PreorderResponse = {
+  ok?: boolean;
+  stored?: boolean;
+  receipt?: string;
+  message?: string;
+};
 
 const PreorderContext = createContext<PreorderContextValue | null>(null);
 
 const CAL_LINK =
   process.env.NEXT_PUBLIC_CAL_LINK || "https://cal.com/5deestudios/air-onboarding";
+const CALENDAR_LOAD_TIMEOUT_MS = 10_000;
 
 export function PreorderProvider({ children }: { children: ReactNode }) {
   const dialogRef = useRef<HTMLDialogElement>(null);
-  const [stage, setStage] = useState<"form" | "calendar">("form");
-  const [pending, setPending] = useState(false);
+  const successHeadingRef = useRef<HTMLHeadingElement>(null);
+  const [stage, setStage] = useState<PreorderStage>("form");
+  const [calendarState, setCalendarState] = useState<CalendarState>("loading");
   const [error, setError] = useState("");
 
   const openPreorder = () => {
     setError("");
-    dialogRef.current?.showModal();
+    const dialog = dialogRef.current;
+    if (dialog && !dialog.open) {
+      document.body.classList.add("modal-open");
+      dialog.showModal();
+    }
   };
 
   const close = () => dialogRef.current?.close();
 
+  useEffect(() => () => document.body.classList.remove("modal-open"), []);
+
   useEffect(() => {
-    const dialog = dialogRef.current;
-    if (!dialog) return;
-    const onClose = () => document.body.classList.remove("modal-open");
-    const onOpen = () => document.body.classList.add("modal-open");
-    const observer = new MutationObserver(() => {
-      if (dialog.open) onOpen();
-      else onClose();
-    });
-    observer.observe(dialog, { attributes: true, attributeFilter: ["open"] });
-    return () => {
-      observer.disconnect();
-      onClose();
-    };
-  }, []);
+    if (stage !== "saved" || calendarState !== "loading") return;
+    const timeout = window.setTimeout(() => setCalendarState("blocked"), CALENDAR_LOAD_TIMEOUT_MS);
+    return () => window.clearTimeout(timeout);
+  }, [calendarState, stage]);
+
+  useEffect(() => {
+    if (stage !== "saved") return;
+    const frame = requestAnimationFrame(() => successHeadingRef.current?.focus({ preventScroll: true }));
+    return () => cancelAnimationFrame(frame);
+  }, [stage]);
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setPending(true);
+    setStage("saving");
     setError("");
     const form = new FormData(event.currentTarget);
     const payload = {
@@ -60,21 +72,41 @@ export function PreorderProvider({ children }: { children: ReactNode }) {
       company: String(form.get("company") || ""),
     };
 
+    // The server also treats this as a honeypot. Refuse to unlock Cal on the
+    // client even if an intermediary ever returns a generic 2xx response.
+    if (payload.company) {
+      setStage("form");
+      setError("We could not verify this preorder. Please refresh and try again.");
+      return;
+    }
+
     try {
       const response = await fetch("/api/preorder", {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify(payload),
       });
-      const result = (await response.json()) as { ok?: boolean; message?: string };
-      if (!response.ok || !result.ok) throw new Error(result.message || "Please try again.");
-      setStage("calendar");
+      const result = (await response.json().catch(() => null)) as PreorderResponse | null;
+      const durableSuccess =
+        response.ok &&
+        result?.ok === true &&
+        result.stored === true &&
+        typeof result.receipt === "string" &&
+        result.receipt.length > 0;
+
+      if (!durableSuccess) {
+        throw new Error(result?.message || "Air could not save your preorder yet. Please try again.");
+      }
+
+      setCalendarState("loading");
+      setStage("saved");
     } catch (submitError) {
+      setStage("form");
       setError(submitError instanceof Error ? submitError.message : "Please try again.");
-    } finally {
-      setPending(false);
     }
   }
+
+  const saving = stage === "saving";
 
   return (
     <PreorderContext.Provider value={{ openPreorder }}>
@@ -83,6 +115,9 @@ export function PreorderProvider({ children }: { children: ReactNode }) {
         ref={dialogRef}
         className="preorder-dialog"
         aria-labelledby="preorder-title"
+        data-preorder-stage={stage}
+        data-calendar-state={stage === "saved" ? calendarState : undefined}
+        onClose={() => document.body.classList.remove("modal-open")}
         onClick={(event) => {
           if (event.target === dialogRef.current) close();
         }}
@@ -92,7 +127,7 @@ export function PreorderProvider({ children }: { children: ReactNode }) {
             <LuX aria-hidden />
           </button>
 
-          {stage === "form" ? (
+          {stage !== "saved" ? (
             <div className="preorder-grid">
               <div className="preorder-copy">
                 <span className="eyebrow">Founding preorder</span>
@@ -108,7 +143,7 @@ export function PreorderProvider({ children }: { children: ReactNode }) {
                 </ul>
               </div>
 
-              <form className="preorder-form" onSubmit={submit}>
+              <form className="preorder-form" onSubmit={submit} aria-busy={saving}>
                 <label htmlFor="preorder-name">Name</label>
                 <input id="preorder-name" name="name" autoComplete="name" required placeholder="Your name" />
 
@@ -146,9 +181,9 @@ export function PreorderProvider({ children }: { children: ReactNode }) {
 
                 {error && <p className="form-error" role="alert">{error}</p>}
 
-                <button className="button button-primary form-submit" type="submit" disabled={pending}>
-                  {pending ? "saving your place…" : "save my preorder"}
-                  {!pending && <LuArrowUpRight aria-hidden />}
+                <button className="button button-primary form-submit" type="submit" disabled={saving}>
+                  {saving ? "saving your place…" : "save my preorder"}
+                  {!saving && <LuArrowUpRight aria-hidden />}
                 </button>
                 <p className="privacy-note">
                   We store these details only to manage your preorder and Air onboarding.
@@ -156,20 +191,34 @@ export function PreorderProvider({ children }: { children: ReactNode }) {
               </form>
             </div>
           ) : (
-            <div className="calendar-stage" role="status">
+            <div className="calendar-stage">
               <div className="calendar-heading">
                 <span className="success-mark"><LuCheck aria-hidden /></span>
                 <div>
                   <span className="eyebrow">You’re on the list</span>
-                  <h2 id="preorder-title">Now, meet your Air.</h2>
-                  <p>Choose a time below. Your preorder is already saved.</p>
+                  <h2 ref={successHeadingRef} id="preorder-title" tabIndex={-1}>Now, meet your Air.</h2>
+                  <p>
+                    {calendarState === "blocked"
+                      ? "Your preorder is saved. Booking did not load here, so use the link below."
+                      : "Your preorder is saved. Choose a time below or open booking in a new tab."}
+                  </p>
                 </div>
               </div>
+              <p className="privacy-note" role="status" aria-live="polite">
+                {calendarState === "loading" && "Loading the booking calendar…"}
+                {calendarState === "ready" && "Booking calendar ready."}
+                {calendarState === "blocked" && "Booking embed unavailable. Your preorder remains saved."}
+              </p>
               <iframe
                 className="cal-frame"
                 title="Book your Air onboarding call"
                 src={`${CAL_LINK}?embed=true&layout=month_view`}
-                allow="camera; microphone; fullscreen; payment"
+                allow="fullscreen"
+                loading="lazy"
+                referrerPolicy="strict-origin-when-cross-origin"
+                aria-busy={calendarState === "loading"}
+                onLoad={() => setCalendarState("ready")}
+                onError={() => setCalendarState("blocked")}
               />
               <a className="calendar-fallback" href={CAL_LINK} target="_blank" rel="noreferrer">
                 <LuCalendarDays aria-hidden /> Open booking in a new tab

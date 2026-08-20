@@ -37,34 +37,33 @@ vec2 uv=gl_FragCoord.xy/uRes;
 float j=clamp(uProgress,0.0,1.0);
 vec2 drift=vec2(-j*0.46-uTime*0.006,j*0.11+uTime*0.0018);
 
-float horizon=smoothstep(0.0,0.72,uv.y);
-vec3 sky=mix(vec3(0.01,0.03,0.08),vec3(0.055,0.23,0.51),horizon);
+float horizon=smoothstep(0.02,0.96,uv.y);
+vec3 sky=mix(vec3(0.72,0.86,0.95),vec3(0.26,0.61,0.86),horizon);
 
 float fA=fbm(uv*vec2(2.1,3.2)+drift);
 float fB=fbm(uv*vec2(4.8,2.3)-drift*0.65);
 float cloud=smoothstep(0.42,0.78,fA*0.72+fB*0.38+uv.y*0.12);
 float mist=smoothstep(0.18,0.92,fbm(uv*vec2(1.15,2.1)+drift*0.4));
 
-vec3 cloudColor=mix(vec3(0.11,0.24,0.44),vec3(0.56,0.70,0.86),smoothstep(0.42,1.0,fB+uv.y*0.24));
-sky=mix(sky,cloudColor,cloud*(0.78-j*0.22));
-sky+=mist*0.04*vec3(0.42,0.65,1.0);
+vec3 cloudColor=mix(vec3(0.68,0.82,0.93),vec3(0.98,0.99,1.0),smoothstep(0.38,1.0,fB+uv.y*0.24));
+sky=mix(sky,cloudColor,cloud*(0.92-j*0.7));
+sky+=mist*0.055*vec3(0.75,0.89,1.0)*(1.0-j*0.45);
 
-vec2 sunP=vec2(0.73,0.64);
+vec2 sunP=vec2(0.18,0.84);
 float sun=smoothstep(0.28,0.0,distance(uv,sunP));
-sky+=sun*vec3(0.22,0.34,0.5)*(1.0-j*0.58);
+sky+=sun*vec3(0.46,0.58,0.68)*(1.0-j*0.36);
 
 vec2 asp=vec2(uRes.x/uRes.y,1.0);
 vec2 rc=uv*asp;vec2 rs=sunP*asp;
-vec2 rdir=normalize(vec2(-0.34,-1.0));
+vec2 rdir=normalize(vec2(0.42,-1.0));
 float r1=rayStrength(rs,rdir,rc,36.2214,21.11349,1.1);
 float r2=rayStrength(rs,rdir,rc,22.3991,18.0234,0.8);
 float rays=(r1*0.5+r2*0.4)*uRays*(1.0-j*0.55);
-sky+=rays*vec3(0.72,0.86,1.0)*(0.55+0.45*cloud);
+sky+=rays*vec3(0.96,0.99,1.0)*(0.62+0.38*cloud);
 
-sky+=(hash(gl_FragCoord.xy+uTime)*2.0-1.0)*0.012;
-float veil=smoothstep(0.52,1.0,j);
-sky=mix(sky,vec3(0.02,0.035,0.07),veil*0.84);
-sky*=0.85+0.15*smoothstep(0.0,0.45,uv.y);
+sky+=(hash(gl_FragCoord.xy+uTime)*2.0-1.0)*0.004;
+sky=mix(sky,vec3(0.51,0.75,0.91),smoothstep(0.74,1.0,j)*0.08);
+sky*=0.96+0.04*smoothstep(0.0,0.45,uv.y);
 gl_FragColor=vec4(sky,1.0);}`;
 
   function compile(gl, type, source) {
@@ -113,7 +112,7 @@ gl_FragColor=vec4(sky,1.0);}`;
       this.dprCap = 1.25;
       this.frameInterval = 1000 / 30;
       this.progressValue = 0;
-      this.clockValue = Math.random() * 40;
+      this.clockValue = 12.5;
       this.frame = 0;
       this.visible = false;
       this.contextLost = false;
@@ -121,6 +120,7 @@ gl_FragColor=vec4(sky,1.0);}`;
       this.releaseTimer = 0;
       this.width = 1;
       this.height = 1;
+      this.skyStatus = "idle";
     }
 
     get progress() {
@@ -160,7 +160,7 @@ gl_FragColor=vec4(sky,1.0);}`;
       this.intersectionObserver = new IntersectionObserver(
         (entries) => {
           this.visible = entries.some((entry) => entry.isIntersecting);
-          if (this.visible) {
+          if (this.visible && !reducedMotion.matches) {
             window.clearTimeout(this.releaseTimer);
             this.ensureContext();
           } else {
@@ -173,13 +173,14 @@ gl_FragColor=vec4(sky,1.0);}`;
       this.intersectionObserver.observe(this);
       this.onVisibilityChange = () => this.sync();
       this.onMotionChange = () => {
-        if (reducedMotion.matches) this.progress = 1;
+        if (reducedMotion.matches) this.latchFallback("reduced-motion");
         this.sync();
       };
       document.addEventListener("visibilitychange", this.onVisibilityChange);
       reducedMotion.addEventListener("change", this.onMotionChange);
       this.resize();
-      this.ensureContext();
+      if (reducedMotion.matches) this.latchFallback("reduced-motion");
+      else this.ensureContext();
       this.sync();
     }
 
@@ -222,6 +223,23 @@ gl_FragColor=vec4(sky,1.0);}`;
       this.contextLost = false;
     }
 
+    announceStatus(status, reason) {
+      if (this.skyStatus === status && !reason) return;
+      this.skyStatus = status;
+      this.dispatchEvent(new CustomEvent("wz-sky-status", {
+        bubbles: true,
+        detail: { status, reason: reason || null },
+      }));
+    }
+
+    latchFallback(reason) {
+      if (this.dead && this.skyStatus === "fallback") return;
+      this.dead = true;
+      this.stop();
+      this.canvas.style.display = "none";
+      this.announceStatus("fallback", reason);
+    }
+
     ensureContext() {
       if (this.dead || this.mode === "off" || (this.gl && !this.contextLost)) return;
       if (this.contextLost) this.rebuildCanvas();
@@ -240,8 +258,7 @@ gl_FragColor=vec4(sky,1.0);}`;
         premultipliedAlpha: false,
       });
       if (!gl) {
-        this.dead = true;
-        this.canvas.style.display = "none";
+        this.latchFallback("webgl-unavailable");
         return;
       }
 
@@ -262,20 +279,17 @@ gl_FragColor=vec4(sky,1.0);}`;
           rays: gl.getUniformLocation(this.program, "uRays"),
         };
         this.canvas.addEventListener("webglcontextlost", (event) => {
-          event.preventDefault();
           this.stop();
           this.contextLost = true;
           this.gl = null;
           this.program = null;
           this.uniforms = null;
-          if (this.visible && this.connected) {
-            window.setTimeout(() => this.ensureContext(), 350);
-          }
+          this.latchFallback(event.statusMessage || "context-lost");
         }, { once: true });
         this.resize();
+        this.announceStatus("ready");
       } catch (error) {
-        this.dead = true;
-        this.canvas.style.display = "none";
+        this.latchFallback(error instanceof Error ? error.message.slice(0, 120) : "shader-init-failed");
       }
     }
 

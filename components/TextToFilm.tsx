@@ -1,82 +1,166 @@
 "use client";
 
-import { createElement, type CSSProperties, useEffect, useRef } from "react";
-import { LuCheck, LuPlay, LuSparkles } from "react-icons/lu";
+import Image from "next/image";
+import {
+  createElement,
+  type CSSProperties,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import { LuCheck, LuExternalLink, LuSparkles } from "react-icons/lu";
 
-const filmSteps = [
-  {
-    number: "01",
-    label: "Text",
-    detail: "“Quiet morning. Golden Gate. No rush.”",
-  },
-  {
-    number: "02",
-    label: "Shape",
-    detail: "4-shot storyboard · tone locked",
-  },
-  {
-    number: "03",
-    label: "First cut",
-    detail: "Ready for notes in the thread",
-  },
-] as const;
+import { useAirExperience } from "@/components/AirExperience";
+import {
+  FEATURED_FILM,
+  type DirectionSpec,
+} from "@/content/directions";
+
+type StoryboardFrame = DirectionSpec["frames"][number];
+type MediaState = "idle" | "loading" | "ready" | "error";
+
+const storyboardGridStyle: CSSProperties = {
+  display: "grid",
+  gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 13rem), 1fr))",
+  gap: "1rem",
+  marginTop: "1.5rem",
+};
+
+function StoryboardCard({
+  frame,
+  frameIndex,
+  objectPosition,
+}: {
+  frame: StoryboardFrame;
+  frameIndex: number;
+  objectPosition: string;
+}) {
+  const [failed, setFailed] = useState(false);
+
+  return (
+    <figure className="film-storyboard-frame" style={{ margin: 0 }}>
+      <div className="film-preview" style={{ boxShadow: "none" }}>
+        {failed ? (
+          <div
+            role="img"
+            aria-label={`Frame ${frameIndex + 1} unavailable. ${frame.note}`}
+            style={{
+              width: "100%",
+              height: "100%",
+              display: "grid",
+              placeItems: "center",
+              padding: "1rem",
+              color: "rgba(237, 248, 255, 0.78)",
+              textAlign: "center",
+            }}
+          >
+            Frame unavailable · {frame.shot}
+          </div>
+        ) : (
+          <Image
+            src={frame.src}
+            alt={frame.alt}
+            width={frame.width}
+            height={frame.height}
+            sizes="(max-width: 720px) 92vw, 28vw"
+            style={{
+              width: "100%",
+              height: "100%",
+              display: "block",
+              objectFit: "cover",
+              objectPosition,
+            }}
+            onError={() => setFailed(true)}
+          />
+        )}
+      </div>
+      <figcaption>
+        Frame {frameIndex + 1} of 3<br />{frame.note}
+      </figcaption>
+    </figure>
+  );
+}
 
 export function TextToFilm() {
+  const { state, selectedDirection } = useAirExperience();
   const sectionRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [mediaAttached, setMediaAttached] = useState(false);
+  const [mediaState, setMediaState] = useState<MediaState>("idle");
+  const [playbackMode, setPlaybackMode] = useState<"static" | "native">("static");
 
   useEffect(() => {
-    const section = sectionRef.current;
-    const video = videoRef.current;
-    if (!section || !video) return;
-
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const clipStart = 5;
-    const clipEnd = 18;
-    let inView = false;
-
-    const playFilm = () => {
-      if (reduced.matches || !inView || video.readyState < HTMLMediaElement.HAVE_METADATA) return;
-      if (video.currentTime < clipStart || video.currentTime >= clipEnd) video.currentTime = clipStart;
-      void video.play().catch(() => undefined);
-    };
-
-    const onLoadedMetadata = () => {
-      if (video.duration > clipStart) video.currentTime = clipStart;
-      playFilm();
-    };
-    const onTimeUpdate = () => {
-      if (video.currentTime >= clipEnd) video.currentTime = clipStart;
-    };
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        inView = Boolean(entry?.isIntersecting);
-        if (inView) playFilm();
-        else video.pause();
-      },
-      { threshold: 0.24 },
-    );
-    const onMotionPreferenceChange = () => {
-      if (reduced.matches) video.pause();
-      else playFilm();
-    };
-
-    video.addEventListener("loadedmetadata", onLoadedMetadata);
-    video.addEventListener("timeupdate", onTimeUpdate);
-    reduced.addEventListener("change", onMotionPreferenceChange);
-    observer.observe(section);
-
+    const coarse = window.matchMedia("(pointer: coarse)");
+    const update = () => setPlaybackMode(reduced.matches || coarse.matches ? "static" : "native");
+    update();
+    reduced.addEventListener("change", update);
+    coarse.addEventListener("change", update);
     return () => {
-      observer.disconnect();
-      video.pause();
-      video.removeEventListener("loadedmetadata", onLoadedMetadata);
-      video.removeEventListener("timeupdate", onTimeUpdate);
-      reduced.removeEventListener("change", onMotionPreferenceChange);
+      reduced.removeEventListener("change", update);
+      coarse.removeEventListener("change", update);
     };
   }, []);
 
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section || mediaAttached) return;
+    if (!("IntersectionObserver" in window)) {
+      setMediaAttached(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry?.isIntersecting) return;
+        setMediaAttached(true);
+        observer.disconnect();
+      },
+      { rootMargin: "500px 0px", threshold: 0.01 },
+    );
+    observer.observe(section);
+    return () => observer.disconnect();
+  }, [mediaAttached]);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    video.pause();
+    if (video.currentTime) video.currentTime = 0;
+    setMediaState(mediaAttached ? "loading" : "idle");
+    if (mediaAttached) video.load();
+  }, [mediaAttached, selectedDirection.id]);
+
+  const storyboardOnly = selectedDirection.firstCutMode === "storyboard-only";
+  const filmSteps = [
+    {
+      number: "01",
+      label: "Text",
+      detail: `“${selectedDirection.request}”`,
+    },
+    {
+      number: "02",
+      label: "Storyboard",
+      detail: `${selectedDirection.cueLabel} · three directed frames`,
+    },
+    {
+      number: "03",
+      label: storyboardOnly ? "Featured study" : "First cut",
+      detail: storyboardOnly
+        ? "Selected board complete · separate Golden Gate study follows"
+        : "Matching eight-second first cut · ready for notes",
+    },
+  ] as const;
+
   return (
-    <section ref={sectionRef} className="film-section section" aria-labelledby="film-title">
+    <section
+      ref={sectionRef}
+      className="film-section section"
+      aria-labelledby="film-title"
+      data-film-direction={selectedDirection.id}
+      data-film-mode={playbackMode}
+      data-media-state={mediaState}
+    >
       {createElement("dk-gradient", {
         "aria-hidden": "true",
         className: "film-dither-field",
@@ -87,16 +171,20 @@ export function TextToFilm() {
         fade: "",
       })}
       <div className="shell">
-        <div className="section-rail"><span>Text to film</span><span>one thread · one cut</span></div>
+        <div className="section-rail">
+          <span>Text to film</span>
+          <span>Private beta preview</span>
+        </div>
+
         <div className="film-grid">
           <div className="film-copy" data-reveal>
-            <p className="eyebrow">A film can start as a text.</p>
-            <h2 id="film-title">Text the feeling. Air builds the film.</h2>
+            <p className="eyebrow">Turn one text into a storyboard and first cut.</p>
+            <h2 id="film-title">See the thought before it leaves the thread.</h2>
             <p>
-              Send a thought, reference, or voice note. Air turns the signal into a treatment,
-              storyboard, shot plan, and first cut—then brings the choices back to iMessage.
+              Air shapes one text into something visible enough to direct. This is a curated
+              interface preview, not live browser generation.
             </p>
-            <ol className="film-path" aria-label="Text-to-film process">
+            <ol className="film-path" aria-label="Text-to-film preview path">
               {filmSteps.map((step) => (
                 <li key={step.number}>
                   <span>{step.number}</span>
@@ -110,40 +198,99 @@ export function TextToFilm() {
             </ol>
           </div>
 
-          <figure className="film-figure" data-reveal style={{ "--delay": "110ms" } as CSSProperties}>
-            <div className="film-preview">
+          <div className="film-storyboard" data-reveal style={{ "--delay": "110ms" } as CSSProperties}>
+            <p className="eyebrow">Storyboard · Private beta preview</p>
+            <h3>{selectedDirection.cueLabel}</h3>
+            <p>Selected direction · {selectedDirection.request}</p>
+            {state.clarifierAnswer && (
+              <p className="soon-badge">Direction note applied · {state.clarifierAnswer}</p>
+            )}
+            <div style={storyboardGridStyle} aria-label={`${selectedDirection.cueLabel} storyboard, three frames`}>
+              {selectedDirection.frames.map((frame, index) => (
+                <StoryboardCard
+                  key={frame.src}
+                  frame={frame}
+                  frameIndex={index}
+                  objectPosition={selectedDirection.objectPosition}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <figure
+          className="film-figure film-featured-study"
+          data-reveal
+          style={{ marginTop: "clamp(3rem, 8vw, 7rem)" }}
+          aria-labelledby="featured-film-title"
+        >
+          <div className="section-rail">
+            <span id="featured-film-title">{FEATURED_FILM.label}</span>
+            <span>First cut · Private beta preview</span>
+          </div>
+          <p>
+            {storyboardOnly
+              ? `${selectedDirection.cueLabel} stops truthfully at storyboard. The film below is a separate Golden Gate case study.`
+              : "The selected Golden Gate storyboard continues into its matching first cut below."}
+          </p>
+          <div className="film-preview" aria-busy={mediaState === "loading"}>
+            {mediaState === "error" ? (
+              <div
+                role="status"
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  display: "grid",
+                  placeItems: "center",
+                  padding: "2rem",
+                  color: "rgba(237, 248, 255, 0.78)",
+                  textAlign: "center",
+                }}
+              >
+                First cut unavailable here. The storyboard and open-film link remain ready.
+              </div>
+            ) : (
               <video
                 ref={videoRef}
+                controls
                 muted
                 playsInline
-                preload="metadata"
-                poster="/media/intro-poster.jpg"
-                aria-hidden="true"
-                tabIndex={-1}
+                preload={mediaAttached ? "metadata" : "none"}
+                poster={FEATURED_FILM.poster}
+                aria-label="Play the eight-second Golden Gate featured film study"
+                style={{ transform: "none", filter: "none" }}
+                onLoadStart={() => setMediaState("loading")}
+                onLoadedMetadata={() => setMediaState("ready")}
+                onCanPlay={() => setMediaState("ready")}
+                onError={() => setMediaState("error")}
               >
-                <source src="/media/air-intro-720.webm" type="video/webm" />
-                <source src="/media/air-intro-1080.mp4" type="video/mp4" />
+                {mediaAttached && (
+                  <>
+                    <source src={FEATURED_FILM.webm} type="video/webm" />
+                    <source src={FEATURED_FILM.mp4} type="video/mp4" />
+                  </>
+                )}
               </video>
-              <div className="film-vignette" aria-hidden />
-              <div className="film-hud film-hud-top" aria-hidden>
-                <span><i /> AIR / FILM STUDY</span>
-                <span>BLUE HOUR · 01</span>
-              </div>
-              <div className="film-hud film-hud-bottom" aria-hidden>
-                <span><LuPlay /> FIRST CUT</span>
-                <span>00:00:15 / 00:00:15</span>
-              </div>
-              <div className="film-timeline" aria-hidden>
-                <span /><span /><span /><span />
-                <i />
-              </div>
+            )}
+            <div className="film-vignette" aria-hidden />
+            <div className="film-hud film-hud-top" aria-hidden style={{ pointerEvents: "none" }}>
+              <span><i /> AIR / FEATURED FILM STUDY</span>
+              <span>QUIET MORNING · 08 SEC</span>
             </div>
-            <figcaption>
-              Illustrative film sequence: Air helps turn an iMessage brief into a storyboard and
-              short film.
-            </figcaption>
-          </figure>
-        </div>
+          </div>
+          <figcaption>
+            {FEATURED_FILM.label}. Curated product evidence; playback is always user initiated.
+          </figcaption>
+          <a
+            className="calendar-fallback film-open-link"
+            href={FEATURED_FILM.mp4}
+            target="_blank"
+            rel="noreferrer"
+          >
+            <LuExternalLink aria-hidden /> Open film in a new tab
+          </a>
+          {mediaState === "loading" && <p role="status">Loading first-cut media…</p>}
+        </figure>
       </div>
     </section>
   );

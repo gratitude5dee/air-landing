@@ -12,12 +12,13 @@ export default function Home() {
       <Header />
       <main id="main">
         <div id="top" />
-        <Hero />
-        <AgentFeatures />
-        <TextToFilm />
-        <WorkflowSignals />
-        <ThreadProof />
-        <ClosingCta />
+        <Hero>
+          <AgentFeatures />
+          <TextToFilm />
+          <WorkflowSignals />
+          <ThreadProof />
+          <ClosingCta />
+        </Hero>
       </main>
       <Footer />
       <MotionEnhancer />

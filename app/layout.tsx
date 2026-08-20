@@ -4,9 +4,11 @@ import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
 import { PreorderProvider } from "@/components/Preorder";
+import { resolveAirFeatureFlags } from "@/lib/feature-flags";
 import "@fontsource-variable/azeret-mono";
 import "@fontsource-variable/newsreader";
 import "./globals.css";
+import "./cloudborne.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://air.wzrd.tech"),
@@ -31,25 +33,36 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  colorScheme: "dark",
-  themeColor: "#071124",
+  colorScheme: "light",
+  themeColor: "#c5e6f8",
   width: "device-width",
   initialScale: 1,
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  const { cinematicEnabled } = resolveAirFeatureFlags();
+
   return (
     <html lang="en" data-air-hero-header="covered">
       <body>
         <a className="skip-link" href="#main">Skip to content</a>
         <noscript>
-          <style>{`html[data-air-hero-header="covered"] .site-header{z-index:80;opacity:1;pointer-events:auto;filter:none;transform:none}`}</style>
+          <style>{`
+            html[data-air-hero-header="covered"] .site-header{z-index:80;opacity:1;pointer-events:auto;filter:none;transform:none}
+            .hero-scroll{height:auto!important}.hero-sticky{position:relative!important}.hero-opening,.hero-shader,.cloud-curtain{display:none!important}.hero-content{opacity:1!important;transform:none!important}
+          `}</style>
         </noscript>
         <PreorderProvider>{children}</PreorderProvider>
         <Analytics />
         <SpeedInsights />
+        <Script
+          src="/vendor/air-prepaint-v2026-08-19-a.js"
+          strategy="beforeInteractive"
+        />
         <Script src="/vendor/dither-kit.js" strategy="afterInteractive" />
-        <Script src="/vendor/wz-atmosphere.js" strategy="afterInteractive" />
+        {cinematicEnabled && (
+          <Script src="/vendor/wz-atmosphere.js" strategy="afterInteractive" />
+        )}
       </body>
     </html>
   );

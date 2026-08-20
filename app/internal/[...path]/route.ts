@@ -1,7 +1,7 @@
 import { proxyAirBackend } from "@/lib/backend-proxy";
 
 export const dynamic = "force-dynamic";
-export const maxDuration = 60;
+export const maxDuration = 35;
 
 type RouteContext = {
   params: Promise<{ path: string[] }>;
@@ -14,6 +14,7 @@ async function proxy(request: Request, context: RouteContext) {
 }
 
 export const GET = proxy;
+export const HEAD = proxy;
 export const POST = proxy;
 export const PUT = proxy;
 export const PATCH = proxy;

@@ -1,36 +1,56 @@
 import "server-only";
 
-const DEFAULT_BACKEND = "https://air-eight-delta.vercel.app";
+import {
+  getParityBackendOrigin,
+  getParityRoutePolicy,
+} from "@/lib/route-policy";
 
-const requestHeaderBlocklist = new Set([
-  "connection",
-  "content-length",
-  "host",
-  "transfer-encoding",
-]);
+type BoundedBody = Uint8Array | undefined | null;
 
-const responseHeaderBlocklist = new Set([
-  "connection",
-  "content-encoding",
-  "content-length",
-  "transfer-encoding",
-]);
+function proxyResponse(code: string, status: number) {
+  return Response.json(
+    { ok: false, code },
+    {
+      status,
+      headers: {
+        "cache-control": "private, no-store",
+        "x-content-type-options": "nosniff",
+      },
+    },
+  );
+}
 
-type ProxyOptions = {
-  maxRequestBytes?: number;
-};
+function notFoundResponse() {
+  return new Response(null, {
+    status: 404,
+    headers: { "cache-control": "private, no-store" },
+  });
+}
 
-async function readBoundedBody(request: Request, maxBytes?: number) {
-  if (!request.body) return undefined;
+function asArrayBuffer(bytes: Uint8Array | undefined) {
+  if (!bytes) return undefined;
+  const copy = new Uint8Array(bytes.byteLength);
+  copy.set(bytes);
+  return copy.buffer;
+}
 
-  const declaredLength = Number(request.headers.get("content-length"));
-  if (maxBytes && Number.isFinite(declaredLength) && declaredLength > maxBytes) {
-    return null;
-  }
+function parseDeclaredLength(value: string | null) {
+  if (value === null) return undefined;
+  if (!/^\d+$/.test(value)) return null;
+  const parsed = Number(value);
+  return Number.isSafeInteger(parsed) ? parsed : null;
+}
 
-  if (!maxBytes) return new Uint8Array(await request.arrayBuffer());
+async function readBoundedBody(
+  stream: ReadableStream<Uint8Array> | null,
+  declaredLength: string | null,
+  maxBytes: number,
+): Promise<BoundedBody> {
+  const declared = parseDeclaredLength(declaredLength);
+  if (declared === null || (declared !== undefined && declared > maxBytes)) return null;
+  if (!stream) return undefined;
 
-  const reader = request.body.getReader();
+  const reader = stream.getReader();
   const chunks: Uint8Array[] = [];
   let total = 0;
 
@@ -57,43 +77,94 @@ async function readBoundedBody(request: Request, maxBytes?: number) {
 export async function proxyAirBackend(
   request: Request,
   pathname: string,
-  options: ProxyOptions = {},
 ) {
-  const origin = (process.env.AIR_BACKEND_ORIGIN || DEFAULT_BACKEND).replace(/\/$/, "");
-  const sourceUrl = new URL(request.url);
-  const target = new URL(`${pathname}${sourceUrl.search}`, `${origin}/`);
-  const headers = new Headers();
+  const origin = getParityBackendOrigin();
+  if (!origin) return notFoundResponse();
 
-  request.headers.forEach((value, key) => {
-    if (!requestHeaderBlocklist.has(key.toLowerCase())) headers.set(key, value);
-  });
-
-  headers.set("x-air-landing-proxy", "1");
-  headers.set("x-forwarded-host", sourceUrl.host);
-
-  const hasBody = !["GET", "HEAD"].includes(request.method);
-  const body = hasBody ? await readBoundedBody(request, options.maxRequestBytes) : undefined;
-  if (body === null) {
-    return Response.json({ ok: false, error: "payload_too_large" }, { status: 413 });
+  const policy = getParityRoutePolicy(pathname);
+  if (!policy) return notFoundResponse();
+  if (request.method !== policy.method) {
+    const response = proxyResponse("method_not_allowed", 405);
+    response.headers.set("allow", policy.method);
+    return response;
   }
 
-  const response = await fetch(target, {
-    method: request.method,
-    headers,
-    body,
-    cache: "no-store",
-    redirect: "manual",
-  });
+  const sourceUrl = new URL(request.url);
+  if (sourceUrl.search) {
+    return proxyResponse("query_not_allowed", 400);
+  }
+  const contentEncoding = request.headers.get("content-encoding")?.toLowerCase();
+  if (contentEncoding && contentEncoding !== "identity") {
+    return proxyResponse("content_encoding_not_allowed", 415);
+  }
 
-  const responseHeaders = new Headers();
-  response.headers.forEach((value, key) => {
-    if (!responseHeaderBlocklist.has(key.toLowerCase())) responseHeaders.set(key, value);
-  });
-  responseHeaders.set("x-air-backend", "passthrough");
+  const target = new URL(policy.pathname, `${origin}/`);
+  const headers = new Headers();
 
-  return new Response(response.body, {
-    status: response.status,
-    statusText: response.statusText,
-    headers: responseHeaders,
-  });
+  for (const name of policy.requestHeaders) {
+    const value = request.headers.get(name);
+    if (value !== null) headers.set(name, value);
+  }
+  headers.set("x-air-landing-proxy", "parity-preview");
+
+  const hasBody = !["GET", "HEAD"].includes(request.method);
+  const body = hasBody
+    ? await readBoundedBody(
+        request.body,
+        request.headers.get("content-length"),
+        policy.maxRequestBytes,
+      )
+    : undefined;
+  if (body === null) {
+    return proxyResponse("payload_too_large", 413);
+  }
+
+  try {
+    const response = await fetch(target, {
+      method: policy.method,
+      headers,
+      body: asArrayBuffer(body),
+      cache: "no-store",
+      redirect: "manual",
+      signal: AbortSignal.timeout(policy.timeoutMs),
+    });
+
+    if (response.status >= 300 && response.status < 400) {
+      return proxyResponse("upstream_redirect_rejected", 502);
+    }
+
+    const responseBody = await readBoundedBody(
+      response.body,
+      response.headers.get("content-length"),
+      policy.maxResponseBytes,
+    );
+    if (responseBody === null) {
+      return proxyResponse("upstream_payload_too_large", 502);
+    }
+
+    const responseHeaders = new Headers();
+    for (const name of policy.responseHeaders) {
+      const value = response.headers.get(name);
+      if (value !== null) responseHeaders.set(name, value);
+    }
+    responseHeaders.set("cache-control", "private, no-store");
+    responseHeaders.set("x-air-backend", "parity-preview");
+    responseHeaders.set("x-content-type-options", "nosniff");
+
+    return new Response(asArrayBuffer(responseBody), {
+      status: response.status,
+      statusText: response.statusText,
+      headers: responseHeaders,
+    });
+  } catch (error) {
+    const timedOut = error instanceof Error && error.name === "TimeoutError";
+    console.error("air_parity_proxy_failed", {
+      route: policy.id,
+      outcome: timedOut ? "timeout" : "unavailable",
+    });
+    return proxyResponse(
+      timedOut ? "upstream_timeout" : "upstream_unavailable",
+      timedOut ? 504 : 502,
+    );
+  }
 }
