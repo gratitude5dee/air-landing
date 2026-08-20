@@ -15,8 +15,14 @@ CREATE TABLE IF NOT EXISTS air_preorders (
 CREATE INDEX IF NOT EXISTS air_preorders_created_at_idx
   ON air_preorders (created_at DESC);
 
+CREATE INDEX IF NOT EXISTS air_preorders_updated_at_idx
+  ON air_preorders (updated_at ASC);
+
 CREATE TABLE IF NOT EXISTS air_preorder_rate_limits (
   ip_hash text PRIMARY KEY,
   window_started_at timestamptz NOT NULL DEFAULT now(),
   hit_count integer NOT NULL DEFAULT 1 CHECK (hit_count > 0)
 );
+
+CREATE INDEX IF NOT EXISTS air_preorder_rate_limits_window_idx
+  ON air_preorder_rate_limits (window_started_at ASC);

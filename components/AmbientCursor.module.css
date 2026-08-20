@@ -1,0 +1,18 @@
+.field {
+  position: fixed !important;
+  inset: 0;
+  z-index: 4;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0.18;
+  mix-blend-mode: multiply;
+}
+
+@media (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce), (forced-colors: active) {
+  .field {
+    display: none;
+  }
+}

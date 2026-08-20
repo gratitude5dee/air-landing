@@ -1,0 +1,21 @@
+{
+  "$schema": "https://openapi.vercel.sh/microfrontends.json",
+  "applications": {
+    "air-landing": {},
+    "air": {
+      "routing": [
+        {
+          "paths": [
+            "/healthz",
+            "/webhooks/imessage",
+            "/internal/drain-inbox",
+            "/internal/provider-audit",
+            "/internal/readiness",
+            "/internal/release-fence",
+            "/internal/inbox-fifo-migration"
+          ]
+        }
+      ]
+    }
+  }
+}

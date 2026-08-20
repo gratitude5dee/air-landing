@@ -207,7 +207,7 @@ button { color: inherit; }
 
 /* The header starts in the hero's lower stacking plane, then settles into its
    usual rail as the foreground cloud curtain has cleared. */
-html[data-air-hero-header="covered"] .site-header {
+html[data-air-hero-header="covered"]:has(.hero-scroll) .site-header {
   z-index: 0;
   opacity: 0.12;
   pointer-events: none;
@@ -434,12 +434,6 @@ html[data-air-hero-header="covered"] .site-header:focus-within {
 }
 .bank-one { left: -25vw; top: -21vh; transform: translate3d(calc(var(--cloud-progress) * -68vw), calc(var(--cloud-progress) * -8vh), 0); }
 .bank-two { right: -28vw; top: -12vh; transform: translate3d(calc(var(--cloud-progress) * 70vw), calc(var(--cloud-progress) * -5vh), 0) scale(1.12); }
-.bank-three {
-  left: 9vw;
-  bottom: -54vh;
-  width: 84vw;
-  transform: translate3d(0, calc(var(--cloud-progress) * 62vh), 0) scale(1.25);
-}
 .cloud-curtain > p {
   position: absolute;
   left: 50%;
@@ -608,12 +602,8 @@ html[data-air-hero-header="covered"] .site-header:focus-within {
   background: color-mix(in srgb, var(--app-color) 82%, white 18%);
   box-shadow: 0 0.9rem 2.3rem rgba(2,12,35,0.46), inset 0 1px rgba(255,255,255,0.45), 0 0 0 1px rgba(4,17,36,0.22);
   transform: rotate(var(--app-rotate));
-  animation: appFloat 20s ease-in-out infinite;
-  animation-delay: var(--app-delay);
   transition: box-shadow 200ms ease, filter 200ms ease;
 }
-.app-icon:nth-of-type(3n) { animation-duration: 24s; }
-.app-icon:nth-of-type(3n + 1) { animation-duration: 17s; }
 .app-icon:hover { z-index: 3; filter: brightness(1.08); box-shadow: 0 1rem 2.6rem rgba(2,12,35,0.56), 0 0 0 1px rgba(219,237,255,0.58); }
 .app-icon svg { width: 1.32rem; height: 1.32rem; }
 .iphone-shell {
@@ -666,7 +656,9 @@ html[data-air-hero-header="covered"] .site-header:focus-within {
   font-size: 0.69rem;
 }
 .thread-back { position: absolute; left: 0.95rem; top: 3.6rem; color: var(--imessage); font-size: 2rem; font-weight: 300; }
-.thread-avatar { width: 2.35rem; height: 2.35rem; display: grid; place-items: center; border-radius: 50%; color: #fff; background: linear-gradient(145deg,#79c5ff,#315a9a); font-family: var(--font-serif); font-size: 1.2rem; box-shadow:0 0 .9rem rgba(76,164,239,.32); }
+.thread-avatar { position: relative; width: 2.35rem; height: 2.35rem; display: grid; place-items: center; overflow: hidden; border-radius: 50%; color: #fff; background: linear-gradient(145deg,#79c5ff,#315a9a); font-family: var(--font-serif); font-size: 1.2rem; box-shadow:0 0 .9rem rgba(76,164,239,.32); }
+.thread-avatar-dither { position: absolute !important; inset: 0; opacity: 0.62; pointer-events: none; mix-blend-mode: screen; }
+.thread-avatar-letter { position: relative; z-index: 1; text-shadow: 0 1px 0 rgba(4, 25, 52, 0.55); }
 .thread-head small { color: #7d8da2; }
 .thread-body { flex: 1; display: flex; flex-direction: column; padding: 0.45rem 0.75rem 0.2rem; }
 .thread-time { text-align: center; color: #718097; font-size: 0.64rem; font-weight: 600; margin: 0.35rem 0 0.7rem; }
@@ -1046,7 +1038,6 @@ html[data-air-hero-header="covered"] .site-header:focus-within {
 @keyframes introIn { from{opacity:0}to{opacity:1} }
 @keyframes bob { 50%{transform:translateY(.35rem)} }
 @keyframes pulse { 70%{box-shadow:0 0 0 .5rem rgba(189,229,255,0)} }
-@keyframes appFloat { 0%,100%{transform:translate3d(0,0,0) rotate(var(--app-rotate))}50%{transform:translate3d(0,-.45rem,0) rotate(calc(var(--app-rotate) + 1deg))} }
 @keyframes typing { 0%,60%,100%{transform:translateY(0);opacity:.45}30%{transform:translateY(-.2rem);opacity:1} }
 @keyframes progressBreathe { 50%{width:86%} }
 @keyframes cursorFloat { 50%{transform:translateY(-.4rem)} }
@@ -1056,7 +1047,7 @@ html[data-air-hero-header="covered"] .site-header:focus-within {
 @keyframes filmPlayhead { from{left:0}to{left:100%} }
 
 @media (max-width: 900px) {
-  html[data-air-hero-header="covered"] .site-header {
+  html[data-air-hero-header="covered"]:has(.hero-scroll) .site-header {
     z-index: 80;
     opacity: 1;
     pointer-events: auto;
@@ -1075,7 +1066,6 @@ html[data-air-hero-header="covered"] .site-header:focus-within {
   .hero-frame { opacity: 1; }
   .hero-sky::before { opacity: 0.18; }
   .sun-haze { opacity: 0.3; }
-  .app-icon:nth-of-type(n + 11) { display: none; }
 }
 
 @media (max-width: 980px) {
@@ -1124,6 +1114,6 @@ html[data-air-hero-header="covered"] .site-header:focus-within {
   html { scroll-behavior:auto }
   *,*::before,*::after { animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important }
   [data-reveal] { opacity:1;transform:none;transition:none }
-  html[data-air-hero-header="covered"] .site-header{z-index:80;opacity:1;pointer-events:auto;filter:none;transform:none;transition:none}
+  html[data-air-hero-header="covered"]:has(.hero-scroll) .site-header{z-index:80;opacity:1;pointer-events:auto;filter:none;transform:none;transition:none}
   .signal-track,.app-icon{animation:none}.hero-shader{display:none}.cloud-curtain{display:none}.hero-scroll{height:auto}.hero-sticky{position:relative}.hero-content{opacity:1;transform:none}.hero-frame{opacity:1}.film-timeline i{animation:none;left:64%}
 }

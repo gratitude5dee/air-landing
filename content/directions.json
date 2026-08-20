@@ -1,0 +1,135 @@
+{
+  "firstVisualResponse": "First visual ready. Want me to build the storyboard?",
+  "featuredFilm": {
+    "label": "Featured film study · Quiet morning",
+    "poster": "/media/air/v2026-08-19-a/first-cut/golden-gate-poster.webp",
+    "webm": "/media/air/v2026-08-19-a/first-cut/golden-gate.webm",
+    "mp4": "/media/air/v2026-08-19-a/first-cut/golden-gate.mp4",
+    "duration": 8
+  },
+  "directions": [
+    {
+      "id": "golden-gate",
+      "cueLabel": "Quiet morning",
+      "request": "Make a film: quiet morning, Golden Gate, no rush.",
+      "frames": [
+        {
+          "src": "/media/air/v2026-08-19-a/directions/golden-gate/01-first.webp",
+          "alt": "A cream-colored dog looks toward the Golden Gate Bridge across the bay.",
+          "shot": "01",
+          "note": "01 · Hold the quiet before the day begins.",
+          "width": 960,
+          "height": 540
+        },
+        {
+          "src": "/media/air/v2026-08-19-a/directions/golden-gate/02-creator.webp",
+          "alt": "A creator studies a phone with the Golden Gate Bridge behind him.",
+          "shot": "02",
+          "note": "02 · Bring the brief back to its creator.",
+          "width": 720,
+          "height": 405
+        },
+        {
+          "src": "/media/air/v2026-08-19-a/directions/golden-gate/03-bridge.webp",
+          "alt": "The Golden Gate Bridge crosses a misty blue bay beyond sunlit grass.",
+          "shot": "03",
+          "note": "03 · Let the horizon breathe.",
+          "width": 720,
+          "height": 405
+        }
+      ],
+      "clarifyingQuestion": "Should the morning feel documentary-real or dreamlike?",
+      "clarifyingAnswers": ["Documentary-real", "Dreamlike"],
+      "memory": {
+        "mood": "quiet",
+        "palette": "mist blue · sun-warmed rust",
+        "pace": "unhurried",
+        "reference": "Golden Gate morning"
+      },
+      "firstCutMode": "matched",
+      "objectPosition": "50% 50%"
+    },
+    {
+      "id": "chrome-launch",
+      "cueLabel": "Chrome launch",
+      "request": "Turn this chrome object into a launch film—precise, weightless, electric.",
+      "frames": [
+        {
+          "src": "/media/air/v2026-08-19-a/directions/chrome-launch/01-first.webp",
+          "alt": "A polished chrome object floats against a pearl-blue sky.",
+          "shot": "01",
+          "note": "01 · Introduce the object as an icon.",
+          "width": 960,
+          "height": 540
+        },
+        {
+          "src": "/media/air/v2026-08-19-a/directions/chrome-launch/02-macro.webp",
+          "alt": "Air-blue light and soft clouds reflect across a chrome surface.",
+          "shot": "02",
+          "note": "02 · Find the world in its reflection.",
+          "width": 720,
+          "height": 405
+        },
+        {
+          "src": "/media/air/v2026-08-19-a/directions/chrome-launch/03-orbit.webp",
+          "alt": "Small app-light signals orbit a chrome object in open sky.",
+          "shot": "03",
+          "note": "03 · Release the energy around it.",
+          "width": 720,
+          "height": 405
+        }
+      ],
+      "clarifyingQuestion": "Should the chrome feel pristine or hand-worn?",
+      "clarifyingAnswers": ["Pristine", "Hand-worn"],
+      "memory": {
+        "mood": "precise",
+        "palette": "chrome · pearl · Air blue",
+        "pace": "measured",
+        "reference": "editorial product film"
+      },
+      "firstCutMode": "storyboard-only",
+      "objectPosition": "50% 50%"
+    },
+    {
+      "id": "blue-hour",
+      "cueLabel": "Blue-hour portrait",
+      "request": "Make a blue-hour portrait film—intimate, kinetic, no gloss.",
+      "frames": [
+        {
+          "src": "/media/air/v2026-08-19-a/directions/blue-hour/01-first.webp",
+          "alt": "A creator's face is lit by a phone at blue hour.",
+          "shot": "01",
+          "note": "01 · Let the phone light find the face.",
+          "width": 960,
+          "height": 540
+        },
+        {
+          "src": "/media/air/v2026-08-19-a/directions/blue-hour/02-hands.webp",
+          "alt": "Hands hold a phone while recording a voice note in dusk light.",
+          "shot": "02",
+          "note": "02 · Make the voice note tactile.",
+          "width": 720,
+          "height": 405
+        },
+        {
+          "src": "/media/air/v2026-08-19-a/directions/blue-hour/03-city.webp",
+          "alt": "A creator walks into a cobalt city street after rain.",
+          "shot": "03",
+          "note": "03 · Carry the thought into the city.",
+          "width": 720,
+          "height": 405
+        }
+      ],
+      "clarifyingQuestion": "Should the camera stay intimate or start moving?",
+      "clarifyingAnswers": ["Stay intimate", "Start moving"],
+      "memory": {
+        "mood": "intimate",
+        "palette": "cobalt · skin warmth · wet silver",
+        "pace": "breathing then kinetic",
+        "reference": "blue-hour street portrait"
+      },
+      "firstCutMode": "storyboard-only",
+      "objectPosition": "50% 50%"
+    }
+  ]
+}

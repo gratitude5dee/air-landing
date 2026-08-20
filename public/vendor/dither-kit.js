@@ -33,7 +33,7 @@
      is immune to that, and an instance-level inline position:absolute still wins
      over it, which is what the full-bleed washes rely on. */
   const sheet = document.createElement('style');
-  sheet.textContent = 'dk-gradient,dk-chart,dk-avatar,dk-glyph,dk-video,dk-orb,dk-dust,dk-clouds,dk-bubble{display:block;position:relative;overflow:hidden;line-height:0}';
+  sheet.textContent = 'dk-gradient,dk-chart,dk-avatar,dk-glyph,dk-video,dk-orb,dk-dust,dk-clouds,dk-bubble{display:block;position:relative;overflow:hidden;line-height:0}dk-bubble[viewport],dk-bubble[global]{position:fixed!important;inset:0;width:100vw;height:100vh;height:100dvh;pointer-events:none}';
   (document.head || document.documentElement).appendChild(sheet);
 
   const RAMPS = {
@@ -680,15 +680,20 @@
 
   /* ---------- droplet that rides the cursor ----------
      The Bubble idea rendered in this page's material: a metaball trail resolved
-     through the Bayer ramp, repainted only inside its own bounding box. */
+     through the Bayer ramp, repainted only inside its own bounding box. Add
+     `viewport` (or `global`) to track the window from a fixed full-screen host.
+     The loop is intentionally demand-driven: it wakes for pointer input and
+     releases its animation frame after the trail has dissolved. */
   class DKBubble extends DKBase {
-    static get observedAttributes() { return ['from', 'color', 'pixel', 'size', 'trail', 'bloom', 'fade', 'glow']; }
+    static get observedAttributes() { return ['from', 'color', 'pixel', 'size', 'trail', 'bloom', 'fade', 'glow', 'idle', 'fps', 'viewport', 'global']; }
     connectedCallback() {
       super.connectedCallback();
       this._tx = -1e5; this._ty = -1e5;
       this._hx = -1e5; this._hy = -1e5;
       this._pts = []; this._on = 0; this._onT = 0; this._dirty = null;
-      const host = this.parentElement;
+      this._bLast = 0; this._bLastMove = 0;
+      this._viewport = this.hasAttribute('viewport') || this.hasAttribute('global');
+      const host = this._viewport ? window : this.parentElement;
       this._bhost = host;
       const fine = window.matchMedia('(hover: hover) and (pointer: fine)');
       this._bmv = e => {
@@ -696,30 +701,61 @@
         this._tx = e.clientX - r.left; this._ty = e.clientY - r.top;
         if (this._onT === 0) { this._hx = this._tx; this._hy = this._ty; this._pts = []; }
         this._onT = 1;
+        this._bLastMove = performance.now();
+        this._float();
       };
-      this._blv = () => { this._onT = 0; };
+      this._blv = () => { this._onT = 0; this._bLastMove = 0; this._float(); };
+      this._bvis = () => {
+        if (!document.hidden) return;
+        this._clearBubble();
+        this._stopBubble();
+      };
       if (host && fine.matches) {
         host.addEventListener('pointermove', this._bmv, { passive: true });
-        host.addEventListener('pointerleave', this._blv, { passive: true });
+        if (this._viewport) {
+          window.addEventListener('blur', this._blv, { passive: true });
+        } else {
+          host.addEventListener('pointerleave', this._blv, { passive: true });
+        }
+        document.addEventListener('visibilitychange', this._bvis, { passive: true });
       }
-      this._float();
     }
     disconnectedCallback() {
       super.disconnectedCallback();
-      if (this._bRaf) cancelAnimationFrame(this._bRaf);
-      this._bRaf = 0;
+      this._stopBubble();
       if (this._bhost) {
         this._bhost.removeEventListener('pointermove', this._bmv);
-        this._bhost.removeEventListener('pointerleave', this._blv);
+        if (!this._viewport) this._bhost.removeEventListener('pointerleave', this._blv);
       }
+      if (this._viewport) window.removeEventListener('blur', this._blv);
+      document.removeEventListener('visibilitychange', this._bvis);
+    }
+    _stopBubble() {
+      if (this._bRaf) cancelAnimationFrame(this._bRaf);
+      this._bRaf = 0;
+    }
+    _clearBubble() {
+      const ctx = this._cv && this._cv.getContext('2d');
+      if (ctx) ctx.clearRect(0, 0, this._cv.width, this._cv.height);
+      this._dirty = null;
+      this._pts = [];
+      this._on = 0;
+      this._onT = 0;
+      this._bloom();
     }
     _float() {
-      if (this._bRaf) return;
-      const step = () => {
-        this._bRaf = requestAnimationFrame(step);
-        const now = performance.now();
-        if (this._bLast && now - this._bLast < 1000 / 30) return;
+      if (this._bRaf || document.hidden) return;
+      const step = now => {
+        this._bRaf = 0;
+        if (!this.isConnected || document.hidden) return;
+        const fps = Math.max(12, this.num('fps', 30));
+        if (this._bLast && now - this._bLast < 1000 / fps) {
+          this._float();
+          return;
+        }
         this._bLast = now;
+        const idle = !this._bLastMove || now - this._bLastMove >= Math.max(120, this.num('idle', 520));
+        if (idle) this._onT = 0;
         this._hx += (this._tx - this._hx) * 0.34;
         this._hy += (this._ty - this._hy) * 0.34;
         this._on += (this._onT - this._on) * 0.1;
@@ -729,6 +765,9 @@
           if (this._pts.length > n) this._pts.length = n;
         }
         try { this._render(); } catch (e) {}
+        const visible = this._on > 0.02 && this._pts.length > 0;
+        if (!visible) this._pts = [];
+        if (!idle || visible) this._float();
       };
       this._bRaf = requestAnimationFrame(step);
     }

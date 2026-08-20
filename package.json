@@ -4,10 +4,15 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "prebuild": "npm run verify:assets",
     "build": "next build --webpack",
     "start": "next start",
     "typecheck": "tsc --noEmit",
-    "check": "npm run typecheck && npm run build"
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "data:delete-preorder": "node scripts/delete-preorder.mjs",
+    "verify:assets": "node scripts/verify-assets.mjs",
+    "check": "npm run test && npm run typecheck && npm run build"
   },
   "dependencies": {
     "@fontsource-variable/azeret-mono": "^5.2.7",
@@ -22,10 +27,15 @@
     "zod": "^4.1.0"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
+    "@playwright/test": "^1.62.1",
     "@types/node": "^24.0.0",
     "@types/react": "^19.1.0",
     "@types/react-dom": "^19.1.0",
-    "typescript": "^5.9.0"
+    "ffprobe-static": "^3.1.0",
+    "sharp": "^0.35.3",
+    "typescript": "^5.9.0",
+    "vitest": "^4.1.11"
   },
   "engines": {
     "node": ">=20"
