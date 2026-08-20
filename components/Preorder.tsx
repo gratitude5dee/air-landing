@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  createElement,
   createContext,
   type FormEvent,
   type ReactNode,
@@ -123,6 +124,20 @@ export function PreorderProvider({ children }: { children: ReactNode }) {
         }}
       >
         <div className="preorder-panel">
+          {createElement("dk-gradient", {
+            "aria-hidden": "true",
+            className: "preorder-dither-field",
+            from: "blue",
+            direction: "radial",
+            variant: "dotted",
+            pixel: "4",
+            bloom: "low",
+            fade: "",
+          })}
+          <div className="preorder-console-chrome" aria-hidden="true">
+            <span>Air / preorder / 01</span>
+            <span>WZRD.tech · private beta</span>
+          </div>
           <button className="dialog-close" type="button" onClick={close} aria-label="Close preorder">
             <LuX aria-hidden />
           </button>

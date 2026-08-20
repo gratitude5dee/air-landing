@@ -166,6 +166,7 @@ html[data-air-hero-header="covered"] .site-header {
 .hero-scroll[data-air-presentation="static"] .hero-opening,
 .hero-scroll[data-air-presentation="static"] .hero-shader,
 .hero-scroll[data-air-presentation="static"] .hero-dither-lens,
+.hero-scroll[data-air-presentation="static"] .hero-pointer-trail,
 .hero-scroll[data-air-presentation="static"] .cloud-curtain {
   display: none;
 }
@@ -275,6 +276,19 @@ html[data-air-hero-header="covered"] .site-header {
   mask-image: radial-gradient(ellipse at 50% 50%, #000 0%, rgba(0, 0, 0, 0.82) 42%, transparent 72%);
 }
 
+/* Fine-pointer only: DitherKit's pixelated droplet trails the cursor through
+   the sky without replacing the platform cursor or sitting above controls. */
+.hero-pointer-trail {
+  position: absolute !important;
+  z-index: 4;
+  inset: 0;
+  display: block;
+  opacity: clamp(0, calc((var(--hero-progress) - 0.18) * 0.86), 0.74);
+  pointer-events: none;
+  mix-blend-mode: screen;
+  mask-image: radial-gradient(ellipse at 54% 52%, #000 0%, rgba(0, 0, 0, 0.88) 46%, transparent 82%);
+}
+
 .hero-grain {
   z-index: 8;
   opacity: 0.024;
@@ -322,6 +336,7 @@ html[data-air-hydrated="timeout"] .hero-sticky {
 html[data-air-hydrated="timeout"] .hero-opening,
 html[data-air-hydrated="timeout"] .hero-shader,
 html[data-air-hydrated="timeout"] .hero-dither-lens,
+html[data-air-hydrated="timeout"] .hero-pointer-trail,
 html[data-air-hydrated="timeout"] .cloud-curtain {
   display: none !important;
 }
@@ -774,9 +789,9 @@ html[data-air-hydrated="timeout"] .hero-content {
   --edge: rgba(191, 226, 248, 0.18);
   color: #edf8ff;
   background:
-    radial-gradient(circle at 88% 8%, rgba(98, 174, 225, 0.42), transparent 24rem),
-    radial-gradient(circle at 5% 70%, rgba(48, 116, 180, 0.35), transparent 30rem),
-    linear-gradient(145deg, #061b3e 0%, #0a3970 48%, #08254f 100%);
+    radial-gradient(ellipse at 86% 30%, rgba(17, 103, 188, 0.5), transparent 22rem),
+    radial-gradient(circle at 9% 76%, rgba(23, 71, 125, 0.4), transparent 30rem),
+    linear-gradient(145deg, #02070d 0%, #04162d 52%, #061b39 100%);
 }
 
 .film-section::before {
@@ -784,10 +799,37 @@ html[data-air-hydrated="timeout"] .hero-content {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  opacity: 0.12;
-  background-image: radial-gradient(rgba(214, 239, 254, 0.9) 0.55px, transparent 0.55px);
+  opacity: 0.28;
+  background-image: radial-gradient(rgba(122, 190, 246, 0.86) 0.55px, transparent 0.55px);
   background-size: 4px 4px;
-  mask-image: linear-gradient(90deg, #000, transparent 34%, transparent 70%, #000);
+  mask-image:
+    linear-gradient(90deg, #000, transparent 36%, transparent 68%, #000),
+    linear-gradient(180deg, #000, transparent 42%);
+}
+
+.film-section::after {
+  content: "";
+  position: absolute;
+  inset: 5.6rem max(1.25rem, calc((100vw - 78rem) / 2)) auto;
+  height: 10.25rem;
+  pointer-events: none;
+  border: 1px solid rgba(147, 206, 250, 0.18);
+  border-bottom: 0;
+  background:
+    linear-gradient(180deg, rgba(94, 165, 220, 0.1), transparent 64%),
+    radial-gradient(rgba(139, 205, 248, 0.52) 0.6px, transparent 0.6px);
+  background-size: auto, 4px 4px;
+  mask-image: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, 0.58) 58%, transparent 100%);
+}
+
+.film-section .section-rail {
+  position: relative;
+  z-index: 1;
+  margin-inline: -0.25rem;
+  padding: 0.8rem 0.75rem 1rem;
+  border: 1px solid rgba(147, 206, 250, 0.18);
+  background: rgba(2, 10, 20, 0.46);
+  box-shadow: inset 0 1px rgba(227, 247, 255, 0.06);
 }
 
 .film-section .eyebrow {
@@ -800,11 +842,57 @@ html[data-air-hydrated="timeout"] .hero-content {
 }
 
 .film-storyboard {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   padding: clamp(1rem, 2vw, 1.5rem);
-  border: 1px solid rgba(205, 235, 253, 0.22);
-  background: rgba(5, 25, 55, 0.46);
-  box-shadow: inset 0 1px rgba(255, 255, 255, 0.09), 0 2rem 5rem rgba(0, 10, 31, 0.24);
+  border: 1px solid rgba(142, 202, 247, 0.3);
+  background:
+    linear-gradient(145deg, rgba(7, 24, 47, 0.96), rgba(1, 8, 17, 0.93)),
+    #020912;
+  box-shadow:
+    inset 0 1px rgba(238, 249, 255, 0.1),
+    inset 0 -1px rgba(15, 87, 156, 0.38),
+    0 2rem 5rem rgba(0, 4, 12, 0.44);
   backdrop-filter: blur(14px);
+}
+
+.film-storyboard::before {
+  content: "Air / storyboard / three frames";
+  position: absolute;
+  inset: 0.72rem 0.85rem auto;
+  z-index: 0;
+  padding-bottom: 0.54rem;
+  border-bottom: 1px dotted rgba(152, 208, 249, 0.32);
+  color: rgba(175, 220, 249, 0.54);
+  font-family: var(--font-mono);
+  font-size: 0.48rem;
+  font-weight: 600;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.film-storyboard::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: auto -5rem -7rem auto;
+  width: 22rem;
+  height: 22rem;
+  border-radius: 50%;
+  opacity: 0.46;
+  background-image: radial-gradient(rgba(34, 142, 236, 0.88) 0.65px, transparent 0.65px);
+  background-size: 4px 4px;
+  mask-image: radial-gradient(circle, #000 0%, transparent 68%);
+}
+
+.film-storyboard > * {
+  position: relative;
+  z-index: 1;
+}
+
+.film-storyboard > .eyebrow {
+  margin-top: 1.75rem;
 }
 
 .film-storyboard > h3 {
@@ -830,6 +918,27 @@ html[data-air-hydrated="timeout"] .hero-content {
 .film-featured-study > p,
 .film-featured-study > [role="status"] {
   color: rgba(231, 246, 255, 0.72);
+}
+
+.film-featured-study .film-preview {
+  border-color: rgba(143, 204, 249, 0.42);
+  background: #01070d;
+  box-shadow:
+    inset 0 0 0 1px rgba(225, 244, 255, 0.05),
+    0 1.6rem 4rem rgba(0, 0, 0, 0.38);
+}
+
+.film-featured-study .film-preview::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  border: 0.5rem solid rgba(3, 12, 23, 0.18);
+  background:
+    linear-gradient(180deg, rgba(162, 214, 251, 0.12), transparent 11%),
+    linear-gradient(0deg, rgba(0, 4, 10, 0.34), transparent 22%);
+  mix-blend-mode: screen;
 }
 
 .film-open-link {
@@ -973,7 +1082,7 @@ html[data-air-hydrated="timeout"] .hero-content {
   filter: brightness(0) invert(1);
 }
 
-/* Conversion surface retains the cobalt depth while staying on palette. */
+/* Conversion surface: a small access console, not a generic modal. */
 .preorder-dialog {
   --cream: #edf8ff;
   --cream-bright: #fff;
@@ -983,19 +1092,131 @@ html[data-air-hydrated="timeout"] .hero-content {
   --edge: rgba(205, 233, 250, 0.2);
   color: #edf8ff;
   border-color: rgba(225, 243, 254, 0.34);
-  background: #061c3b;
+  background: #020913;
 }
 
 .preorder-panel {
+  isolation: isolate;
+  overflow: hidden;
   background:
-    radial-gradient(circle at 11% 8%, rgba(77, 157, 216, 0.3), transparent 34%),
-    linear-gradient(145deg, #061b3b, #0a3567);
+    radial-gradient(circle at 88% 48%, rgba(9, 91, 178, 0.56), transparent 23rem),
+    radial-gradient(circle at 8% 0%, rgba(54, 126, 192, 0.24), transparent 28rem),
+    linear-gradient(145deg, #020912, #061b37 74%, #071a36);
+}
+
+.preorder-panel::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: 3.3rem 0 auto;
+  height: 10rem;
+  pointer-events: none;
+  border-top: 1px solid rgba(159, 211, 249, 0.22);
+  border-bottom: 1px solid rgba(159, 211, 249, 0.08);
+  background:
+    linear-gradient(180deg, rgba(62, 142, 206, 0.12), transparent 78%),
+    radial-gradient(rgba(132, 195, 241, 0.56) 0.6px, transparent 0.6px);
+  background-size: auto, 4px 4px;
+  mask-image: linear-gradient(180deg, #000, rgba(0, 0, 0, 0.72) 56%, transparent);
+}
+
+.preorder-dither-field {
+  position: absolute;
+  z-index: 0;
+  inset: auto -10rem -13rem auto;
+  width: 44rem;
+  height: 44rem;
+  display: block;
+  opacity: 0.32;
+  pointer-events: none;
+  mask-image: radial-gradient(circle at 44% 40%, #000 0%, rgba(0, 0, 0, 0.8) 38%, transparent 69%);
+}
+
+.preorder-console-chrome {
+  position: absolute;
+  z-index: 3;
+  inset: 0 0 auto;
+  min-height: 3.3rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.8rem 4.7rem 0.8rem 1.3rem;
+  border-bottom: 1px solid rgba(160, 211, 249, 0.28);
+  color: rgba(206, 234, 252, 0.72);
+  background: rgba(2, 10, 21, 0.68);
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.08), 0 1rem 2.6rem rgba(0, 0, 0, 0.14);
+  font-family: var(--font-mono);
+  font-size: 0.5rem;
+  font-weight: 600;
+  letter-spacing: 0.13em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.preorder-dialog .dialog-close {
+  top: 0.35rem;
+  right: 0.45rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0;
+  border-color: rgba(169, 216, 248, 0.34);
+  color: rgba(232, 246, 255, 0.82);
+  background: rgba(1, 9, 19, 0.68);
+}
+
+.preorder-dialog .dialog-close:hover {
+  border-color: rgba(181, 224, 251, 0.78);
+  color: #d9efff;
+}
+
+.preorder-grid {
+  position: relative;
+  z-index: 1;
+  padding-top: 3.3rem;
+}
+
+.preorder-copy {
+  position: relative;
+  border-right-color: rgba(151, 207, 247, 0.2);
+  background:
+    linear-gradient(180deg, rgba(1, 10, 21, 0.44), rgba(4, 19, 40, 0.18)),
+    radial-gradient(rgba(148, 205, 246, 0.35) 0.55px, transparent 0.55px);
+  background-size: auto, 4px 4px;
+}
+
+.preorder-copy::after {
+  content: "AIR / WZRD / FOUNDING PREORDER";
+  position: absolute;
+  right: 1.2rem;
+  bottom: 1.1rem;
+  color: rgba(166, 211, 243, 0.44);
+  font-family: var(--font-mono);
+  font-size: 0.45rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.preorder-form {
+  position: relative;
+  z-index: 1;
+  background: linear-gradient(145deg, rgba(3, 14, 29, 0.58), rgba(5, 30, 61, 0.34));
+}
+
+.preorder-form > label:not(.consent-row) {
+  color: rgba(201, 229, 249, 0.68);
 }
 
 .preorder-form > input {
-  border-color: rgba(220, 240, 253, 0.24);
+  min-height: 3.35rem;
+  border-color: rgba(185, 221, 246, 0.32);
+  border-radius: 0;
   color: #fff;
-  background: rgba(3, 17, 38, 0.5);
+  background: rgba(1, 9, 19, 0.6);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.03em;
 }
 
 .preorder-form > input:focus {
@@ -1004,14 +1225,42 @@ html[data-air-hydrated="timeout"] .hero-content {
 }
 
 .preorder-dialog .button-primary {
+  min-height: 3.45rem;
+  border-radius: 0;
   color: #06234a;
-  border-color: rgba(255, 255, 255, 0.8);
-  background: #eef9ff;
+  border-color: rgba(178, 220, 249, 0.82);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.16), transparent 42%),
+    #d9efff;
+  box-shadow:
+    inset 0 1px rgba(255, 255, 255, 0.9),
+    inset 0 -3px #2b76bf,
+    0 0 0 1px rgba(65, 151, 220, 0.28),
+    0 0.9rem 2.3rem rgba(0, 0, 0, 0.18);
 }
 
 .preorder-dialog .eyebrow,
 .preorder-dialog .calendar-fallback {
   color: #9bd8fb;
+}
+
+.preorder-dialog[data-preorder-stage="saved"] .calendar-stage {
+  position: relative;
+  z-index: 1;
+  padding-top: clamp(5.4rem, 8vw, 6.4rem);
+}
+
+.preorder-dialog[data-preorder-stage="saved"] .calendar-stage::before {
+  content: "Booking / founding preorder";
+  position: absolute;
+  top: 4rem;
+  left: clamp(2rem, 5vw, 4.5rem);
+  color: rgba(181, 220, 247, 0.55);
+  font-family: var(--font-mono);
+  font-size: 0.48rem;
+  font-weight: 600;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
 }
 
 @media (max-width: 1100px) and (min-width: 901px) {
@@ -1054,6 +1303,7 @@ html[data-air-hydrated="timeout"] .hero-content {
 
   .hero-opening,
   .hero-dither-lens,
+  .hero-pointer-trail,
   .cloud-curtain {
     display: none;
   }
@@ -1229,6 +1479,7 @@ html[data-air-hydrated="timeout"] .hero-content {
 
   .hero-shader,
   .hero-dither-lens,
+  .hero-pointer-trail,
   .cloud-curtain {
     display: none;
   }
@@ -1243,6 +1494,7 @@ html[data-air-hydrated="timeout"] .hero-content {
   .hero-opening,
   .hero-shader,
   .hero-dither-lens,
+  .hero-pointer-trail,
   .cloud-curtain,
   .app-orbit,
   dk-gradient {

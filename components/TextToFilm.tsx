@@ -166,6 +166,7 @@ export function TextToFilm() {
         className: "film-dither-field",
         from: "blue",
         direction: "radial",
+        variant: "dotted",
         pixel: "4",
         bloom: "low",
         fade: "",

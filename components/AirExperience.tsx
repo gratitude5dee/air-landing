@@ -322,6 +322,17 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
             bloom: "low",
             fade: "",
           })}
+        {cinematicActive &&
+          createElement("dk-bubble", {
+            "aria-hidden": "true",
+            className: "hero-pointer-trail",
+            from: "blue",
+            pixel: "4",
+            size: "44",
+            trail: "18",
+            bloom: "low",
+            glow: "#a8ddff",
+          })}
         {cinematicEnabled &&
           createElement("wz-sky", {
             ref: skyRef,
