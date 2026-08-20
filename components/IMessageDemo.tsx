@@ -1,5 +1,6 @@
 "use client";
 
+import { createElement } from "react";
 import {
   LuChevronLeft,
   LuChevronRight,
@@ -54,7 +55,16 @@ export function IMessageDemo() {
 
         <div className="thread-head">
           <span className="thread-back" aria-hidden>‹</span>
-          <span className="thread-avatar" aria-hidden>A</span>
+          <span className="thread-avatar" aria-hidden>
+            {createElement("dk-avatar", {
+              className: "thread-avatar-dither",
+              name: "air-wzrd",
+              from: "cyan",
+              cells: "5",
+              bloom: "low",
+            })}
+            <span className="thread-avatar-letter">A</span>
+          </span>
           <span>
             air by WZRD.tech <small aria-hidden>›</small>
           </span>

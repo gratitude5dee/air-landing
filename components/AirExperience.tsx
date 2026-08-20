@@ -12,6 +12,7 @@ import {
   useMemo,
   useReducer,
   useRef,
+  useState,
 } from "react";
 import {
   SiAirtable,
@@ -160,6 +161,8 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
   const { state, directions, dispatch, cinematicEnabled } = useAirExperience();
   const sectionRef = useRef<HTMLElement>(null);
   const skyRef = useRef<HTMLElement>(null);
+  const cinematicActiveRef = useRef(false);
+  const [cinematicActive, setCinematicActive] = useState(false);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -201,16 +204,20 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
       }
 
       latestProgress = progress;
+      if (cinematicActiveRef.current !== cinematicEligible) {
+        cinematicActiveRef.current = cinematicEligible;
+        setCinematicActive(cinematicEligible);
+      }
       section.dataset.airPresentation = cinematicEligible
         ? "cinematic"
         : "static";
       section.style.setProperty("--cloud-progress", String(progress));
       section.style.setProperty(
         "--hero-progress",
-        String(Math.min(1, progress * 1.55)),
+        String(Math.min(1, progress * 1.42)),
       );
       document.documentElement.dataset.airHeroHeader =
-        progress >= 0.52 ? "revealed" : "covered";
+        progress >= 0.62 ? "revealed" : "covered";
       setSkyProgress();
     };
 
@@ -304,6 +311,17 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
           />
         </div>
 
+        {cinematicActive &&
+          createElement("dk-gradient", {
+            "aria-hidden": "true",
+            className: "hero-dither-lens",
+            from: "cyan",
+            direction: "radial",
+            variant: "dotted",
+            pixel: "5",
+            bloom: "low",
+            fade: "",
+          })}
         {cinematicEnabled &&
           createElement("wz-sky", {
             ref: skyRef,

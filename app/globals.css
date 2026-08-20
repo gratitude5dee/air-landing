@@ -666,7 +666,9 @@ html[data-air-hero-header="covered"] .site-header:focus-within {
   font-size: 0.69rem;
 }
 .thread-back { position: absolute; left: 0.95rem; top: 3.6rem; color: var(--imessage); font-size: 2rem; font-weight: 300; }
-.thread-avatar { width: 2.35rem; height: 2.35rem; display: grid; place-items: center; border-radius: 50%; color: #fff; background: linear-gradient(145deg,#79c5ff,#315a9a); font-family: var(--font-serif); font-size: 1.2rem; box-shadow:0 0 .9rem rgba(76,164,239,.32); }
+.thread-avatar { position: relative; width: 2.35rem; height: 2.35rem; display: grid; place-items: center; overflow: hidden; border-radius: 50%; color: #fff; background: linear-gradient(145deg,#79c5ff,#315a9a); font-family: var(--font-serif); font-size: 1.2rem; box-shadow:0 0 .9rem rgba(76,164,239,.32); }
+.thread-avatar-dither { position: absolute !important; inset: 0; opacity: 0.62; pointer-events: none; mix-blend-mode: screen; }
+.thread-avatar-letter { position: relative; z-index: 1; text-shadow: 0 1px 0 rgba(4, 25, 52, 0.55); }
 .thread-head small { color: #7d8da2; }
 .thread-body { flex: 1; display: flex; flex-direction: column; padding: 0.45rem 0.75rem 0.2rem; }
 .thread-time { text-align: center; color: #718097; font-size: 0.64rem; font-weight: 600; margin: 0.35rem 0 0.7rem; }

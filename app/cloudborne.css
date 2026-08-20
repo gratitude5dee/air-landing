@@ -149,8 +149,25 @@ html[data-air-hero-header="covered"] .site-header {
 
 /* Opening world and scroll reveal. */
 .hero-scroll {
-  height: 212svh;
+  height: 250svh;
   background: #b8dff6;
+}
+
+/* The cinematic journey is opt-in at runtime. Save-data, reduced-motion, and
+   unsupported environments settle directly into the readable composition. */
+.hero-scroll[data-air-presentation="static"] {
+  height: auto;
+}
+
+.hero-scroll[data-air-presentation="static"] .hero-sticky {
+  position: relative;
+}
+
+.hero-scroll[data-air-presentation="static"] .hero-opening,
+.hero-scroll[data-air-presentation="static"] .hero-shader,
+.hero-scroll[data-air-presentation="static"] .hero-dither-lens,
+.hero-scroll[data-air-presentation="static"] .cloud-curtain {
+  display: none;
 }
 
 .hero-sticky {
@@ -173,7 +190,7 @@ html[data-air-hero-header="covered"] .site-header {
   overflow: hidden;
   display: grid;
   place-items: center;
-  opacity: clamp(0, calc(1.5 - var(--cloud-progress) * 3), 1);
+  opacity: clamp(0, calc(1.5 - var(--cloud-progress) * 2.55), 1);
   transform: scale(calc(1 + var(--cloud-progress) * 0.035));
   transform-origin: 50% 52%;
   pointer-events: none;
@@ -241,6 +258,23 @@ html[data-air-hero-header="covered"] .site-header {
   mix-blend-mode: soft-light;
 }
 
+/* A single static DitherKit wash gives the hero its pixel language without
+   competing with the GLSL sky or adding another continuous render loop. */
+.hero-dither-lens {
+  position: absolute !important;
+  z-index: 3;
+  top: 48%;
+  right: max(-8vw, -10rem);
+  width: min(62vw, 52rem);
+  height: min(68svh, 48rem);
+  border-radius: 50%;
+  opacity: clamp(0, calc((var(--cloud-progress) - 0.18) * 0.65), 0.34);
+  pointer-events: none;
+  mix-blend-mode: soft-light;
+  transform: translateY(-50%);
+  mask-image: radial-gradient(ellipse at 50% 50%, #000 0%, rgba(0, 0, 0, 0.82) 42%, transparent 72%);
+}
+
 .hero-grain {
   z-index: 8;
   opacity: 0.024;
@@ -287,6 +321,7 @@ html[data-air-hydrated="timeout"] .hero-sticky {
 
 html[data-air-hydrated="timeout"] .hero-opening,
 html[data-air-hydrated="timeout"] .hero-shader,
+html[data-air-hydrated="timeout"] .hero-dither-lens,
 html[data-air-hydrated="timeout"] .cloud-curtain {
   display: none !important;
 }
@@ -299,7 +334,7 @@ html[data-air-hydrated="timeout"] .hero-content {
 .cloud-bank {
   width: 82vw;
   height: 98vh;
-  opacity: clamp(0, calc(0.82 - var(--cloud-progress) * 1.3), 0.82);
+  opacity: clamp(0, calc(0.82 - var(--cloud-progress) * 1.15), 0.82);
   filter: blur(13px) drop-shadow(0 2rem 4rem var(--cloud-shadow));
   background:
     radial-gradient(ellipse at 18% 53%, rgba(255, 255, 255, 0.98) 0 13%, rgba(234, 247, 254, 0.92) 24%, transparent 45%),
@@ -330,6 +365,7 @@ html[data-air-hydrated="timeout"] .hero-content {
 .cloud-curtain > p {
   color: #0b477e;
   text-shadow: 0 1px rgba(255, 255, 255, 0.76);
+  opacity: clamp(0, calc(1 - var(--cloud-progress) * 2.15), 1);
 }
 
 .hero-frame {
@@ -1017,6 +1053,7 @@ html[data-air-hydrated="timeout"] .hero-content {
   }
 
   .hero-opening,
+  .hero-dither-lens,
   .cloud-curtain {
     display: none;
   }
@@ -1191,6 +1228,7 @@ html[data-air-hydrated="timeout"] .hero-content {
   }
 
   .hero-shader,
+  .hero-dither-lens,
   .cloud-curtain {
     display: none;
   }
@@ -1204,6 +1242,7 @@ html[data-air-hydrated="timeout"] .hero-content {
 @media (forced-colors: active) {
   .hero-opening,
   .hero-shader,
+  .hero-dither-lens,
   .cloud-curtain,
   .app-orbit,
   dk-gradient {
