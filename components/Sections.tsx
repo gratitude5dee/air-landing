@@ -78,6 +78,14 @@ function FeatureVisual({ kind }: { kind: Feature["visual"] }) {
   if (kind === "computer") {
     return (
       <div className="feature-visual computer-visual" aria-hidden>
+        <div className={styles.computerArtwork}>
+          <Image
+            src="/images/editorial/v2026-08-21-a/private-workspace.avif"
+            alt=""
+            fill
+            sizes="(max-width: 720px) 88vw, (max-width: 980px) 84vw, 48vw"
+          />
+        </div>
         <div className="tiny-window-head"><i /><i /><i /><span>air://workspace</span></div>
         <div className="window-grid"><span /><span /><span /><span /></div>
         <div className="cursor-chip">Air is arranging your launch ↗</div>
@@ -240,6 +248,14 @@ export function WorkflowSignals() {
       data-air-cloud-opacity="0.16"
       aria-labelledby="signals-title"
     >
+      <div className={styles.workflowArtwork} aria-hidden="true">
+        <Image
+          src="/images/editorial/v2026-08-21-a/orchestration-horizon.avif"
+          alt=""
+          fill
+          sizes="100vw"
+        />
+      </div>
       <div className="shell">
         <div className="section-rail"><span>One thought</span><span>One private thread · Interface preview</span></div>
         <div className={`section-heading ${styles.workflowHeading}`} data-reveal>

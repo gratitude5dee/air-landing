@@ -27,6 +27,8 @@ All images below were generated with OpenAI image generation. The shared directi
 | Blue hour / city | `exec-305d22d9-dd6b-45f0-bef3-4ba198e9700f` | Creator moving into a cobalt city street after rain. | `7f8b2de9f83b102b77f38a1e59b636a5683d67ced844ab33d1b48504aab94ebb` |
 | Golden Gate / bridge cleanup | `exec-734451f4-d1b1-4dc3-80bc-76b6d007de8a` | Precise edit of a supplied film still: remove the reclining person while preserving the bridge, sky, grass, framing, and color. | `1fe44b21c63a57a2349d73a34473eddb61cc413956bfecb3e552090d8d55f2dc` |
 | Closing / blue-hour horizon | `exec-bdf3764a-4ad9-4c42-b002-c2353d1ff7c0` | Original landscape-only horizon for the preorder finale: pearl-to-cobalt sky, low cloud banks, no people, text, logos, brands, or devices. Runtime derivative: `/images/closing/v2026-08-21-a/blue-hour-horizon.avif`. | `05eca63b2db4efca950186c1d68c1607dcdf68bb80e43341669c4973a18cde8f` |
+| Editorial / private workspace | `exec-ca8d819e-ad76-435a-9746-587cbb7274f9` | Original frosted-glass and chrome still life for the Computer capability: no literal device, interface, text, logo, or brand. Runtime derivative: `/images/editorial/v2026-08-21-a/private-workspace.avif`. | `3ed4104243da5ddf8c8de40fb3b7fab7ba72e322d3aceaf440af2ae03523bad9` |
+| Editorial / orchestration horizon | `exec-d5052084-f25b-41f5-b379-dec01ad4cecd` | Original blue-hour cloud horizon with subtle abstract convergence paths for the one-thread orchestration chapter: no products, UI, people, text, logo, or brand. Runtime derivative: `/images/editorial/v2026-08-21-a/orchestration-horizon.avif`. | `0b8aee0b0790dacf63cf9b0341afba99e844bcc081328605c515730e96f1063a` |
 
 ## Golden Gate source frames
 

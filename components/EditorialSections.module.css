@@ -32,6 +32,49 @@
 
 .anchorCard :global(.computer-visual) {
   margin-inline: -0.1rem;
+  isolation: isolate;
+  overflow: hidden;
+  background: #071322;
+}
+
+.computerArtwork {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+}
+
+.computerArtwork::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(115deg, rgba(3, 16, 34, 0.74), rgba(3, 16, 34, 0.2) 58%, rgba(2, 12, 28, 0.58)),
+    linear-gradient(0deg, rgba(2, 11, 24, 0.68), transparent 62%);
+}
+
+.computerArtwork :global(img) {
+  object-fit: cover;
+  object-position: 40% center;
+  opacity: 0.82;
+  filter: saturate(0.82) contrast(1.04);
+}
+
+.anchorCard :global(.tiny-window-head),
+.anchorCard :global(.window-grid),
+.anchorCard :global(.cursor-chip) {
+  position: relative;
+  z-index: 1;
+}
+
+.anchorCard :global(.tiny-window-head) {
+  background: rgba(2, 14, 30, 0.52);
+  backdrop-filter: blur(0.65rem);
+}
+
+.anchorCard :global(.window-grid span) {
+  background: linear-gradient(145deg, rgba(22, 75, 121, 0.34), rgba(3, 15, 31, 0.58));
+  backdrop-filter: blur(0.35rem);
 }
 
 .communicationStack {
@@ -100,6 +143,35 @@
 
 .workflowScene {
   isolation: isolate;
+}
+
+.workflowArtwork {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.workflowArtwork::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(3, 17, 38, 0.95) 0%, rgba(3, 17, 38, 0.65) 46%, rgba(3, 17, 38, 0.82) 100%),
+    linear-gradient(180deg, rgba(3, 12, 28, 0.48), rgba(3, 12, 28, 0.1) 45%, rgba(4, 20, 43, 0.72));
+}
+
+.workflowArtwork :global(img) {
+  object-fit: cover;
+  object-position: center;
+  opacity: 0.54;
+  filter: saturate(0.84) contrast(1.05);
+}
+
+.workflowScene > :global(.shell) {
+  position: relative;
+  z-index: 1;
 }
 
 .workflowHeading {

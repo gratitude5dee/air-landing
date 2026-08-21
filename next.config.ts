@@ -59,6 +59,10 @@ const nextConfig: NextConfig = {
         source: "/images/closing/v2026-08-21-a/:path*",
         headers: immutableHeaders,
       },
+      {
+        source: "/images/editorial/v2026-08-21-a/:path*",
+        headers: immutableHeaders,
+      },
     ];
   },
 };

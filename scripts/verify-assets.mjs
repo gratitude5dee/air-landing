@@ -13,10 +13,21 @@ const PUBLIC_ROOT = resolve(PROJECT_ROOT, "public");
 const MANIFEST_PATH = resolve(PROJECT_ROOT, "content/directions.json");
 const VERSION_PREFIX = "/media/air/v2026-08-19-a/";
 const CLOSING_ART_PATH = "/images/closing/v2026-08-21-a/blue-hour-horizon.avif";
+const EDITORIAL_ARTWORK = [
+  {
+    assetPath: "/images/editorial/v2026-08-21-a/private-workspace.avif",
+    label: "Private-workspace artwork",
+  },
+  {
+    assetPath: "/images/editorial/v2026-08-21-a/orchestration-horizon.avif",
+    label: "Orchestration-horizon artwork",
+  },
+];
 const FIRST_FRAME_BUDGET = 120 * 1024;
 const CONTINUATION_FRAME_BUDGET = 90 * 1024;
 const POSTER_BUDGET = 180 * 1024;
 const CLOSING_ART_BUDGET = 240 * 1024;
+const EDITORIAL_ART_BUDGET = 160 * 1024;
 const FILM_PACKAGE_BUDGET = 2.5 * 1024 * 1024;
 const FILM_DURATION_TOLERANCE_SECONDS = 0.05;
 const MAX_KEYFRAME_GAP_SECONDS = 0.5;
@@ -175,6 +186,37 @@ async function verifyClosingArtwork() {
   return { absolutePath, bytes: fileStats.size };
 }
 
+async function verifyEditorialArtwork() {
+  const verified = [];
+  for (const artwork of EDITORIAL_ARTWORK) {
+    const absolutePath = resolve(PUBLIC_ROOT, `.${artwork.assetPath}`);
+    if (!isContainedPath(PUBLIC_ROOT, absolutePath)) {
+      fail(`${artwork.label} escapes the public directory: ${artwork.assetPath}`);
+    }
+    const fileStats = await stat(absolutePath).catch(() => null);
+    if (!fileStats?.isFile()) fail(`${artwork.label} is missing: ${artwork.assetPath}`);
+    if (fileStats.size > EDITORIAL_ART_BUDGET) {
+      fail(`${artwork.label} exceeds ${EDITORIAL_ART_BUDGET} bytes (${fileStats.size}).`);
+    }
+
+    let metadata;
+    try {
+      metadata = await sharp(absolutePath, { failOn: "error" }).metadata();
+    } catch (error) {
+      fail(`${artwork.label} is not a readable AVIF: ${error instanceof Error ? error.message : String(error)}`);
+    }
+    if (metadata.mediaType !== "image/avif" || metadata.format !== "heif") {
+      fail(`${artwork.label} must be AVIF: ${artwork.assetPath}`);
+    }
+    if (metadata.width !== 1672 || metadata.height !== 941) {
+      fail(`${artwork.label} must be 1672x941, received ${String(metadata.width)}x${String(metadata.height)}.`);
+    }
+    if (metadata.pages && metadata.pages !== 1) fail(`${artwork.label} must be a single frame.`);
+    verified.push({ absolutePath, bytes: fileStats.size });
+  }
+  return verified;
+}
+
 function finiteNumber(value, label) {
   const number = Number(value);
   if (!Number.isFinite(number)) fail(`${label} is not finite.`);
@@ -291,6 +333,7 @@ export async function verifyAssets() {
     }),
   );
   verified.push(await verifyClosingArtwork());
+  verified.push(...await verifyEditorialArtwork());
   const webm = await verifyFilm({
     assetPath: manifest.featuredFilm.webm,
     duration: manifest.featuredFilm.duration,
