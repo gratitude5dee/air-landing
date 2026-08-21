@@ -2,7 +2,7 @@ import { Header, Footer } from "@/components/Chrome";
 import { Hero } from "@/components/Hero";
 import { IntroFilm } from "@/components/IntroFilm";
 import { MotionEnhancer } from "@/components/MotionEnhancer";
-import { AgentFeatures, ClosingCta, ThreadProof, WorkflowSignals } from "@/components/Sections";
+import { AgentFeatures, AirFaq, ClosingCta, ThreadProof, WorkflowSignals } from "@/components/Sections";
 import { TextToFilm } from "@/components/TextToFilm";
 
 export default function Home() {
@@ -17,6 +17,7 @@ export default function Home() {
           <TextToFilm />
           <WorkflowSignals />
           <ThreadProof />
+          <AirFaq />
           <ClosingCta />
         </Hero>
       </main>

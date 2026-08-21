@@ -26,6 +26,7 @@ All images below were generated with OpenAI image generation. The shared directi
 | Blue hour / hands | `exec-b9ca27bf-6aca-4db3-9d8d-a0972b9b6e41` | Tactile hands recording a voice note in dusk light. | `2acfbe7f6acc950eba2d3a21ac358071338a5d3ab732653344c35773682bfe61` |
 | Blue hour / city | `exec-305d22d9-dd6b-45f0-bef3-4ba198e9700f` | Creator moving into a cobalt city street after rain. | `7f8b2de9f83b102b77f38a1e59b636a5683d67ced844ab33d1b48504aab94ebb` |
 | Golden Gate / bridge cleanup | `exec-734451f4-d1b1-4dc3-80bc-76b6d007de8a` | Precise edit of a supplied film still: remove the reclining person while preserving the bridge, sky, grass, framing, and color. | `1fe44b21c63a57a2349d73a34473eddb61cc413956bfecb3e552090d8d55f2dc` |
+| Closing / blue-hour horizon | `exec-bdf3764a-4ad9-4c42-b002-c2353d1ff7c0` | Original landscape-only horizon for the preorder finale: pearl-to-cobalt sky, low cloud banks, no people, text, logos, brands, or devices. Runtime derivative: `/images/closing/v2026-08-21-a/blue-hour-horizon.avif`. | `05eca63b2db4efca950186c1d68c1607dcdf68bb80e43341669c4973a18cde8f` |
 
 ## Golden Gate source frames
 

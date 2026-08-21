@@ -1,0 +1,669 @@
+/*
+ * Editorial-only layout treatment for the post-hero chapters. Global Air
+ * tokens and primitives remain the source of colour, type, and motion.
+ */
+
+.capabilityScene {
+  isolation: isolate;
+}
+
+.capabilityLead {
+  max-width: 47rem;
+}
+
+.capabilityField {
+  display: grid;
+  grid-template-columns: minmax(0, 1.16fr) minmax(20rem, 0.84fr);
+  gap: 1.1rem;
+  align-items: stretch;
+}
+
+.capabilityCard {
+  min-width: 0;
+}
+
+.anchorCard {
+  min-height: 34rem;
+}
+
+.anchorCard :global(.feature-visual) {
+  min-height: 17rem;
+}
+
+.anchorCard :global(.computer-visual) {
+  margin-inline: -0.1rem;
+}
+
+.communicationStack {
+  min-width: 0;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) minmax(0, 1fr);
+  gap: 1.1rem;
+}
+
+.groupLabel {
+  margin: 0 0 -0.15rem;
+  color: rgba(7, 47, 87, 0.58);
+  font-family: var(--font-mono);
+  font-size: 0.52rem;
+  font-weight: 620;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.communicationCard {
+  min-height: 15.65rem;
+}
+
+.communicationCard :global(.feature-visual) {
+  min-height: 5rem;
+}
+
+.utilityShelf {
+  grid-column: 1 / -1;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.1rem;
+}
+
+.utilityShelf > .groupLabel {
+  grid-column: 1 / -1;
+  margin-top: 1.1rem;
+}
+
+.utilityCard,
+.connectorCard {
+  min-height: 21.5rem;
+}
+
+.utilityCard :global(.feature-visual),
+.connectorCard :global(.feature-visual) {
+  min-height: 7.75rem;
+}
+
+.connectorCard {
+  background:
+    radial-gradient(circle at 50% 12%, rgba(124, 193, 233, 0.25), transparent 11rem),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.88), rgba(219, 240, 251, 0.7));
+}
+
+.walletStatus {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.walletStatus :global(.soon-badge) {
+  white-space: nowrap;
+}
+
+.workflowScene {
+  isolation: isolate;
+}
+
+.workflowHeading {
+  max-width: 65rem;
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(18rem, 0.72fr);
+  column-gap: clamp(2rem, 8vw, 7rem);
+  row-gap: 0.8rem;
+  align-items: end;
+}
+
+.workflowHeading :global(.eyebrow),
+.workflowHeading h2 {
+  grid-column: 1;
+}
+
+.workflowHeading > p:last-child {
+  grid-column: 2;
+  grid-row: 2 / span 1;
+  align-self: end;
+  margin: 0;
+}
+
+.workflowProofGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(19rem, 0.72fr);
+  gap: clamp(1.3rem, 4vw, 4.8rem);
+  align-items: stretch;
+}
+
+.conversationArtifact {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-width: 0;
+  padding: 0.72rem;
+  border: 1px solid rgba(196, 230, 251, 0.28);
+  background:
+    radial-gradient(circle at 78% 15%, rgba(66, 150, 219, 0.2), transparent 19rem),
+    linear-gradient(145deg, rgba(5, 26, 55, 0.96), rgba(2, 12, 28, 0.94));
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.1), 0 2.2rem 5.6rem rgba(0, 5, 18, 0.28);
+}
+
+.conversationArtifact::after {
+  content: "";
+  position: absolute;
+  inset: auto -12% -32% 42%;
+  z-index: -1;
+  width: 31rem;
+  height: 17rem;
+  opacity: 0.4;
+  background-image: radial-gradient(rgba(150, 211, 251, 0.72) 0.65px, transparent 0.65px);
+  background-size: 4px 4px;
+  mask-image: radial-gradient(ellipse, #000 0%, transparent 69%);
+}
+
+.threadChrome,
+.threadFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  padding: 0.58rem 0.75rem;
+  color: rgba(220, 241, 253, 0.58);
+  font-family: var(--font-mono);
+  font-size: 0.48rem;
+  font-weight: 580;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+.threadChrome {
+  border: 1px solid rgba(196, 230, 251, 0.16);
+  background: rgba(2, 12, 27, 0.46);
+}
+
+.threadChrome > span:first-child {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: rgba(236, 248, 255, 0.78);
+}
+
+.threadChrome i {
+  width: 0.42rem;
+  height: 0.42rem;
+  border-radius: 50%;
+  background: #8fd4ff;
+  box-shadow: 0 0 0.62rem rgba(143, 212, 255, 0.82);
+}
+
+.threadTranscript {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  padding: clamp(1.25rem, 3.2vw, 2.25rem) clamp(0.3rem, 2vw, 1.25rem) 1.25rem;
+}
+
+.threadMessage {
+  width: min(88%, 30rem);
+  padding: 0.82rem 0.95rem;
+  border: 1px solid rgba(214, 240, 255, 0.14);
+  border-radius: 1rem;
+  box-shadow: 0 0.75rem 1.75rem rgba(0, 0, 0, 0.14);
+}
+
+.threadMessage > span {
+  display: block;
+  margin-bottom: 0.38rem;
+  color: rgba(224, 243, 253, 0.58);
+  font-family: var(--font-mono);
+  font-size: 0.47rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.threadMessage p {
+  margin: 0;
+  color: #f4fbff;
+  font-size: clamp(0.9rem, 1.4vw, 1.05rem);
+  line-height: 1.43;
+}
+
+.threadMessageUser {
+  align-self: flex-end;
+  border-bottom-right-radius: 0.25rem;
+  background: linear-gradient(145deg, #0a84ff, #2878db);
+}
+
+.threadMessageUser > span {
+  color: rgba(243, 250, 255, 0.72);
+}
+
+.threadMessageAir {
+  align-self: flex-start;
+  border-bottom-left-radius: 0.25rem;
+  background: rgba(120, 151, 181, 0.23);
+}
+
+.connectionNotice {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  align-self: center;
+  width: min(94%, 35rem);
+  padding: 0.68rem 0.8rem;
+  border: 1px dashed rgba(177, 221, 247, 0.25);
+  color: rgba(222, 244, 255, 0.74);
+  font-family: var(--font-mono);
+  font-size: 0.53rem;
+  letter-spacing: 0.04em;
+  line-height: 1.45;
+}
+
+.connectionNotice svg {
+  flex: none;
+  color: #9bd8fc;
+}
+
+.workflowLedger {
+  display: grid;
+  gap: 0;
+  margin: 0.75rem 0 0;
+  padding: 0;
+  border-top: 1px solid rgba(203, 233, 251, 0.15);
+  list-style: none;
+}
+
+.workflowLedger li {
+  display: grid;
+  grid-template-columns: 1.85rem minmax(0, 1fr);
+  gap: 0.5rem;
+  padding: 0.72rem 0;
+  border-bottom: 1px solid rgba(203, 233, 251, 0.12);
+}
+
+.workflowLedger li > span {
+  color: #9bd8fc;
+  font-family: var(--font-mono);
+  font-size: 0.49rem;
+  letter-spacing: 0.1em;
+}
+
+.workflowLedger b,
+.workflowLedger small {
+  display: block;
+}
+
+.workflowLedger b {
+  color: #f2faff;
+  font-size: 0.86rem;
+  font-weight: 620;
+}
+
+.workflowLedger small {
+  margin-top: 0.22rem;
+  color: rgba(220, 241, 253, 0.62);
+  font-size: 0.75rem;
+  line-height: 1.42;
+}
+
+.threadFooter {
+  padding-top: 0;
+}
+
+.threadFooter > span:last-child {
+  color: rgba(220, 241, 253, 0.52);
+}
+
+.workflowAside {
+  align-self: center;
+  min-width: 0;
+  padding: clamp(0.3rem, 2vw, 1.25rem);
+}
+
+.workflowAside h3 {
+  margin: 0.48rem 0 0;
+  color: #f6fbff;
+  font-size: clamp(2rem, 3.7vw, 3.7rem);
+  font-weight: 700;
+  letter-spacing: -0.058em;
+  line-height: 0.95;
+  background-image: none !important;
+  -webkit-text-fill-color: currentColor !important;
+}
+
+.workflowAside > p:last-of-type {
+  max-width: 31rem;
+  margin: 1.25rem 0 0;
+  color: rgba(224, 244, 255, 0.73);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.workflowAside ul {
+  display: grid;
+  gap: 0.85rem;
+  margin: 2rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.workflowAside li {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.7rem;
+  align-items: start;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px dotted rgba(212, 239, 253, 0.3);
+  color: rgba(225, 245, 255, 0.72);
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
+.workflowAside li svg {
+  margin-top: 0.1rem;
+  color: #9bd8fc;
+}
+
+.workflowAside li b {
+  color: #f4fbff;
+  font-weight: 650;
+}
+
+.signalShelf {
+  display: grid;
+  grid-template-columns: minmax(15rem, 0.52fr) minmax(0, 1.48fr);
+  gap: clamp(1.5rem, 4vw, 4rem);
+  align-items: center;
+  margin-top: clamp(3.6rem, 7vw, 7rem);
+  padding: clamp(1rem, 2.3vw, 1.5rem);
+  border-top: 1px solid rgba(205, 235, 251, 0.2);
+  border-bottom: 1px solid rgba(205, 235, 251, 0.16);
+  background: rgba(1, 14, 33, 0.18);
+}
+
+.signalShelf > div:first-child > p:last-child {
+  max-width: 23rem;
+  margin: 0.65rem 0 0;
+  color: rgba(225, 245, 255, 0.66);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.signalStrip {
+  display: flex;
+  gap: 0.65rem;
+  overflow: hidden;
+  padding: 0.15rem;
+  mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+}
+
+.signalStrip figure {
+  flex: 0 0 clamp(9rem, 16vw, 13.5rem);
+  display: grid;
+  place-items: center;
+  min-height: 3.65rem;
+  margin: 0;
+  padding: 0.4rem;
+  border: 1px solid rgba(218, 239, 252, 0.16);
+  background: rgba(255, 255, 255, 0.055);
+}
+
+.signalStrip img {
+  width: 100%;
+  height: auto;
+  max-height: 3rem;
+  object-fit: contain;
+  opacity: 0.8;
+}
+
+.threadScene {
+  isolation: isolate;
+}
+
+.threadReference {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.threadReferenceImage {
+  min-height: 1px;
+  background: linear-gradient(145deg, #effaff, #bcdcf0);
+}
+
+.faqSection {
+  --cream: #082750;
+  --cream-bright: #082750;
+  --ink-72: rgba(5, 37, 74, 0.72);
+  --ink-55: rgba(5, 37, 74, 0.57);
+  --rule: rgba(9, 75, 128, 0.28);
+  color: #082750;
+  background:
+    radial-gradient(circle at 86% 14%, rgba(255, 255, 255, 0.78), transparent 20rem),
+    linear-gradient(180deg, #d6edf9, #f0f9fd 55%, #c4e3f4);
+}
+
+.faqSection::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.38;
+  background-image: radial-gradient(rgba(17, 96, 157, 0.34) 0.55px, transparent 0.55px);
+  background-size: 4px 4px;
+  mask-image: linear-gradient(180deg, transparent 10%, #000 46%, transparent 90%);
+}
+
+.faqSection > :global(.shell) {
+  position: relative;
+  z-index: 1;
+}
+
+.faqHeading {
+  max-width: 44rem;
+}
+
+.faqHeading h2 {
+  color: #082750;
+}
+
+.faqList {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 0;
+}
+
+.faqList > div {
+  min-width: 0;
+  min-height: 15rem;
+  padding: clamp(1.15rem, 2.3vw, 1.65rem);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.74), rgba(224, 242, 251, 0.52));
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.9), 0 1.25rem 3rem rgba(38, 100, 150, 0.11);
+}
+
+.faqList dt {
+  display: grid;
+  gap: 1rem;
+  color: #082750;
+  font-size: clamp(1.25rem, 2vw, 1.7rem);
+  font-weight: 650;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+}
+
+.faqList dt span {
+  color: rgba(10, 93, 157, 0.63);
+  font-family: var(--font-mono);
+  font-size: 0.53rem;
+  font-weight: 620;
+  letter-spacing: 0.13em;
+}
+
+.faqList dd {
+  margin: 1.05rem 0 0;
+  color: rgba(5, 37, 74, 0.73);
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
+.closingScene {
+  isolation: isolate;
+}
+
+.closingArtwork {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.closingArtwork img {
+  object-fit: cover;
+  object-position: center;
+  opacity: 0.78;
+  mix-blend-mode: soft-light;
+}
+
+.closingInner {
+  max-width: 43rem;
+}
+
+@media (max-width: 980px) {
+  .capabilityField {
+    grid-template-columns: 1fr;
+  }
+
+  .anchorCard {
+    min-height: 29rem;
+  }
+
+  .communicationStack {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: auto minmax(0, 1fr);
+  }
+
+  .communicationStack > .groupLabel {
+    grid-column: 1 / -1;
+  }
+
+  .workflowHeading,
+  .workflowProofGrid,
+  .signalShelf {
+    grid-template-columns: 1fr;
+  }
+
+  .workflowHeading > p:last-child {
+    grid-column: 1;
+    grid-row: auto;
+    margin-top: 0.2rem;
+  }
+
+  .workflowAside {
+    padding-inline: 0;
+  }
+
+  .signalStrip {
+    padding-bottom: 0.2rem;
+  }
+
+  .faqList {
+    grid-template-columns: 1fr;
+  }
+
+  .faqList > div {
+    min-height: 0;
+  }
+}
+
+@media (max-width: 720px) {
+  .anchorCard {
+    min-height: 25rem;
+  }
+
+  .anchorCard :global(.feature-visual) {
+    min-height: 12rem;
+  }
+
+  .communicationStack,
+  .utilityShelf {
+    grid-template-columns: 1fr;
+  }
+
+  .communicationStack > .groupLabel,
+  .utilityShelf > .groupLabel {
+    grid-column: auto;
+  }
+
+  .communicationCard,
+  .utilityCard,
+  .connectorCard {
+    min-height: 20rem;
+  }
+
+  .communicationCard :global(.feature-visual),
+  .utilityCard :global(.feature-visual),
+  .connectorCard :global(.feature-visual) {
+    min-height: 7rem;
+  }
+
+  .threadChrome,
+  .threadFooter {
+    font-size: 0.43rem;
+  }
+
+  .threadChrome > span:last-child {
+    display: none;
+  }
+
+  .threadMessage {
+    width: 94%;
+  }
+
+  .connectionNotice {
+    align-self: stretch;
+    width: auto;
+  }
+
+  .workflowAside h3 {
+    font-size: clamp(2rem, 11vw, 3.45rem);
+  }
+
+  .signalShelf {
+    margin-top: 3.5rem;
+  }
+
+  .signalStrip figure {
+    flex-basis: 14rem;
+  }
+
+  .faqList dt {
+    font-size: 1.35rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .conversationArtifact,
+  .signalShelf,
+  .faqList > div {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .conversationArtifact,
+  .threadChrome,
+  .threadMessage,
+  .connectionNotice,
+  .faqList > div {
+    border: 1px solid CanvasText;
+    background: Canvas;
+    color: CanvasText;
+  }
+
+  .threadMessage p,
+  .workflowLedger b,
+  .workflowAside h3,
+  .workflowAside li b,
+  .faqHeading h2,
+  .faqList dt,
+  .faqList dd {
+    color: CanvasText;
+    -webkit-text-fill-color: CanvasText !important;
+  }
+}

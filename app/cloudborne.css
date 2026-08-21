@@ -586,6 +586,7 @@ html[data-air-hydrated="timeout"] .hero-content {
 }
 
 .direction-cues {
+  max-width: 32rem;
   display: flex;
   flex-wrap: wrap;
   gap: 0.55rem;
@@ -646,12 +647,15 @@ html[data-air-hydrated="timeout"] .hero-content {
   inset: 0;
   transform: rotate(var(--orbit-angle));
   transform-origin: 50% 52%;
-  opacity: clamp(0, calc((var(--orbit-progress) - 0.04) * 1.05), 1);
+  /* The constellation supports the device rather than competing with the
+     * product promise. Its quiet arrival keeps the phone and headline as the
+     * two clear focal points after the handoff. */
+  opacity: clamp(0, calc((var(--orbit-progress) - 0.04) * 0.82), 0.82);
   will-change: transform, opacity;
 }
 
 .orbit-map path {
-  stroke: rgba(9, 76, 132, 0.26);
+  stroke: rgba(9, 76, 132, 0.18);
 }
 
 .orbit-map circle {

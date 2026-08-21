@@ -27,6 +27,7 @@ export const metadata: Metadata = {
 const capabilities = [
   {
     Icon: LuLaptop,
+    kind: "Computer",
     number: "01",
     title: "Computer",
     status: "Private beta",
@@ -34,6 +35,7 @@ const capabilities = [
   },
   {
     Icon: LuPhone,
+    kind: "Phone",
     number: "02",
     title: "Phone number",
     status: "Private beta",
@@ -41,6 +43,7 @@ const capabilities = [
   },
   {
     Icon: LuInbox,
+    kind: "Inbox",
     number: "03",
     title: "Email and inbox",
     status: "Private beta",
@@ -48,6 +51,7 @@ const capabilities = [
   },
   {
     Icon: LuKeyRound,
+    kind: "Vault",
     number: "04",
     title: "Secrets manager",
     status: "Private beta",
@@ -55,6 +59,7 @@ const capabilities = [
   },
   {
     Icon: LuLink,
+    kind: "Connections",
     number: "05",
     title: "1,000+ available app connections",
     status: "Connector catalog",
@@ -62,6 +67,7 @@ const capabilities = [
   },
   {
     Icon: LuWalletCards,
+    kind: "Wallet",
     number: "06",
     title: "Wallet & AgentCard",
     status: "Wallet · Private beta / AgentCard · Coming soon",
@@ -77,35 +83,68 @@ export default function CapabilitiesPage() {
       title="The tools behind the creative thread."
       description="Air’s creative thread is designed to be supported by a workspace, phone line, inbox, scoped secrets, and a connector catalog. Each item is labeled by its current availability."
     >
-      <section className={styles.chapter} data-air-scene="pearl" data-variant="sky" aria-labelledby="support-title">
+      <section
+        className={`${styles.chapter} ${styles.capabilityChapter}`}
+        data-air-scene="pearl"
+        data-air-cloud-progress="0.84"
+        data-air-cloud-rays="0.1"
+        data-air-cloud-opacity="0.18"
+        data-variant="sky"
+        aria-labelledby="support-title"
+      >
         <div className="shell">
-          <div className={styles.rail}><span>Every agent gets a</span><span>06 capabilities</span></div>
-          <div className={styles.leadGrid}>
+          <div className={styles.rail}>
+            <span>Every agent gets a</span>
+            <span>06 labeled capabilities</span>
+          </div>
+          <div className={styles.chapterHeading}>
             <h2 id="support-title">Support the idea without losing the thread.</h2>
             <p>These are the grounded systems that let a creative conversation turn into finished, reviewable work.</p>
           </div>
-          <div className={styles.capabilityGrid}>
-            {capabilities.map(({ Icon, number, title, status, body }) => (
-              <article className={styles.capabilityCard} key={title}>
-                <div className={styles.capabilityTop}><span>{number}</span><Icon aria-hidden /></div>
-                <h3>{title}</h3>
-                <p>{body}</p>
-                <span className={styles.status}>{status}</span>
+
+          <div className={styles.capabilitySurface} aria-label="Air operating surface">
+            {capabilities.map(({ Icon, kind, number, title, status, body }) => (
+              <article className={`${styles.capabilityModule} ${styles[`capability${kind}`]}`} key={title}>
+                <header>
+                  <span>{number}</span>
+                  <Icon aria-hidden />
+                </header>
+                <div className={styles.capabilityModuleVisual} aria-hidden>
+                  <i /><i /><i /><i />
+                </div>
+                <div className={styles.capabilityModuleCopy}>
+                  <h3>{title}</h3>
+                  <p>{body}</p>
+                  <span className={styles.status}>{status}</span>
+                </div>
               </article>
             ))}
+          </div>
+
+          <div className={styles.capabilityLegend}>
+            <span>Operating-surface preview</span>
+            <p>Availability labels describe the current product state—not an entitlement or a completed account connection.</p>
           </div>
         </div>
       </section>
 
-      <section className={styles.callout} data-air-scene="cloud" aria-labelledby="connections-title">
+      <section
+        className={`${styles.editorialCallout} ${styles.editorialCalloutNight}`}
+        data-air-scene="ink"
+        data-air-cloud-progress="0.74"
+        data-air-cloud-rays="0.14"
+        data-air-cloud-opacity="0.18"
+        aria-labelledby="connections-title"
+      >
         <div className="shell">
           <div>
             <p className="eyebrow">Approval stays in the loop</p>
             <h2 id="connections-title">The connections are not the point.</h2>
           </div>
-          <div>
+          <div className={styles.calloutAside}>
             <p>
-              Air is designed to keep the creative conversation readable. You decide what Air may connect, publish, and spend.
+              Air is designed to keep the creative conversation readable. You decide what Air may connect,
+              publish, and spend.
             </p>
             <DetailArrowLink href="/how-it-works">See the review loop</DetailArrowLink>
           </div>

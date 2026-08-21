@@ -62,6 +62,7 @@ function StoryboardCard({
             alt={frame.alt}
             width={frame.width}
             height={frame.height}
+            loading="eager"
             sizes="(max-width: 720px) 92vw, 28vw"
             style={{
               width: "100%",
@@ -183,11 +184,12 @@ export function TextToFilm() {
 
         <div className="film-grid">
           <div className="film-copy" data-reveal>
-            <p className="eyebrow">Turn one text into a storyboard and first cut.</p>
-            <h2 id="film-title">Give the thought a first frame.</h2>
+            <p className="eyebrow">Text to film · later private-beta proof</p>
+            <h2 id="film-title">Turn one text into a storyboard and first cut.</h2>
             <p>
-              A later private-beta creative proof: Air shapes one text into something visible enough
-              to direct. This is a curated interface preview, not live browser generation.
+              Start with the feeling, the reference, or the rough brief. Air turns it into a first
+              frame and a board you can direct. This is a curated interface preview, not live
+              browser generation.
             </p>
             <ol className="film-path" aria-label="Text-to-film preview path">
               {filmSteps.map((step) => (

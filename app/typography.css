@@ -65,8 +65,11 @@ main :is(h1, h2, h3),
       currentColor 52.5%,
       currentColor 100%
     );
+    /* Repeat the material sweep so clipped text always has an opaque base
+     * layer. A single, over-wide non-repeating gradient can leave an edge of
+     * a heading transparent while it travels across the line. */
     background-position: 150% 50%;
-    background-repeat: no-repeat;
+    background-repeat: repeat-x;
     background-size: 280% 100%;
     -webkit-background-clip: text;
     background-clip: text;
