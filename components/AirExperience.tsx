@@ -88,18 +88,20 @@ const appIcons = [
   { Icon: SiInstagram, name: "Instagram", color: "#ff4b98", x: "7%", y: "18%", size: "3.25rem", rotate: "-4deg" },
   { Icon: SiGmail, name: "Gmail", color: "#ea4335", x: "21%", y: "6%", size: "2.7rem", rotate: "3deg" },
   { Icon: LuMessagesSquare, name: "Slack", color: "#7d5cff", x: "39%", y: "2%", size: "2.55rem", rotate: "-2deg" },
-  { Icon: SiNotion, name: "Notion", color: "#15171a", x: "85%", y: "16%", size: "3rem", rotate: "4deg" },
-  { Icon: LuPalette, name: "Canva", color: "#00b8d9", x: "97%", y: "34%", size: "2.75rem", rotate: "-3deg" },
-  { Icon: SiFigma, name: "Figma", color: "#f24e1e", x: "98%", y: "59%", size: "3.1rem", rotate: "5deg" },
-  { Icon: SiGooglecalendar, name: "Calendar", color: "#4285f4", x: "87%", y: "82%", size: "2.7rem", rotate: "-3deg" },
-  { Icon: SiDropbox, name: "Dropbox", color: "#0061ff", x: "70%", y: "92%", size: "2.5rem", rotate: "4deg" },
+  // Keep the outer arc inside the phone half of the hero. The promise owns
+  // the opposing column; an app tile should never land on its last line.
+  { Icon: SiNotion, name: "Notion", color: "#15171a", x: "68%", y: "16%", size: "3rem", rotate: "4deg" },
+  { Icon: LuPalette, name: "Canva", color: "#00b8d9", x: "82%", y: "34%", size: "2.75rem", rotate: "-3deg" },
+  { Icon: SiFigma, name: "Figma", color: "#f24e1e", x: "83%", y: "59%", size: "3.1rem", rotate: "5deg" },
+  { Icon: SiGooglecalendar, name: "Calendar", color: "#4285f4", x: "72%", y: "82%", size: "2.7rem", rotate: "-3deg" },
+  { Icon: SiDropbox, name: "Dropbox", color: "#0061ff", x: "55%", y: "92%", size: "2.5rem", rotate: "4deg" },
   { Icon: SiShopify, name: "Shopify", color: "#76a947", x: "48%", y: "96%", size: "2.65rem", rotate: "-4deg" },
   { Icon: SiStripe, name: "Stripe", color: "#635bff", x: "23%", y: "88%", size: "2.7rem", rotate: "3deg" },
   { Icon: SiHubspot, name: "HubSpot", color: "#ff6f3d", x: "5%", y: "70%", size: "3rem", rotate: "-5deg" },
   { Icon: SiAirtable, name: "Airtable", color: "#f7c948", x: "-1%", y: "47%", size: "2.8rem", rotate: "4deg" },
   { Icon: SiTiktok, name: "TikTok", color: "#111111", x: "14%", y: "41%", size: "2.45rem", rotate: "-2deg" },
-  { Icon: SiYoutube, name: "YouTube", color: "#ff0033", x: "80%", y: "49%", size: "2.55rem", rotate: "4deg" },
-  { Icon: SiMeta, name: "Meta", color: "#0866ff", x: "72%", y: "26%", size: "2.8rem", rotate: "-3deg" },
+  { Icon: SiYoutube, name: "YouTube", color: "#ff0033", x: "68%", y: "49%", size: "2.55rem", rotate: "4deg" },
+  { Icon: SiMeta, name: "Meta", color: "#0866ff", x: "62%", y: "26%", size: "2.8rem", rotate: "-3deg" },
 ] as const;
 
 const visuallyHidden: CSSProperties = {
