@@ -166,14 +166,113 @@ html:has(.site-header:focus-within) .hero-frame {
   color: #064e91;
 }
 
-/* Intro ends on the exact visual language the page begins with. */
+/* Intro and opening are one sequence. The video resolves into the same
+   finframe used below it, then lets the opening cloud layer take over. This
+   keeps skip and natural completion from exposing a black or unpainted frame. */
 .intro-film {
+  overflow: hidden;
+  isolation: isolate;
   background: #c2e4f8;
 }
 
+.intro-video,
+.intro-handoff-poster {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.intro-video {
+  z-index: 0;
+  background: #c2e4f8;
+  will-change: opacity, transform;
+  transition:
+    opacity 270ms cubic-bezier(0.4, 0, 0.2, 1),
+    transform 820ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.intro-handoff-poster {
+  z-index: 1;
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(1.018);
+  transform-origin: 50% 52%;
+  will-change: opacity, transform;
+}
+
 .intro-vignette {
+  z-index: 2;
   background:
     linear-gradient(180deg, rgba(3, 19, 43, 0.42), transparent 24%, transparent 68%, rgba(3, 19, 43, 0.58));
+  transition: opacity 340ms ease;
+}
+
+.intro-brand,
+.intro-controls {
+  z-index: 3;
+  transition:
+    opacity 180ms ease,
+    transform 360ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.intro-progress {
+  z-index: 4;
+  transition: opacity 160ms ease;
+}
+
+.intro-film[data-state="handoff"] .intro-video {
+  opacity: 0;
+  transform: scale(1.018);
+}
+
+.intro-film[data-state="handoff"] .intro-handoff-poster {
+  animation: intro-poster-handoff 820ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.intro-film[data-state="handoff"] .intro-vignette {
+  opacity: 0;
+}
+
+.intro-film[data-state="handoff"] .intro-brand {
+  opacity: 0;
+  transform: translateY(-0.7rem);
+}
+
+.intro-film[data-state="handoff"] .intro-controls {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(0.7rem);
+}
+
+.intro-film[data-state="handoff"] .intro-progress {
+  opacity: 0;
+}
+
+@keyframes intro-poster-handoff {
+  0% {
+    opacity: 0;
+    transform: scale(1.018);
+  }
+  19% {
+    opacity: 1;
+    transform: scale(1.005);
+  }
+  52% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.028);
+  }
+}
+
+@media (prefers-reduced-motion: reduce), (forced-colors: active) {
+  .intro-film[data-state="handoff"] .intro-handoff-poster {
+    animation: none;
+  }
 }
 
 /* Opening world and scroll reveal. */
@@ -350,11 +449,11 @@ html:has(.site-header:focus-within) .hero-frame {
   opacity: 1;
 }
 
-.hero-scroll:focus-within .cloud-curtain {
+.hero-scroll:focus-within:not(:has([data-air-opening-focus]:focus)) .cloud-curtain {
   opacity: 0;
 }
 
-.hero-scroll:focus-within .hero-content {
+.hero-scroll:focus-within:not(:has([data-air-opening-focus]:focus)) .hero-content {
   opacity: 1;
   transform: none;
 }
@@ -458,14 +557,16 @@ html[data-air-hydrated="timeout"] .hero-content {
 }
 
 .hero-copy h1 {
-  color: #082b60;
+  color: #03234d;
   font-size: clamp(3.3rem, 4.55vw, 5rem);
-  text-shadow: 0 1px rgba(255, 255, 255, 0.65), 0 1.2rem 3.5rem rgba(38, 106, 158, 0.13);
+  /* Keep the promise decisively legible on the pearl sky. The shimmer is an
+     * overlay, not the fill: no white edge can turn the title into chrome. */
+  text-shadow: 0 0.7rem 2.6rem rgba(13, 66, 119, 0.13);
 }
 
 .hero-copy h1 em {
-  color: #276fAA;
-  text-shadow: 0 1px rgba(255, 255, 255, 0.72);
+  color: #045991;
+  text-shadow: 0 0.65rem 2.1rem rgba(16, 88, 142, 0.14);
 }
 
 .hero-copy > p {

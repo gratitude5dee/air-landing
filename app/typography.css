@@ -9,7 +9,7 @@
 :root {
   --font-display: "Inter Variable", Inter, "Helvetica Neue", Arial, system-ui, sans-serif;
   --font-body: "Inter Variable", Inter, "Helvetica Neue", Arial, system-ui, sans-serif;
-  --air-shine-duration: 10.8s;
+  --air-shine-duration: 13.2s;
   --air-shine-ease: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -35,11 +35,6 @@ main h3 {
   letter-spacing: -0.042em !important;
 }
 
-.hero-copy h1 em {
-  font-style: normal;
-  font-weight: 700 !important;
-}
-
 main :is(h1, h2, h3),
 .preorder-dialog h2 {
   text-wrap: balance;
@@ -48,7 +43,7 @@ main :is(h1, h2, h3),
 @supports (color: color-mix(in srgb, white 50%, black)) {
   main :is(h1, h2, h3),
   .preorder-dialog h2 {
-    --air-shine-glint-modern: color-mix(in srgb, currentColor 68%, white);
+    --air-shine-glint-modern: color-mix(in srgb, currentColor 80%, white);
   }
 }
 
@@ -62,17 +57,17 @@ main :is(h1, h2, h3),
      * color-mix(), then the richer scene-aware version below takes over. */
     --air-shine-glint: var(--air-shine-glint-modern, rgba(255, 255, 255, 0.84));
     background-image: linear-gradient(
-      108deg,
+      112deg,
       currentColor 0%,
-      currentColor 46.5%,
-      var(--air-shine-glint) 49.2%,
-      var(--air-shine-glint) 50.8%,
-      currentColor 53.5%,
+      currentColor 47.5%,
+      var(--air-shine-glint) 49.35%,
+      var(--air-shine-glint) 50.65%,
+      currentColor 52.5%,
       currentColor 100%
     );
-    background-position: 145% 50%;
+    background-position: 150% 50%;
     background-repeat: no-repeat;
-    background-size: 250% 100%;
+    background-size: 280% 100%;
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -87,39 +82,18 @@ main :is(h1, h2, h3),
     background-position: 50% 50%;
   }
 
-  /* Each hero line owns a modest, high-contrast material pass. Painting the
-   * gradient on the H1 would flatten the blue iMessages promise into the
-   * parent color and can overexpose a whole word against the cloud field. */
+  /* The hero deliberately uses the component-level overlay below rather than
+   * clipping its primary text. Its base tone stays fully opaque over the sky.
+   */
   .hero-copy h1 {
     animation: none;
     background-image: none;
     -webkit-text-fill-color: currentColor;
   }
 
-  .hero-copy h1 :is(span, em) {
-    --air-shine-glint: #4d86af;
-    background-image: linear-gradient(
-      108deg,
-      currentColor 0%,
-      currentColor 46.5%,
-      var(--air-shine-glint) 49.2%,
-      var(--air-shine-glint) 50.8%,
-      currentColor 53.5%,
-      currentColor 100%
-    );
-    background-position: 145% 50%;
-    background-repeat: no-repeat;
-    background-size: 250% 100%;
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: air-heading-shine var(--air-shine-duration) var(--air-shine-ease) infinite;
-  }
-
-  .hero-copy h1 em {
-    color: #276faa;
-    --air-shine-glint: #79b4d9;
-    font-style: normal;
+  .hero-copy h1 .hero-shiny-line {
+    display: block;
+    font-weight: inherit;
   }
 
   /* White type on the blue-hour chapters needs a cool, brighter sweep rather
@@ -132,36 +106,48 @@ main :is(h1, h2, h3),
 
 @keyframes air-heading-shine {
   0%,
-  20% {
-    background-position: 145% 50%;
+  28% {
+    background-position: 150% 50%;
   }
 
-  68%,
+  72%,
   100% {
-    background-position: -45% 50%;
+    background-position: -50% 50%;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   main :is(h1, h2, h3),
   .preorder-dialog h2,
-  .hero-copy h1 :is(span, em) {
+  .hero-copy h1 .hero-shiny-line {
     animation: none !important;
-    background-position: 50% 50%;
+    background-image: none !important;
+    -webkit-text-fill-color: currentColor !important;
   }
 }
 
 html[data-air-save-data="true"] main :is(h1, h2, h3),
 html[data-air-save-data="true"] .preorder-dialog h2,
-html[data-air-save-data="true"] .hero-copy h1 :is(span, em) {
+html[data-air-save-data="true"] .hero-copy h1 .hero-shiny-line {
   animation: none !important;
-  background-position: 50% 50%;
+  background-image: none !important;
+  -webkit-text-fill-color: currentColor !important;
+}
+
+@media (prefers-contrast: more) {
+  main :is(h1, h2, h3),
+  .preorder-dialog h2,
+  .hero-copy h1 .hero-shiny-line {
+    background-image: none !important;
+    -webkit-text-fill-color: currentColor !important;
+    animation: none !important;
+  }
 }
 
 @media (forced-colors: active) {
   main :is(h1, h2, h3),
   .preorder-dialog h2,
-  .hero-copy h1 :is(span, em) {
+  .hero-copy h1 .hero-shiny-line {
     color: CanvasText !important;
     background-image: none !important;
     -webkit-text-fill-color: CanvasText !important;

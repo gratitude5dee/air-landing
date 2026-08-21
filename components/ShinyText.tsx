@@ -37,6 +37,13 @@ export function ShinyText({
   yoyo = false,
   ...spanProps
 }: ShinyTextProps) {
+  const content = text ?? children;
+  // The sheen is a separate, decorative layer so the base text never becomes
+  // transparent. That keeps a stable contrast ratio while the highlight moves
+  // across it, and avoids duplicating arbitrary React content in the overlay.
+  const sheenContent =
+    typeof content === "string" || typeof content === "number" ? String(content) : null;
+
   const animationDirection = yoyo
     ? direction === "left"
       ? "alternate"
@@ -63,7 +70,12 @@ export function ShinyText({
         .join(" ")}
       style={shinyStyle}
     >
-      {text ?? children}
+      <span className={styles.content}>{content}</span>
+      {sheenContent ? (
+        <span className={styles.sheen} aria-hidden="true">
+          {sheenContent}
+        </span>
+      ) : null}
     </span>
   );
 }

@@ -6,56 +6,82 @@
   --shiny-delay: 0s;
   --shiny-direction: normal;
 
+  position: relative;
+  isolation: isolate;
   display: inline-block;
   color: var(--shiny-color);
 }
 
+.content {
+  position: relative;
+  z-index: 1;
+}
+
+.sheen { display: none; }
+
 @supports ((-webkit-background-clip: text) or (background-clip: text)) {
-  .shiny {
+  .sheen {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: block;
+    width: 100%;
+    color: transparent;
     background-image: linear-gradient(
       var(--shiny-angle),
-      var(--shiny-color) 0%,
-      var(--shiny-color) 37%,
-      var(--shiny-shine) 50%,
-      var(--shiny-color) 63%,
-      var(--shiny-color) 100%
+      transparent 0%,
+      transparent 45.5%,
+      var(--shiny-shine) 49%,
+      var(--shiny-shine) 51%,
+      transparent 54.5%,
+      transparent 100%
     );
-    background-position: 145% 50%;
+    background-position: 150% 50%;
     background-repeat: no-repeat;
-    background-size: 225% 100%;
+    background-size: 240% 100%;
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
-    animation: shiny-sweep var(--shiny-speed) ease-in-out var(--shiny-delay) infinite;
+    pointer-events: none;
+    user-select: none;
+    animation: shiny-sweep var(--shiny-speed) cubic-bezier(0.4, 0, 0.2, 1) var(--shiny-delay) infinite;
     animation-direction: var(--shiny-direction);
   }
 }
 
-.pauseOnHover:hover {
+.pauseOnHover:hover .sheen {
   animation-play-state: paused;
 }
 
-.disabled {
-  animation: none;
-  background-image: none;
-  -webkit-text-fill-color: currentColor;
+.disabled .sheen {
+  display: none;
 }
 
 @keyframes shiny-sweep {
   0%,
-  16% {
-    background-position: 145% 50%;
+  24% {
+    background-position: 150% 50%;
   }
 
-  62%,
+  70%,
   100% {
-    background-position: -45% 50%;
+    background-position: -50% 50%;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .shiny {
-    animation: none;
-    background-position: 50% 50%;
-  }
+  .sheen { display: none; }
+}
+
+html[data-air-save-data="true"] .sheen {
+  display: none;
+}
+
+@media (prefers-contrast: more) {
+  .sheen { display: none; }
+}
+
+@media (forced-colors: active) {
+  .shiny { color: CanvasText !important; }
+  .sheen { display: none; }
 }

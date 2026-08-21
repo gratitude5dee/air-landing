@@ -1,14 +1,33 @@
 .field {
   position: fixed !important;
   inset: 0;
-  z-index: 4;
+  z-index: 1;
   width: 100vw;
   height: 100vh;
   height: 100dvh;
   overflow: hidden;
-  pointer-events: none;
-  opacity: 0.18;
+  contain: layout paint style;
+  isolation: isolate;
+  pointer-events: none !important;
+  user-select: none;
+  touch-action: none;
+  opacity: 0.19;
   mix-blend-mode: multiply;
+}
+
+.field,
+.field * {
+  pointer-events: none !important;
+}
+
+.field canvas {
+  contain: paint;
+}
+
+:global(html[data-air-save-data="true"]) .field,
+:global(body.modal-open) .field,
+:global(body.intro-open) .field {
+  display: none;
 }
 
 @media (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce), (forced-colors: active) {

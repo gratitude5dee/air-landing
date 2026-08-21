@@ -418,8 +418,8 @@ html[data-air-hero-header="covered"] .site-header:focus-within {
   mix-blend-mode: soft-light;
 }
 .cloud-curtain { position: absolute; inset: 0; z-index: 7; pointer-events: none; transition: opacity 180ms ease; }
-.hero-scroll:focus-within .cloud-curtain { opacity: 0; }
-.hero-scroll:focus-within .hero-content { opacity: 1; transform: none; }
+.hero-scroll:focus-within:not(:has([data-air-opening-focus]:focus)) .cloud-curtain { opacity: 0; }
+.hero-scroll:focus-within:not(:has([data-air-opening-focus]:focus)) .hero-content { opacity: 1; transform: none; }
 .cloud-bank {
   position: absolute;
   width: 76vw;

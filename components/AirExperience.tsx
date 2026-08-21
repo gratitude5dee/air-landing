@@ -49,6 +49,7 @@ import {
   type DirectionSpec,
 } from "@/content/directions";
 import { resolveHeroTimeline } from "@/lib/hero-timeline";
+import { ShinyText } from "@/components/ShinyText";
 
 export type { AirDemoAction, AirDemoState } from "@/components/air-demo-state";
 
@@ -252,7 +253,19 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
     const scheduleUpdate = () => {
       if (!animationFrame) animationFrame = requestAnimationFrame(update);
     };
-    const handleFocusIn = () => {
+    const handleFocusIn = (event: FocusEvent) => {
+      const target = event.target;
+      // Intro dismissal lands on the opening's named region, not an action.
+      // Keep the first scroll position intact there; a tab into a real hero
+      // control still invokes the accessibility escape hatch below.
+      if (
+        target instanceof Element &&
+        target.closest("[data-air-opening-focus]")
+      ) {
+        focusFloorActive = false;
+        scheduleUpdate();
+        return;
+      }
       focusFloorActive = true;
       scheduleUpdate();
     };
@@ -366,6 +379,7 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
           role="region"
           aria-label="Air opening"
           tabIndex={-1}
+          data-air-opening-focus
         >
           <img
             className="hero-opening-image"
@@ -418,9 +432,35 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
               id="hero-title"
               aria-label="Your personal creative assistant in your iMessages."
             >
-              <span>Your personal creative </span>
-              <span>assistant in your </span>
-              <em>iMessages.</em>
+              <ShinyText
+                className="hero-shiny-line"
+                color="#03234d"
+                shineColor="#3d7faa"
+                speed={13.2}
+                spread={112}
+              >
+                Your personal creative
+              </ShinyText>
+              <ShinyText
+                className="hero-shiny-line"
+                color="#03234d"
+                shineColor="#3d7faa"
+                speed={13.2}
+                delay={0.42}
+                spread={112}
+              >
+                assistant in your
+              </ShinyText>
+              <ShinyText
+                className="hero-shiny-line hero-shiny-line--signal"
+                color="#045991"
+                shineColor="#4b8fc1"
+                speed={13.2}
+                delay={0.84}
+                spread={112}
+              >
+                iMessages.
+              </ShinyText>
             </h1>
             <p>
               Text a thought, a reference, or a rough brief. Air helps shape the
