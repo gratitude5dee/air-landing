@@ -418,18 +418,9 @@ html[data-air-hydrated="timeout"] .hero-content {
 }
 
 .hero-frame {
-  z-index: 6;
-  border-color: rgba(6, 62, 111, 0.18);
-  opacity: clamp(0, calc((var(--handoff-progress) - 0.04) * 1.12), 1);
-}
-
-.hero-frame::before,
-.hero-frame::after {
-  background-image: repeating-linear-gradient(180deg, rgba(8, 73, 129, 0.46) 0 1px, transparent 1px 7px);
-}
-
-.hero-frame span {
-  color: rgba(5, 51, 96, 0.6);
+  /* The opening poster has its own edge. Once the interface arrives it sits
+     directly in the sky—no decorative viewport frame competing with it. */
+  display: none;
 }
 
 .hero-content {
@@ -444,7 +435,10 @@ html[data-air-hydrated="timeout"] .hero-content {
 }
 
 .hero-copy {
-  grid-column: 1 / span 5;
+  /* Desktop reads as a product object first: the live thread holds the left
+     side of the horizon and the promise resolves beside it. */
+  grid-column: 7 / -1;
+  grid-row: 1;
   max-width: 42rem;
 }
 
@@ -540,8 +534,10 @@ html[data-air-hydrated="timeout"] .hero-content {
 }
 
 .phone-stage {
-  grid-column: 6 / -1;
-  padding: 0.25rem 0 0 2.8rem;
+  grid-column: 1 / span 6;
+  grid-row: 1;
+  place-items: center;
+  padding: 0.25rem 2.8rem 0 0;
 }
 
 .app-orbit-motion {
@@ -581,8 +577,11 @@ html[data-air-hydrated="timeout"] .hero-content {
 }
 
 .iphone-shell {
-  width: clamp(22.5rem, 26vw, 29rem);
-  max-width: calc((100svh - 8rem) * 0.46);
+  /* The shell height is just over twice its width. Keep a small safe margin
+     for its physical edge and rotation so short desktop viewports show the
+     complete iMessage thread instead of clipping the composer. */
+  width: min(clamp(18rem, 26vw, 29rem), calc((100svh - 8.75rem) * 0.43));
+  max-width: 100%;
   border-color: rgba(255, 255, 255, 0.84);
   background:
     linear-gradient(138deg, #f7fcff 0%, #6c94b5 8%, #102746 16%, #030a13 49%, #507da1 86%, #eefaff 100%);
@@ -1341,7 +1340,8 @@ html[data-air-hydrated="timeout"] .hero-content {
   }
 
   .phone-stage {
-    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-left: 0;
   }
 
   .app-icon:nth-of-type(n + 13) {
@@ -1396,9 +1396,15 @@ html[data-air-hydrated="timeout"] .hero-content {
   .hero-copy,
   .phone-stage {
     grid-column: auto;
+    grid-row: auto;
+  }
+
+  .hero-copy {
+    order: 0;
   }
 
   .phone-stage {
+    order: 1;
     min-height: auto;
     padding: 1rem 1.5rem 0;
   }

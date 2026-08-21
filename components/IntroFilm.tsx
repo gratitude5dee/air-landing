@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { LuPlay, LuVolume2, LuVolumeX, LuX } from "react-icons/lu";
 
 import { LiveAnnouncer } from "@/components/LiveAnnouncer";
+import { ShinyText } from "@/components/ShinyText";
 
 const SESSION_KEY = "air-intro-seen-v1";
 
@@ -13,10 +14,36 @@ export function IntroFilm() {
   const skipRef = useRef<HTMLButtonElement>(null);
   const finishingRef = useRef(false);
   const [eligible, setEligible] = useState(false);
-  const [muted, setMuted] = useState(true);
+  const [muted, setMuted] = useState(false);
   const [progress, setProgress] = useState(0);
   const [mediaState, setMediaState] = useState<"idle" | "playing" | "blocked" | "error">("idle");
   const [announcement, setAnnouncement] = useState("");
+
+  const startFilmWithSound = useCallback(async () => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    // Try the intended sound-on experience first. If autoplay policy rejects
+    // it, retry muted so the intro still begins without a click.
+    video.muted = false;
+    setMuted(false);
+
+    try {
+      await video.play();
+      setMediaState("playing");
+      return;
+    } catch {
+      video.muted = true;
+      setMuted(true);
+    }
+
+    try {
+      await video.play();
+      setMediaState("playing");
+    } catch {
+      setMediaState("blocked");
+    }
+  }, []);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -48,19 +75,13 @@ export function IntroFilm() {
     window.dispatchEvent(new CustomEvent("air:intro-statechange", { detail: { state: "active" } }));
     skipRef.current?.focus({ preventScroll: true });
 
-    const video = videoRef.current;
-    if (video) {
-      void video.play().then(
-        () => setMediaState("playing"),
-        () => setMediaState("blocked"),
-      );
-    }
+    void startFilmWithSound();
 
     return () => {
       document.body.classList.remove("intro-open");
       if (dialog.open) dialog.close();
     };
-  }, [eligible]);
+  }, [eligible, startFilmWithSound]);
 
   const finish = useCallback(() => {
     if (finishingRef.current) return;
@@ -92,21 +113,24 @@ export function IntroFilm() {
     });
   }, []);
 
-  function playFilm() {
-    const video = videoRef.current;
-    if (!video) return;
-    void video.play().then(
-      () => setMediaState("playing"),
-      () => setMediaState("blocked"),
-    );
-  }
+  const playFilm = useCallback(() => {
+    void startFilmWithSound();
+  }, [startFilmWithSound]);
 
   function toggleSound() {
     const video = videoRef.current;
     if (!video) return;
     video.muted = !video.muted;
     setMuted(video.muted);
-    playFilm();
+    void video.play().then(
+      () => setMediaState("playing"),
+      () => {
+        // Keep the control in sync with the media element if a platform
+        // pauses playback after a volume change.
+        setMuted(video.muted);
+        setMediaState("blocked");
+      },
+    );
   }
 
   return (
@@ -116,7 +140,6 @@ export function IntroFilm() {
           ref={dialogRef}
           className="intro-film"
           aria-labelledby="air-intro-title"
-          aria-describedby="air-intro-description"
           data-air-intro-dialog
           onCancel={(event) => {
             event.preventDefault();
@@ -127,7 +150,6 @@ export function IntroFilm() {
           <video
             ref={videoRef}
             className="intro-video"
-            autoPlay
             muted={muted}
             playsInline
             preload="metadata"
@@ -135,6 +157,7 @@ export function IntroFilm() {
             onEnded={finish}
             onError={() => setMediaState("error")}
             onPlay={() => setMediaState("playing")}
+            onVolumeChange={(event) => setMuted(event.currentTarget.muted)}
             onTimeUpdate={(event) => {
               const video = event.currentTarget;
               setProgress(video.duration ? video.currentTime / video.duration : 0);
@@ -145,12 +168,16 @@ export function IntroFilm() {
           </video>
           <div className="intro-vignette" aria-hidden />
           <div className="intro-brand">
-            <span id="air-intro-title">air by WZRD.tech</span>
-            <small id="air-intro-description">
-              {mediaState === "error"
-                ? "intro unavailable — continue to Air"
-                : "your personal creative assistant is arriving"}
-            </small>
+            <ShinyText
+              id="air-intro-title"
+              color="#dceeff"
+              shineColor="#ffffff"
+              speed={4.4}
+              spread={116}
+              pauseOnHover
+            >
+              air by WZRD.tech
+            </ShinyText>
           </div>
           <div className="intro-controls">
             {mediaState === "blocked" || mediaState === "error" ? (

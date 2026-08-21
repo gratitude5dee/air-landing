@@ -186,12 +186,12 @@ export function IMessageDemo() {
                   width={frame.width}
                   height={frame.height}
                   loading={
-                    selectedDirection.id === "golden-gate" && frameIndex === 0
+                    selectedDirection.id === "chrome-launch" && frameIndex === 0
                       ? "eager"
                       : "lazy"
                   }
                   fetchPriority={
-                    selectedDirection.id === "golden-gate" && frameIndex === 0
+                    selectedDirection.id === "chrome-launch" && frameIndex === 0
                       ? "high"
                       : "auto"
                   }

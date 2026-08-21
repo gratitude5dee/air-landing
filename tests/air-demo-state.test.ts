@@ -28,7 +28,7 @@ describe("Air demo reducer", () => {
     expect(loved).toMatchObject({
       reaction: "❤️",
       reviewEligible: true,
-      tasteDirectionId: "golden-gate",
+      tasteDirectionId: "chrome-launch",
     });
   });
 
@@ -41,7 +41,7 @@ describe("Air demo reducer", () => {
       { type: "select-reaction", reaction: "👎" },
     );
     expect(reviewed).toMatchObject({
-      directionId: "chrome-launch",
+      directionId: "blue-hour",
       reaction: null,
       reviewEligible: false,
       reviewed: false,

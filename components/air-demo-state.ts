@@ -30,7 +30,9 @@ export type AirDemoAction =
   | { type: "announce"; message: string };
 
 export const INITIAL_AIR_DEMO_STATE: Readonly<AirDemoState> = Object.freeze({
-  directionId: "golden-gate",
+  // The launch composition is the canonical first impression of the live
+  // iMessage preview. Other directions remain deliberate user selections.
+  directionId: "chrome-launch",
   reaction: null,
   reviewEligible: false,
   reviewed: false,
