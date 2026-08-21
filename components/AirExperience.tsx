@@ -43,6 +43,7 @@ import {
   type AirDemoState,
 } from "@/components/air-demo-state";
 import { PreorderButton } from "@/components/Preorder";
+import { ShinyText } from "@/components/ShinyText";
 import {
   DIRECTIONS,
   getDirection,
@@ -420,7 +421,19 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
             >
               <span>Your personal creative </span>
               <span>assistant in your </span>
-              <em>iMessages.</em>
+              <em>
+                <ShinyText
+                  className="hero-shiny"
+                  color="#0d4f88"
+                  shineColor="#3285bf"
+                  speed={7.2}
+                  delay={2.4}
+                  spread={112}
+                  pauseOnHover
+                >
+                  iMessages.
+                </ShinyText>
+              </em>
             </h1>
             <p>
               Text a thought, a reference, or a rough brief. Air helps shape the

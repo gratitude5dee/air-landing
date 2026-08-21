@@ -1,0 +1,61 @@
+.shiny {
+  --shiny-color: currentColor;
+  --shiny-shine: #fff;
+  --shiny-angle: 120deg;
+  --shiny-speed: 3.6s;
+  --shiny-delay: 0s;
+  --shiny-direction: normal;
+
+  display: inline-block;
+  color: var(--shiny-color);
+}
+
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  .shiny {
+    background-image: linear-gradient(
+      var(--shiny-angle),
+      var(--shiny-color) 0%,
+      var(--shiny-color) 37%,
+      var(--shiny-shine) 50%,
+      var(--shiny-color) 63%,
+      var(--shiny-color) 100%
+    );
+    background-position: 145% 50%;
+    background-repeat: no-repeat;
+    background-size: 225% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shiny-sweep var(--shiny-speed) ease-in-out var(--shiny-delay) infinite;
+    animation-direction: var(--shiny-direction);
+  }
+}
+
+.pauseOnHover:hover {
+  animation-play-state: paused;
+}
+
+.disabled {
+  animation: none;
+  background-image: none;
+  -webkit-text-fill-color: currentColor;
+}
+
+@keyframes shiny-sweep {
+  0%,
+  16% {
+    background-position: 145% 50%;
+  }
+
+  62%,
+  100% {
+    background-position: -45% 50%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shiny {
+    animation: none;
+    background-position: 50% 50%;
+  }
+}
