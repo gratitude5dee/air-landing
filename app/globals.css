@@ -291,12 +291,48 @@ html[data-air-hero-header="covered"] .site-header:focus-within {
   position: absolute;
   top: clamp(1.2rem, 4vw, 3rem);
   left: clamp(1.2rem, 4vw, 3rem);
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
+  display: block;
   text-shadow: 0 2px 18px rgba(0,0,0,0.5);
 }
-.intro-brand span { font-size: 1.15rem; letter-spacing: -0.03em; }
+.intro-brand-title {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+.intro-logo {
+  position: relative;
+  display: block;
+  width: clamp(8.75rem, 12vw, 13.5rem);
+  opacity: 0;
+  transform: translateY(0.5rem) scale(0.96);
+  filter: blur(3px);
+  animation: introLogoReveal 980ms cubic-bezier(0.22, 1, 0.36, 1) 180ms forwards;
+}
+.intro-logo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 0.45rem 1.25rem rgba(0, 0, 0, 0.62));
+}
+.intro-logo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(108deg, transparent 34%, rgba(241, 251, 255, 0.12) 45%, rgba(255, 255, 255, 0.96) 50%, rgba(152, 220, 255, 0.35) 55%, transparent 66%);
+  background-repeat: no-repeat;
+  background-position: 150% 50%;
+  background-size: 235% 100%;
+  -webkit-mask: url("/images/wzrd-wordmark.png") center / contain no-repeat;
+  mask: url("/images/wzrd-wordmark.png") center / contain no-repeat;
+  animation: introLogoGlint 4.8s cubic-bezier(0.4, 0, 0.2, 1) 760ms infinite;
+}
 .intro-brand small,
 .intro-controls button {
   font-family: var(--font-mono);
@@ -333,6 +369,15 @@ html[data-air-hero-header="covered"] .site-header:focus-within {
   height: 3px;
   transform-origin: left;
   background: var(--air);
+}
+@keyframes introLogoReveal {
+  0% { opacity: 0; transform: translateY(0.5rem) scale(0.96); filter: blur(3px); }
+  70% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+  100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+}
+@keyframes introLogoGlint {
+  0%, 24% { background-position: 150% 50%; }
+  58%, 100% { background-position: -50% 50%; }
 }
 
 /* Hero */
@@ -1114,6 +1159,7 @@ html[data-air-hero-header="covered"] .site-header:focus-within {
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior:auto }
   *,*::before,*::after { animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important }
+  .intro-logo{opacity:1;transform:none;filter:none}.intro-logo::after{display:none}
   [data-reveal] { opacity:1;transform:none;transition:none }
   html[data-air-hero-header="covered"]:has(.hero-scroll) .site-header{z-index:80;opacity:1;pointer-events:auto;filter:none;transform:none;transition:none}
   .signal-track,.app-icon{animation:none}.hero-shader{display:none}.cloud-curtain{display:none}.hero-scroll{height:auto}.hero-sticky{position:relative}.hero-content{opacity:1;transform:none}.hero-frame{opacity:1}.film-timeline i{animation:none;left:64%}

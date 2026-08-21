@@ -1,7 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { LuPlay, LuVolume2, LuVolumeX, LuX } from "react-icons/lu";
+import Image from "next/image";
+import { LuVolume2, LuVolumeX, LuX } from "react-icons/lu";
 
 import { LiveAnnouncer } from "@/components/LiveAnnouncer";
 import { ShinyText } from "@/components/ShinyText";
@@ -24,7 +25,7 @@ export function IntroFilm() {
   const [isHandingOff, setIsHandingOff] = useState(false);
   const [muted, setMuted] = useState(false);
   const [progress, setProgress] = useState(0);
-  const [mediaState, setMediaState] = useState<"idle" | "playing" | "blocked" | "error">("idle");
+  const [mediaState, setMediaState] = useState<"idle" | "playing" | "error">("idle");
   const [announcement, setAnnouncement] = useState("");
 
   const startFilmWithSound = useCallback(async () => {
@@ -50,7 +51,7 @@ export function IntroFilm() {
       await video.play();
       setMediaState("playing");
     } catch {
-      setMediaState("blocked");
+      setMediaState("error");
     }
   }, []);
 
@@ -217,10 +218,6 @@ export function IntroFilm() {
     };
   }, [complete, eligible, finish]);
 
-  const playFilm = useCallback(() => {
-    void startFilmWithSound();
-  }, [startFilmWithSound]);
-
   function toggleSound() {
     const video = videoRef.current;
     if (!video) return;
@@ -232,7 +229,7 @@ export function IntroFilm() {
         // Keep the control in sync with the media element if a platform
         // pauses playback after a volume change.
         setMuted(video.muted);
-        setMediaState("blocked");
+        setMediaState("error");
       },
     );
   }
@@ -256,6 +253,7 @@ export function IntroFilm() {
           <video
             ref={videoRef}
             className="intro-video"
+            autoPlay
             muted={muted}
             playsInline
             preload="auto"
@@ -282,30 +280,23 @@ export function IntroFilm() {
           />
           <div className="intro-vignette" aria-hidden />
           <div className="intro-brand">
-            <ShinyText
-              id="air-intro-title"
-              color="#dceeff"
-              shineColor="#ffffff"
-              speed={4.4}
-              spread={116}
-              pauseOnHover
-            >
-              air by WZRD.tech
-            </ShinyText>
+            <span id="air-intro-title" className="intro-brand-title">WZRD.tech introduction</span>
+            <span className="intro-logo" aria-hidden="true">
+              <Image src="/images/wzrd-wordmark.png" alt="" width={1600} height={396} priority />
+            </span>
           </div>
           <div className="intro-controls">
-            {mediaState === "blocked" || mediaState === "error" ? (
-              <button type="button" onClick={playFilm} disabled={mediaState === "error" || isHandingOff}>
-                <LuPlay aria-hidden /> {mediaState === "error" ? "film unavailable" : "play film"}
-              </button>
-            ) : (
-              <button type="button" onClick={toggleSound} disabled={isHandingOff} aria-label={muted ? "Turn intro sound on" : "Mute intro"}>
-                {muted ? <LuVolumeX aria-hidden /> : <LuVolume2 aria-hidden />}
+            <button type="button" onClick={toggleSound} disabled={mediaState === "error" || isHandingOff} aria-label={muted ? "Turn intro sound on" : "Mute intro"}>
+              {muted ? <LuVolumeX aria-hidden /> : <LuVolume2 aria-hidden />}
+              <ShinyText disabled={isHandingOff} color="#e8f5ff" shineColor="#ffffff" speed={4.2} spread={112}>
                 {muted ? "sound on" : "mute"}
-              </button>
-            )}
+              </ShinyText>
+            </button>
             <button ref={skipRef} type="button" autoFocus disabled={isHandingOff} onClick={() => finish()}>
-              skip intro <LuX aria-hidden />
+              <ShinyText disabled={isHandingOff} color="#e8f5ff" shineColor="#ffffff" speed={4.2} delay={0.3} spread={112}>
+                skip intro
+              </ShinyText>
+              <LuX aria-hidden />
             </button>
           </div>
           <span className="intro-progress" style={{ transform: `scaleX(${progress})` }} aria-hidden />
