@@ -17,7 +17,8 @@
   --edge: rgba(219, 237, 255, 0.16);
   --edge-strong: rgba(140, 200, 255, 0.42);
   --dither-step: 3px;
-  --font-serif: "Newsreader Variable", Newsreader, Georgia, serif;
+  --font-display: "Inter Variable", Inter, "Helvetica Neue", Arial, system-ui, sans-serif;
+  --font-body: "Inter Variable", Inter, "Helvetica Neue", Arial, system-ui, sans-serif;
   --font-mono: "Azeret Mono Variable", "SFMono-Regular", Consolas, monospace;
   --display-xl: clamp(3.6rem, 5.5vw, 6.6rem);
   --display-l: clamp(2.8rem, 5.2vw, 5.4rem);
@@ -40,7 +41,7 @@ body {
   overflow-x: clip;
   background: var(--void);
   color: var(--cream);
-  font-family: var(--font-serif);
+  font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   font-optical-sizing: auto;
@@ -656,7 +657,7 @@ html[data-air-hero-header="covered"] .site-header:focus-within {
   font-size: 0.69rem;
 }
 .thread-back { position: absolute; left: 0.95rem; top: 3.6rem; color: var(--imessage); font-size: 2rem; font-weight: 300; }
-.thread-avatar { position: relative; width: 2.35rem; height: 2.35rem; display: grid; place-items: center; overflow: hidden; border-radius: 50%; color: #fff; background: linear-gradient(145deg,#79c5ff,#315a9a); font-family: var(--font-serif); font-size: 1.2rem; box-shadow:0 0 .9rem rgba(76,164,239,.32); }
+.thread-avatar { position: relative; width: 2.35rem; height: 2.35rem; display: grid; place-items: center; overflow: hidden; border-radius: 50%; color: #fff; background: linear-gradient(145deg,#79c5ff,#315a9a); font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif; font-size: 1.2rem; box-shadow:0 0 .9rem rgba(76,164,239,.32); }
 .thread-avatar-dither { position: absolute !important; inset: 0; opacity: 0.62; pointer-events: none; mix-blend-mode: screen; }
 .thread-avatar-letter { position: relative; z-index: 1; text-shadow: 0 1px 0 rgba(4, 25, 52, 0.55); }
 .thread-head small { color: #7d8da2; }

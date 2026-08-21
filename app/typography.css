@@ -1,0 +1,170 @@
+/*
+ * Air type system
+ *
+ * The marketing surface uses a single clean, neutral sans to match the
+ * reference treatment. Azeret Mono stays reserved for operational labels and
+ * the iMessage illustration retains Apple's system face in globals.css.
+ */
+
+:root {
+  --font-display: "Inter Variable", Inter, "Helvetica Neue", Arial, system-ui, sans-serif;
+  --font-body: "Inter Variable", Inter, "Helvetica Neue", Arial, system-ui, sans-serif;
+  --air-shine-duration: 10.8s;
+  --air-shine-ease: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body {
+  font-family: var(--font-body);
+  font-feature-settings: "cv02" 1, "cv03" 1, "cv04" 1, "cv11" 1;
+  font-synthesis: none;
+}
+
+/* This is deliberately a terminal typography layer. It overrides the
+ * previous editorial weights wherever pages and CSS modules define headings,
+ * while leaving type scale, local colors, and responsive measures intact. */
+main :is(h1, h2),
+.preorder-dialog h2 {
+  font-family: var(--font-display) !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.058em !important;
+}
+
+main h3 {
+  font-family: var(--font-display) !important;
+  font-weight: 650 !important;
+  letter-spacing: -0.042em !important;
+}
+
+.hero-copy h1 em {
+  font-style: normal;
+  font-weight: 700 !important;
+}
+
+main :is(h1, h2, h3),
+.preorder-dialog h2 {
+  text-wrap: balance;
+}
+
+@supports (color: color-mix(in srgb, white 50%, black)) {
+  main :is(h1, h2, h3),
+  .preorder-dialog h2 {
+    --air-shine-glint-modern: color-mix(in srgb, currentColor 68%, white);
+  }
+}
+
+/* A narrow chrome highlight gives the headline hierarchy the requested
+ * React-Bits-style shimmer without turning body copy or functional controls
+ * into moving text. H3s keep the material finish at rest; H1/H2 sweep slowly. */
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  main :is(h1, h2, h3),
+  .preorder-dialog h2 {
+    /* Literal fallback keeps clipped text visible in engines without
+     * color-mix(), then the richer scene-aware version below takes over. */
+    --air-shine-glint: var(--air-shine-glint-modern, rgba(255, 255, 255, 0.84));
+    background-image: linear-gradient(
+      108deg,
+      currentColor 0%,
+      currentColor 46.5%,
+      var(--air-shine-glint) 49.2%,
+      var(--air-shine-glint) 50.8%,
+      currentColor 53.5%,
+      currentColor 100%
+    );
+    background-position: 145% 50%;
+    background-repeat: no-repeat;
+    background-size: 250% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  main :is(h1, h2),
+  .preorder-dialog h2 {
+    animation: air-heading-shine var(--air-shine-duration) var(--air-shine-ease) infinite;
+  }
+
+  main h3 {
+    background-position: 50% 50%;
+  }
+
+  /* Each hero line owns a modest, high-contrast material pass. Painting the
+   * gradient on the H1 would flatten the blue iMessages promise into the
+   * parent color and can overexpose a whole word against the cloud field. */
+  .hero-copy h1 {
+    animation: none;
+    background-image: none;
+    -webkit-text-fill-color: currentColor;
+  }
+
+  .hero-copy h1 :is(span, em) {
+    --air-shine-glint: #4d86af;
+    background-image: linear-gradient(
+      108deg,
+      currentColor 0%,
+      currentColor 46.5%,
+      var(--air-shine-glint) 49.2%,
+      var(--air-shine-glint) 50.8%,
+      currentColor 53.5%,
+      currentColor 100%
+    );
+    background-position: 145% 50%;
+    background-repeat: no-repeat;
+    background-size: 250% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: air-heading-shine var(--air-shine-duration) var(--air-shine-ease) infinite;
+  }
+
+  .hero-copy h1 em {
+    color: #276faa;
+    --air-shine-glint: #79b4d9;
+    font-style: normal;
+  }
+
+  /* White type on the blue-hour chapters needs a cool, brighter sweep rather
+   * than pure white so it stays legible through the entire animation. */
+  .film-section :is(h2, h3),
+  .signals-section :is(h2, h3) {
+    --air-shine-glint: #bce9ff;
+  }
+}
+
+@keyframes air-heading-shine {
+  0%,
+  20% {
+    background-position: 145% 50%;
+  }
+
+  68%,
+  100% {
+    background-position: -45% 50%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  main :is(h1, h2, h3),
+  .preorder-dialog h2,
+  .hero-copy h1 :is(span, em) {
+    animation: none !important;
+    background-position: 50% 50%;
+  }
+}
+
+html[data-air-save-data="true"] main :is(h1, h2, h3),
+html[data-air-save-data="true"] .preorder-dialog h2,
+html[data-air-save-data="true"] .hero-copy h1 :is(span, em) {
+  animation: none !important;
+  background-position: 50% 50%;
+}
+
+@media (forced-colors: active) {
+  main :is(h1, h2, h3),
+  .preorder-dialog h2,
+  .hero-copy h1 :is(span, em) {
+    color: CanvasText !important;
+    background-image: none !important;
+    -webkit-text-fill-color: CanvasText !important;
+    animation: none !important;
+  }
+}

@@ -8,9 +8,10 @@ import { PageAtmosphere } from "@/components/PageAtmosphere";
 import { PreorderProvider } from "@/components/Preorder";
 import { resolveAirFeatureFlags } from "@/lib/feature-flags";
 import "@fontsource-variable/azeret-mono";
-import "@fontsource-variable/newsreader";
+import "@fontsource-variable/inter";
 import "./globals.css";
 import "./cloudborne.css";
+import "./typography.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://air.wzrd.tech"),
@@ -60,7 +61,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <Analytics />
         <SpeedInsights />
         <Script
-          src="/vendor/air-prepaint-v2026-08-19-a.js"
+          src="/vendor/air-prepaint-v2026-08-20-b.js"
           strategy="beforeInteractive"
         />
         <Script src="/vendor/dither-kit.js" strategy="afterInteractive" />
