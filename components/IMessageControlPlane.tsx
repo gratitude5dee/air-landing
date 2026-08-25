@@ -2,7 +2,8 @@
 
 import { useDrag } from "@use-gesture/react";
 import { type CSSProperties, type KeyboardEvent, useRef, useState } from "react";
-import { LuBot, LuBraces, LuRefreshCcw, LuRoute, LuSend, LuSparkles } from "react-icons/lu";
+import { LuBot, LuRefreshCcw, LuSend, LuSparkles } from "react-icons/lu";
+import { SiHermes, SiOpencode } from "react-icons/si";
 
 import styles from "./IMessageControlPlane.module.css";
 
@@ -11,9 +12,9 @@ type Point = { x: number; y: number };
 
 const agents = [
   { id: "openclaw", name: "OpenClaw", mark: "OC", Icon: LuBot, description: "Research and browser work", x: "6%", y: "15%", tone: "sky" },
-  { id: "hermes", name: "Hermes", mark: "H", Icon: LuRoute, description: "Routing and handoffs", x: "59%", y: "11%", tone: "seafoam" },
+  { id: "hermes", name: "Hermes", mark: "H", Icon: SiHermes, description: "Routing and handoffs", x: "59%", y: "11%", tone: "seafoam" },
   { id: "pi", name: "Pi", mark: "π", Icon: LuSparkles, description: "Long-running context", x: "15%", y: "62%", tone: "blue" },
-  { id: "opencode", name: "OpenCode", mark: "</>", Icon: LuBraces, description: "Code and execution", x: "65%", y: "62%", tone: "ice" },
+  { id: "opencode", name: "OpenCode", mark: "</>", Icon: SiOpencode, description: "Code and execution", x: "65%", y: "62%", tone: "ice" },
 ] as const;
 
 const initialActiveAgent = agents[0];
