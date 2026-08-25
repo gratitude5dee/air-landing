@@ -147,29 +147,15 @@ const roadmapItems = [
 
 const pricingPlans = [
   {
-    name: "Personal",
-    price: "$20",
-    cadence: "/ month",
-    status: "Private beta",
-    description: "For one person getting started with a persistent AI operator.",
-    features: [
-      "One personal Air assistant",
-      "One personal composable computer",
-      "iMessage and web access",
-      "Guided first-week onboarding",
-    ],
-    cta: "Join the beta",
-  },
-  {
     name: "Adaptive",
     price: "$50",
     cadence: "/ month",
     status: "Private beta",
     description: "For an Air that learns your taste, rhythms, and preferred feeds.",
     features: [
-      "Everything in Personal",
-      "Hyper-personalized memory and preferences",
-      "Curated routing across supported models",
+      "One Air + persistent Ubuntu computer",
+      "Hyper-personalized memory, feeds, and preferences",
+      "Curated routing across 1,000+ supported models",
       "1,000+ app-toolkit catalog",
     ],
     cta: "Request Adaptive",
@@ -661,7 +647,7 @@ export function Pricing() {
         <div className="section-rail"><span>Private-beta plans</span><span>USD / monthly starting points</span></div>
         <div className={styles.pricingHeading} data-reveal>
           <p className="eyebrow">Choose how much computer Air gets</p>
-          <h2 id="pricing-title">Start personal. Add depth, environments, or dedicated compute.</h2>
+          <h2 id="pricing-title">Start with more depth. Add environments or dedicated compute.</h2>
           <p>Every plan begins with one personal agent and one persistent workspace.</p>
         </div>
 

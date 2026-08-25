@@ -13,6 +13,7 @@ import {
 } from "@/components/ComposableSections";
 import { Hero } from "@/components/Hero";
 import { IntroFilm } from "@/components/IntroFilm";
+import { IMessageControlPlane } from "@/components/IMessageControlPlane";
 import { MotionEnhancer } from "@/components/MotionEnhancer";
 import { AIR_PRODUCT_DESCRIPTION, AIR_TAGLINE } from "@/lib/air-copy";
 
@@ -79,6 +80,7 @@ export default function Home() {
           <ProductSequence />
           <MiniAppStore />
           <IMessageDrop />
+          <IMessageControlPlane />
           <Roadmap />
           <Pricing />
           <ComposableFaq />

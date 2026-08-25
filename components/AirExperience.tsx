@@ -30,6 +30,7 @@ import {
   SiYoutube,
 } from "react-icons/si";
 import {
+  LuArrowUpRight,
   LuCheck,
   LuChevronDown,
   LuMessagesSquare,
@@ -42,7 +43,6 @@ import {
   type AirDemoAction,
   type AirDemoState,
 } from "@/components/air-demo-state";
-import { PreorderButton } from "@/components/Preorder";
 import {
   DIRECTIONS,
   getDirection,
@@ -485,7 +485,9 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
             </p>
 
             <div className="hero-actions">
-              <PreorderButton label="Join the private beta" />
+              <a className="button button-primary" href="https://buy.stripe.com/bJe5kF8Pg49RaPw9M6a3u02">
+                Start Air at $50 / month <LuArrowUpRight aria-hidden />
+              </a>
               <a className="text-link" href="#what-is-air">Explore the computer <span aria-hidden>↓</span></a>
             </div>
             <ul className="hero-proof" aria-label="Air preview status">
