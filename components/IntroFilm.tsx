@@ -196,6 +196,14 @@ export function IntroFilm() {
     exitTimerRef.current = window.setTimeout(complete, INTRO_HANDOFF_MS);
   }, [complete, stopFilm]);
 
+  // A cinematic layer must never become a dead end. Media errors include
+  // blocked codecs, a partial deploy, and an interrupted network request, so
+  // release straight into the fully usable hero instead of leaving a poster
+  // and disabled controls over the page.
+  useEffect(() => {
+    if (eligible && mediaState === "error") finish({ immediate: true });
+  }, [eligible, finish, mediaState]);
+
   useEffect(() => {
     if (!eligible) return;
 

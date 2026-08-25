@@ -211,6 +211,7 @@
 .domeActiveIcon { overflow: hidden; }
 .domeAgentMark { position: relative; width: 100%; height: 100%; display: grid; place-items: center; overflow: hidden; color: #effcff; background: radial-gradient(circle at 50% 18%, rgba(255, 255, 255, 0.55), transparent 37%), linear-gradient(145deg, rgba(169, 236, 255, 0.28), rgba(7, 63, 112, 0.16)); }
 .domeAgentMark svg { position: relative; z-index: 1; width: 48%; height: 48%; filter: drop-shadow(0 0.16rem 0.35rem rgba(4, 38, 89, 0.36)); }
+.domeAgentMark img { position: relative; z-index: 1; width: 52%; height: 52%; object-fit: contain; image-rendering: pixelated; filter: drop-shadow(0 0.16rem 0.35rem rgba(4, 38, 89, 0.36)); }
 .domeAgentMark b { position: absolute; right: 0.16rem; bottom: 0.1rem; z-index: 2; color: rgba(241, 253, 255, 0.9); font-family: var(--font-mono); font-size: clamp(0.37rem, 0.55vw, 0.55rem); line-height: 1; letter-spacing: -0.08em; text-shadow: 0 1px 0.25rem rgba(1, 22, 52, 0.76); }
 .domeAgentMark[data-agent="openclaw"] { color: #eafffb; background: radial-gradient(circle at 50% 15%, #bdf5e8, transparent 38%), linear-gradient(145deg, #276b78, #063748); }
 .domeAgentMark[data-agent="hermes"] { color: #e8fdff; background: radial-gradient(circle at 50% 15%, #caefff, transparent 38%), linear-gradient(145deg, #336b99, #0a355e); }

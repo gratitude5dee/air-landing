@@ -79,6 +79,9 @@ button { color: inherit; }
 .skip-link:focus { transform: none; }
 
 .button {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   min-height: 3.4rem;
   display: inline-flex;
   align-items: center;
@@ -97,7 +100,23 @@ button { color: inherit; }
   transition: transform 180ms var(--spring), box-shadow 180ms ease, background 180ms ease;
 }
 
-.button svg { font-size: 1rem; transition: transform 180ms var(--spring); }
+/* Air's small, contained take on a specular button: the sheen is brief,
+   pointer-safe, and never required to understand or operate the control. */
+.button::after {
+  content: "";
+  position: absolute;
+  inset: -80% -35%;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(108deg, transparent 42%, rgba(255, 255, 255, 0.76) 50%, transparent 58%);
+  mix-blend-mode: soft-light;
+  transform: translateX(-48%) rotate(10deg);
+  transition: transform 620ms var(--settle), opacity 180ms ease;
+}
+.button:hover::after { opacity: 0.9; transform: translateX(48%) rotate(10deg); }
+
+.button svg { position: relative; z-index: 1; font-size: 1rem; transition: transform 180ms var(--spring); }
 .button:hover { transform: translateY(-3px); }
 .button:hover svg { transform: translate(3px, -3px); }
 .button:focus-visible { outline: 2px solid var(--cream-bright); outline-offset: 3px; }

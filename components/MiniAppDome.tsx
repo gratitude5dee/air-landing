@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useDrag } from "@use-gesture/react";
 import { type CSSProperties, type KeyboardEvent, useEffect, useMemo, useRef } from "react";
 import { LuBot, LuChevronLeft, LuChevronRight, LuMaximize2, LuRefreshCcw, LuSparkles } from "react-icons/lu";
@@ -45,7 +46,15 @@ function AgentDomeMark({ agent }: { agent: (typeof AGENT_FIELD)[number] }) {
   const Icon = agent.Icon;
   return (
     <span className={styles.domeAgentMark} data-agent={agent.id}>
-      <Icon aria-hidden="true" />
+      {agent.id === "openclaw" ? (
+        <Image
+          src="/images/agents/v2026-08-25-a/openclaw-pixel-lobster.svg"
+          alt=""
+          width={40}
+          height={40}
+          aria-hidden="true"
+        />
+      ) : <Icon aria-hidden="true" />}
       <b>{agent.mark}</b>
     </span>
   );

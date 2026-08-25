@@ -77,10 +77,10 @@ export default function Home() {
         <Hero>
           <IMessageDrop />
           <IMessageControlPlane />
+          <MiniAppStore />
           <ComposableDefinition />
           <ComposableCapabilities />
           <ProductSequence />
-          <MiniAppStore />
           <Roadmap />
           <Pricing />
           <ComposableFaq />

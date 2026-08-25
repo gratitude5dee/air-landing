@@ -25,6 +25,7 @@ import {
   LuStore,
   LuWorkflow,
 } from "react-icons/lu";
+import { SiHermes, SiOpencode } from "react-icons/si";
 
 import { PreorderButton } from "@/components/Preorder";
 import { MiniAppGallery } from "@/components/MiniAppGallery";
@@ -504,6 +505,33 @@ export function MiniAppStore() {
             <LuStore aria-hidden />
             <span><small>Publisher access</small>Rolling out</span>
           </div>
+        </div>
+
+        <div className={styles.agentCloud} data-reveal>
+          <div>
+            <p className="eyebrow">Agent field</p>
+            <p>Give the Mini App Store a team: OpenClaw, Hermes, Pi, OpenCode, and the agents you bring to Air.</p>
+          </div>
+          <ul aria-label="Agent marks represented in the Air Mini App Store">
+            <li>
+              <span className={styles.agentMark} data-agent="openclaw">
+                <Image src="/images/agents/v2026-08-25-a/openclaw-pixel-lobster.svg" alt="" width={36} height={36} />
+              </span>
+              <span>OpenClaw</span>
+            </li>
+            <li>
+              <span className={styles.agentMark} data-agent="hermes"><SiHermes aria-hidden /></span>
+              <span>Hermes</span>
+            </li>
+            <li>
+              <span className={styles.agentMark} data-agent="pi" aria-hidden>π</span>
+              <span>Pi</span>
+            </li>
+            <li>
+              <span className={styles.agentMark} data-agent="opencode"><SiOpencode aria-hidden /></span>
+              <span>OpenCode</span>
+            </li>
+          </ul>
         </div>
 
         <MiniAppGallery items={AIR_MINI_APPS} />
