@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { PreorderButton } from "@/components/Preorder";
+import { AIR_TAGLINE } from "@/lib/air-copy";
 
 export function Header() {
   return (
@@ -30,7 +31,7 @@ export function Footer() {
             <span>air by</span>
             <Image src="/images/wzrd-wordmark.png" alt="WZRD.tech" width={1600} height={396} />
           </Link>
-          <p>Your personal, creative, composable computer.</p>
+          <p>{AIR_TAGLINE}</p>
         </div>
         <nav aria-label="Footer navigation">
           <a href="#top">Top</a>

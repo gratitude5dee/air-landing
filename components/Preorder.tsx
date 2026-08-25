@@ -266,11 +266,13 @@ export function PreorderButton({
   compact = false,
   interest = "General",
   label = "pre-order air today",
+  onBeforeOpen,
 }: {
   className?: string;
   compact?: boolean;
   interest?: PreorderInterest;
   label?: string;
+  onBeforeOpen?: () => void;
 }) {
   const context = useContext(PreorderContext);
   if (!context) throw new Error("PreorderButton must be used inside PreorderProvider");
@@ -279,7 +281,10 @@ export function PreorderButton({
     <button
       type="button"
       className={`button button-primary ${compact ? "button-compact" : ""} ${className}`}
-      onClick={() => context.openPreorder(interest)}
+      onClick={() => {
+        onBeforeOpen?.();
+        context.openPreorder(interest);
+      }}
     >
       {label} <LuArrowUpRight aria-hidden />
     </button>

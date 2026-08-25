@@ -48,6 +48,7 @@ import {
   getDirection,
   type DirectionSpec,
 } from "@/content/directions";
+import { AIR_TAGLINE } from "@/lib/air-copy";
 import { resolveHeroTimeline } from "@/lib/hero-timeline";
 import { ShinyText } from "@/components/ShinyText";
 
@@ -73,7 +74,11 @@ type AirExperienceProps = {
 type HeroVariables = CSSProperties & {
   "--cloud-progress": number;
   "--hero-progress": number;
+  "--poster-exit-progress": number;
   "--reveal-progress": number;
+  "--title-reveal-progress": number;
+  "--title-exit-progress": number;
+  "--title-progress": number;
   "--handoff-progress": number;
   "--orbit-progress": number;
   "--orbit-angle": string;
@@ -238,7 +243,13 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
         ? "cinematic"
         : "static";
       section.dataset.airShader = cinematicEligible ? shaderStatus : "off";
+      section.dataset.airPoster =
+        timeline.posterExitProgress >= 0.995 ? "hidden" : "visible";
       section.style.setProperty("--reveal-progress", String(timeline.revealProgress));
+      section.style.setProperty("--poster-exit-progress", String(timeline.posterExitProgress));
+      section.style.setProperty("--title-reveal-progress", String(timeline.titleRevealProgress));
+      section.style.setProperty("--title-exit-progress", String(timeline.titleExitProgress));
+      section.style.setProperty("--title-progress", String(timeline.titleProgress));
       section.style.setProperty("--handoff-progress", String(timeline.handoffProgress));
       section.style.setProperty("--orbit-progress", String(timeline.orbitProgress));
       section.style.setProperty("--orbit-angle", `${timeline.orbitProgress * 25}deg`);
@@ -257,18 +268,9 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
     };
     const handleFocusIn = (event: FocusEvent) => {
       const target = event.target;
-      // Intro dismissal lands on the opening's named region, not an action.
-      // Keep the first scroll position intact there; a tab into a real hero
-      // control still invokes the accessibility escape hatch below.
-      if (
-        target instanceof Element &&
-        target.closest("[data-air-opening-focus]")
-      ) {
-        focusFloorActive = false;
-        scheduleUpdate();
-        return;
-      }
-      focusFloorActive = true;
+      // Keyboard focus must never land on an obscured product control. The
+      // atmospheric sequence is visual-only once someone starts navigating.
+      focusFloorActive = target instanceof Element;
       scheduleUpdate();
     };
     const handleFocusOut = (event: FocusEvent) => {
@@ -341,19 +343,27 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
 
   const heroStyle: HeroVariables = cinematicEnabled
     ? {
-        "--cloud-progress": 0,
-        "--hero-progress": 0,
-        "--reveal-progress": 0,
-        "--handoff-progress": 0,
+      "--cloud-progress": 0,
+      "--hero-progress": 0,
+      "--poster-exit-progress": 0,
+      "--reveal-progress": 0,
+      "--title-reveal-progress": 0,
+      "--title-exit-progress": 0,
+      "--title-progress": 0,
+      "--handoff-progress": 0,
         "--orbit-progress": 0,
         "--orbit-angle": "0deg",
         "--counter-orbit-angle": "0deg",
       }
     : {
-        "--cloud-progress": 1,
-        "--hero-progress": 1,
-        "--reveal-progress": 1,
-        "--handoff-progress": 1,
+      "--cloud-progress": 1,
+      "--hero-progress": 1,
+      "--poster-exit-progress": 1,
+      "--reveal-progress": 1,
+      "--title-reveal-progress": 0,
+      "--title-exit-progress": 1,
+      "--title-progress": 0,
+      "--handoff-progress": 1,
         "--orbit-progress": 1,
         "--orbit-angle": "25deg",
         "--counter-orbit-angle": "-25deg",
@@ -378,20 +388,16 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
         <div
           id="air-opening"
           className="hero-opening"
-          role="region"
-          aria-label="Air opening"
-          tabIndex={-1}
-          data-air-opening-focus
+          aria-hidden="true"
         >
           <img
             className="hero-opening-image"
             src="/images/opening/v2026-08-19-a/finframe.webp"
-            alt="Air by WZRD.tech in an open blue sky above clouds."
+            alt=""
             width={1920}
             height={1080}
             fetchPriority="high"
           />
-          <p className="hero-opening-title">your personal, creative composable computer</p>
         </div>
 
         {cinematicActive &&
@@ -418,6 +424,9 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
             <p>scroll to clear the clouds <LuChevronDown /></p>
           </div>
         )}
+        <p className="hero-cloud-title" aria-hidden="true">
+          {AIR_TAGLINE}
+        </p>
         <div className="hero-grain" aria-hidden />
 
         <div className="hero-frame" aria-hidden>
@@ -433,7 +442,7 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
             </div>
             <h1
               id="hero-title"
-              aria-label="Your personal, creative, composable computer."
+              tabIndex={-1}
             >
               <ShinyText
                 className="hero-shiny-line"
@@ -444,6 +453,7 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
               >
                 Your personal,
               </ShinyText>
+              {" "}
               <ShinyText
                 className="hero-shiny-line"
                 color="#03234d"
@@ -454,6 +464,7 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
               >
                 creative composable
               </ShinyText>
+              {" "}
               <ShinyText
                 className="hero-shiny-line hero-shiny-line--signal"
                 color="#045991"

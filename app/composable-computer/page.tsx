@@ -3,6 +3,7 @@ import { LuAppWindow, LuBrainCircuit, LuMonitorCog, LuShieldCheck, LuWorkflow } 
 
 import { DetailArrowLink, DetailPageShell } from "@/components/DetailPageShell";
 import styles from "@/components/DetailPageShell.module.css";
+import { AIR_PRODUCT_DESCRIPTION, AIR_TAGLINE } from "@/lib/air-copy";
 
 export const metadata: Metadata = {
   title: "Personal composable AI computer | Air by WZRD",
@@ -10,8 +11,8 @@ export const metadata: Metadata = {
     "See how Air combines one persistent agent, managed compute, memory, skills, app connections, Mini Apps, and approval controls.",
   alternates: { canonical: "/composable-computer" },
   openGraph: {
-    title: "Air — your personal, creative, composable computer",
-    description: "One persistent AI agent with its own workspace, memory, tools, connections, and Mini Apps.",
+    title: `Air — ${AIR_TAGLINE}`,
+    description: AIR_PRODUCT_DESCRIPTION,
     url: "/composable-computer",
   },
 };

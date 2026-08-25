@@ -12,6 +12,7 @@ const INTRO_HANDOFF_MS = 820;
 
 type FinishOptions = {
   immediate?: boolean;
+  focusHero?: boolean;
 };
 
 export function IntroFilm() {
@@ -19,6 +20,7 @@ export function IntroFilm() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const skipRef = useRef<HTMLButtonElement>(null);
   const finishingRef = useRef(false);
+  const focusHeroRef = useRef(false);
   const exitTimerRef = useRef<number | null>(null);
   const audioFadeFrameRef = useRef<number | null>(null);
   const [eligible, setEligible] = useState(false);
@@ -105,12 +107,10 @@ export function IntroFilm() {
     window.dispatchEvent(new CustomEvent("air:intro-complete"));
     setEligible(false);
 
-    // The focus receiver deliberately keeps the cinematic timeline at its
-    // opening state. Tabbing to a real hero control still resolves the full,
-    // readable composition immediately.
     requestAnimationFrame(() => {
-      const opening = document.getElementById("air-opening");
-      opening?.focus({ preventScroll: true });
+      if (focusHeroRef.current) {
+        document.getElementById("hero-title")?.focus({ preventScroll: true });
+      }
       setAnnouncement("Intro complete. Air experience ready.");
     });
 
@@ -175,6 +175,7 @@ export function IntroFilm() {
   const finish = useCallback((options: FinishOptions = {}) => {
     if (finishingRef.current) return;
     finishingRef.current = true;
+    focusHeroRef.current = Boolean(options.focusHero);
 
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const forcedColors = window.matchMedia("(forced-colors: active)").matches;
@@ -246,7 +247,7 @@ export function IntroFilm() {
           data-air-intro-dialog
           onCancel={(event) => {
             event.preventDefault();
-            if (!isHandingOff) finish();
+            if (!isHandingOff) finish({ focusHero: true });
           }}
           style={{ width: "100vw", maxWidth: "none", height: "100svh", maxHeight: "none", margin: 0, padding: 0, border: 0 }}
         >
@@ -280,11 +281,10 @@ export function IntroFilm() {
           />
           <div className="intro-vignette" aria-hidden />
           <div className="intro-brand">
-            <span id="air-intro-title" className="intro-brand-title">Air, your personal creative composable computer</span>
+            <span id="air-intro-title" className="intro-brand-title">Air introduction</span>
             <span className="intro-logo" aria-hidden="true">
               <Image src="/images/wzrd-wordmark.png" alt="" width={1600} height={396} priority />
             </span>
-            <small>your personal, creative composable computer</small>
           </div>
           <div className="intro-controls">
             <button type="button" onClick={toggleSound} disabled={mediaState === "error" || isHandingOff} aria-label={muted ? "Turn intro sound on" : "Mute intro"}>
@@ -293,7 +293,7 @@ export function IntroFilm() {
                 {muted ? "sound on" : "mute"}
               </ShinyText>
             </button>
-            <button ref={skipRef} type="button" autoFocus disabled={isHandingOff} onClick={() => finish()}>
+            <button ref={skipRef} type="button" autoFocus disabled={isHandingOff} onClick={() => finish({ focusHero: true })}>
               <ShinyText disabled={isHandingOff} color="#e8f5ff" shineColor="#ffffff" speed={4.2} delay={0.3} spread={112}>
                 skip intro
               </ShinyText>

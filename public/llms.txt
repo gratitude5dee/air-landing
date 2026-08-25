@@ -1,6 +1,6 @@
 # Air by WZRD
 
-> Air is a personal, creative, composable computer: one persistent AI agent with its own workspace, memory, skills, supported app connections, and Mini Apps.
+> Air is your personal, creative composable computer: one persistent AI agent with its own workspace, memory, skills, supported app connections, and Mini Apps.
 
 Canonical site: https://air.wzrd.tech
 

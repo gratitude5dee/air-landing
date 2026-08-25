@@ -136,7 +136,8 @@ html:has(.site-header:focus-within) .site-header {
 
 html:has(.site-header:focus-within) .hero-opening,
 html:has(.site-header:focus-within) .hero-shader,
-html:has(.site-header:focus-within) .cloud-curtain {
+html:has(.site-header:focus-within) .cloud-curtain,
+html:has(.site-header:focus-within) .hero-cloud-title {
   opacity: 0 !important;
 }
 
@@ -294,7 +295,8 @@ html:has(.site-header:focus-within) .hero-frame {
 .hero-scroll[data-air-presentation="static"] .hero-opening,
 .hero-scroll[data-air-presentation="static"] .hero-shader,
 .hero-scroll[data-air-presentation="static"] .hero-dither-lens,
-.hero-scroll[data-air-presentation="static"] .cloud-curtain {
+.hero-scroll[data-air-presentation="static"] .cloud-curtain,
+.hero-scroll[data-air-presentation="static"] .hero-cloud-title {
   display: none;
 }
 
@@ -312,7 +314,8 @@ html:has(.site-header:focus-within) .hero-frame {
 .hero-scroll[data-air-shader="fallback"] .hero-opening,
 .hero-scroll[data-air-shader="fallback"] .hero-shader,
 .hero-scroll[data-air-shader="fallback"] .hero-dither-lens,
-.hero-scroll[data-air-shader="fallback"] .cloud-curtain {
+.hero-scroll[data-air-shader="fallback"] .cloud-curtain,
+.hero-scroll[data-air-shader="fallback"] .hero-cloud-title {
   display: none !important;
 }
 
@@ -342,15 +345,15 @@ html:has(.site-header:focus-within) .hero-frame {
   overflow: hidden;
   display: grid;
   place-items: center;
-  opacity: calc(1 - var(--handoff-progress));
-  transform: scale(calc(1 + var(--handoff-progress) * 0.035));
+  opacity: calc(1 - var(--poster-exit-progress));
+  transform: scale(calc(1 + var(--poster-exit-progress) * 0.035));
   transform-origin: 50% 52%;
   pointer-events: none;
   will-change: opacity, transform;
 }
 
-.hero-opening:focus-visible {
-  outline: none;
+.hero-scroll[data-air-poster="hidden"] .hero-opening {
+  visibility: hidden;
 }
 
 .hero-opening-image {
@@ -362,11 +365,11 @@ html:has(.site-header:focus-within) .hero-frame {
   filter: saturate(0.92) contrast(0.98) brightness(1.025);
 }
 
-.hero-opening-title {
+.hero-cloud-title {
   position: absolute;
   left: clamp(1.5rem, 5vw, 5rem);
   bottom: clamp(2rem, 6vw, 5.5rem);
-  z-index: 2;
+  z-index: 69;
   max-width: 12ch;
   margin: 0;
   color: #f7fbfd;
@@ -376,6 +379,14 @@ html:has(.site-header:focus-within) .hero-frame {
   line-height: 0.9;
   text-shadow: 0 1rem 3rem rgba(4, 32, 63, 0.32);
   text-wrap: balance;
+  opacity: var(--title-progress);
+  filter: blur(calc((1 - var(--title-reveal-progress)) * 9px));
+  transform: translateY(calc((1 - var(--title-reveal-progress)) * 2.5rem - var(--title-exit-progress) * 1.75rem));
+  transform-origin: left bottom;
+  pointer-events: none;
+  will-change: opacity, transform, filter;
+  mask-image: linear-gradient(180deg, transparent 0%, #000 22%, #000 76%, transparent 100%);
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 22%, #000 76%, transparent 100%);
 }
 
 .hero-opening::after {
@@ -465,11 +476,12 @@ html:has(.site-header:focus-within) .hero-frame {
   opacity: 1;
 }
 
-.hero-scroll:focus-within:not(:has([data-air-opening-focus]:focus)) .cloud-curtain {
+.hero-scroll:focus-within .cloud-curtain,
+.hero-scroll:focus-within .hero-cloud-title {
   opacity: 0;
 }
 
-.hero-scroll:focus-within:not(:has([data-air-opening-focus]:focus)) .hero-content {
+.hero-scroll:focus-within .hero-content {
   opacity: 1;
   transform: none;
 }
@@ -493,7 +505,8 @@ html[data-air-hydrated="timeout"] .hero-sticky {
 html[data-air-hydrated="timeout"] .hero-opening,
 html[data-air-hydrated="timeout"] .hero-shader,
 html[data-air-hydrated="timeout"] .hero-dither-lens,
-html[data-air-hydrated="timeout"] .cloud-curtain {
+html[data-air-hydrated="timeout"] .cloud-curtain,
+html[data-air-hydrated="timeout"] .hero-cloud-title {
   display: none !important;
 }
 
@@ -1510,7 +1523,8 @@ html[data-air-hydrated="timeout"] .hero-content {
 
   .hero-opening,
   .hero-dither-lens,
-  .cloud-curtain {
+  .cloud-curtain,
+  .hero-cloud-title {
     display: none;
   }
 
@@ -1694,7 +1708,8 @@ html[data-air-hydrated="timeout"] .hero-content {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero-opening {
+  .hero-opening,
+  .hero-cloud-title {
     display: none;
   }
 
@@ -1712,6 +1727,7 @@ html[data-air-hydrated="timeout"] .hero-content {
 
 @media (forced-colors: active) {
   .hero-opening,
+  .hero-cloud-title,
   .hero-shader,
   .hero-dither-lens,
   .cloud-curtain,

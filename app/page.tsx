@@ -14,6 +14,7 @@ import {
 import { Hero } from "@/components/Hero";
 import { IntroFilm } from "@/components/IntroFilm";
 import { MotionEnhancer } from "@/components/MotionEnhancer";
+import { AIR_PRODUCT_DESCRIPTION, AIR_TAGLINE } from "@/lib/air-copy";
 
 const structuredData = [
   {
@@ -21,7 +22,7 @@ const structuredData = [
     "@type": "WebSite",
     name: "Air by WZRD",
     url: "https://air.wzrd.tech",
-    description: "Air is a personal, creative, composable AI computer.",
+    description: `Air is ${AIR_TAGLINE.toLowerCase()}`,
     publisher: { "@id": "https://air.wzrd.tech/#organization" },
   },
   {
@@ -39,7 +40,7 @@ const structuredData = [
     operatingSystem: "Ubuntu",
     url: "https://air.wzrd.tech",
     description:
-      "A personal composable computer with one persistent AI agent, durable workspace, memory, Mini Apps, supported models, and approved app connections.",
+      `A ${AIR_TAGLINE.toLowerCase()} ${AIR_PRODUCT_DESCRIPTION}`,
     featureList: [
       "Persistent managed Ubuntu workspace",
       "Context continuity across iMessage and web",

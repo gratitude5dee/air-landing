@@ -1,6 +1,10 @@
 export type HeroTimeline = Readonly<{
   progress: number;
+  posterExitProgress: number;
   revealProgress: number;
+  titleRevealProgress: number;
+  titleExitProgress: number;
+  titleProgress: number;
   handoffProgress: number;
   orbitProgress: number;
   headerRevealed: boolean;
@@ -20,18 +24,25 @@ function segment(progress: number, start: number, end: number) {
 }
 
 /**
- * The cinematic hero is deliberately split into three independent tracks:
- * cloud reveal, poster-to-product handoff, and the app-orbit arrival.
+ * The cinematic hero follows the opening's visual contract: the baked logo
+ * leaves first, the promise surfaces through clouds, then the product UI lands.
  */
 export function resolveHeroTimeline(rawProgress: number): HeroTimeline {
   const progress = clamp(rawProgress);
-  const revealProgress = segment(progress, 0.1, 0.52);
-  const handoffProgress = segment(progress, 0.64, 0.94);
-  const orbitProgress = segment(progress, 0.6, 0.94);
+  const posterExitProgress = segment(progress, 0.12, 0.3);
+  const revealProgress = segment(progress, 0.28, 0.74);
+  const titleRevealProgress = segment(progress, 0.34, 0.56);
+  const titleExitProgress = segment(progress, 0.68, 0.78);
+  const handoffProgress = segment(progress, 0.8, 0.98);
+  const orbitProgress = segment(progress, 0.82, 0.98);
 
   return {
     progress,
+    posterExitProgress,
     revealProgress,
+    titleRevealProgress,
+    titleExitProgress,
+    titleProgress: Math.min(titleRevealProgress, 1 - titleExitProgress),
     handoffProgress,
     orbitProgress,
     headerRevealed: handoffProgress >= 0.22,

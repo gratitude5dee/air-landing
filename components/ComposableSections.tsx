@@ -27,6 +27,8 @@ import {
 } from "react-icons/lu";
 
 import { PreorderButton } from "@/components/Preorder";
+import { MiniAppGallery } from "@/components/MiniAppGallery";
+import { AIR_MINI_APPS } from "@/lib/mini-apps";
 
 import styles from "./ComposableSections.module.css";
 
@@ -403,7 +405,10 @@ export function ComposableCapabilities() {
                 <span>{number}</span>
                 <span className={styles.statusChip}>{status}</span>
               </header>
-              <div className={styles.capabilityIcon}><Icon aria-hidden /></div>
+              <div className={styles.capabilityVisual} aria-hidden="true">
+                <span /><span /><span /><i />
+                <div className={styles.capabilityIcon}><Icon /></div>
+              </div>
               <h3>{title}</h3>
               <p>{body}</p>
               <footer>
@@ -515,6 +520,8 @@ export function MiniAppStore() {
           </div>
         </div>
 
+        <MiniAppGallery items={AIR_MINI_APPS} />
+
         <div className={styles.miniAppGrid}>
           {miniAppActions.map(({ Icon, number, title, body, meta }, index) => (
             <article data-reveal style={{ "--delay": `${index * 90}ms` } as CSSProperties} key={title}>
@@ -550,8 +557,9 @@ export function IMessageDrop() {
           <span>The input is already in your pocket</span>
           <span>iMessage + web</span>
         </div>
-        <div className={styles.dropGrid}>
-          <div className={styles.dropCopy} data-reveal>
+        <div className={styles.dropPanel}>
+          <div className={styles.dropGrid}>
+            <div className={styles.dropCopy} data-reveal>
             <p className="eyebrow">Drop in a thought</p>
             <h2 id="drop-title">Get back something you can use.</h2>
             <p>
@@ -564,10 +572,10 @@ export function IMessageDrop() {
               <li><LuCheck /> Continue with the same context on the web</li>
               <li><LuCheck /> Approve consequential actions before they run</li>
             </ul>
-          </div>
+            </div>
 
-          <figure className={styles.dropStage} data-reveal>
-            <div className={styles.dropWell} aria-hidden="true">
+            <figure className={styles.dropStage} data-reveal>
+              <div className={styles.dropWell} aria-hidden="true">
               <span className={styles.dropMarker}><LuArrowDown /></span>
               {dropAssets.map((asset) => (
                 <span
@@ -597,9 +605,10 @@ export function IMessageDrop() {
                 <div><small>Air returned</small><strong>Launch room ready</strong></div>
                 <b>Open</b>
               </div>
-            </div>
-            <figcaption>Existing iMessage assets settle into one reviewable result.</figcaption>
-          </figure>
+              </div>
+              <figcaption>Existing iMessage assets settle into one reviewable result.</figcaption>
+            </figure>
+          </div>
         </div>
       </div>
     </section>
@@ -727,7 +736,14 @@ export function ComposableClosing() {
       data-air-cloud-opacity="0.2"
       aria-labelledby="closing-title"
     >
-      <div className={styles.closingGlow} aria-hidden />
+      <Image
+        className={styles.closingImage}
+        src="/images/closing/v2026-08-21-a/blue-hour-horizon.avif"
+        alt=""
+        fill
+        sizes="100vw"
+      />
+      <div className={styles.closingScrim} aria-hidden />
       <div className={`shell ${styles.closingInner}`} data-reveal>
         <span className={styles.closingOrb}><LuBot aria-hidden /></span>
         <p className="eyebrow">Your computer is waiting</p>
