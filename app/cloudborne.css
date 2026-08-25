@@ -370,24 +370,39 @@ html:has(.site-header:focus-within) .hero-frame {
   top: 50%;
   left: 50%;
   z-index: 69;
-  width: min(12ch, calc(100% - 3rem));
+  width: min(18ch, calc(100% - 4rem));
   margin: 0;
   color: #f7fbfd;
-  font-size: clamp(3rem, 7vw, 8rem);
+  font-size: clamp(2.9rem, 6.7vw, 7.75rem);
   font-weight: 390;
   letter-spacing: -0.068em;
   line-height: 0.9;
   text-align: center;
-  text-shadow: 0 1rem 3rem rgba(4, 32, 63, 0.32);
+  text-shadow:
+    0 0.12em 0.65em rgba(255, 255, 255, 0.22),
+    0 1rem 3rem rgba(4, 32, 63, 0.28);
   text-wrap: balance;
   opacity: var(--title-progress);
-  filter: blur(calc((1 - var(--title-reveal-progress)) * 11px));
-  transform: translate(-50%, calc(-50% + (1 - var(--title-reveal-progress)) * 4.5rem - var(--title-exit-progress) * 3rem));
+  filter: blur(calc((1 - var(--title-reveal-progress)) * 12px)) saturate(calc(0.86 + var(--title-reveal-progress) * 0.14));
+  transform: translate(-50%, calc(-50% + (1 - var(--title-reveal-progress)) * 5.5rem - var(--title-exit-progress) * 3.5rem)) scale(calc(0.94 + var(--title-reveal-progress) * 0.06 - var(--title-exit-progress) * 0.025));
   transform-origin: center center;
   pointer-events: none;
   will-change: opacity, transform, filter;
-  mask-image: linear-gradient(180deg, transparent 0%, #000 22%, #000 76%, transparent 100%);
-  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 22%, #000 76%, transparent 100%);
+  mask-image: linear-gradient(180deg, transparent 0%, #000 12%, #000 88%, transparent 100%);
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 12%, #000 88%, transparent 100%);
+}
+
+.hero-cloud-title .hero-cloud-shiny {
+  display: inline;
+}
+
+/* Reuse the lightweight ShinyText layer, but put its bright edge on the same
+   scroll track as the title. The highlight is therefore a moment of the
+   reveal—not a distracting, permanent animation over the opening. */
+.hero-cloud-title .hero-cloud-shiny > span[aria-hidden="true"] {
+  opacity: min(0.94, calc(var(--title-progress) * 1.12));
+  background-position: var(--title-sheen-position) 50%;
+  animation: none;
 }
 
 .hero-cloud-title::before {

@@ -79,6 +79,7 @@ type HeroVariables = CSSProperties & {
   "--title-reveal-progress": number;
   "--title-exit-progress": number;
   "--title-progress": number;
+  "--title-sheen-position": string;
   "--handoff-progress": number;
   "--orbit-progress": number;
   "--orbit-angle": string;
@@ -250,6 +251,12 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
       section.style.setProperty("--title-reveal-progress", String(timeline.titleRevealProgress));
       section.style.setProperty("--title-exit-progress", String(timeline.titleExitProgress));
       section.style.setProperty("--title-progress", String(timeline.titleProgress));
+      // The highlight is tied to the title track instead of a free-running
+      // loop: it enters with the words, settles while the promise holds, and
+      // leaves with the handoff to the product hero.
+      const titleSheenPosition =
+        150 - timeline.titleRevealProgress * 160 - timeline.titleExitProgress * 110;
+      section.style.setProperty("--title-sheen-position", `${titleSheenPosition}%`);
       section.style.setProperty("--handoff-progress", String(timeline.handoffProgress));
       section.style.setProperty("--orbit-progress", String(timeline.orbitProgress));
       section.style.setProperty("--orbit-angle", `${timeline.orbitProgress * 25}deg`);
@@ -350,6 +357,7 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
       "--title-reveal-progress": 0,
       "--title-exit-progress": 0,
       "--title-progress": 0,
+      "--title-sheen-position": "150%",
       "--handoff-progress": 0,
         "--orbit-progress": 0,
         "--orbit-angle": "0deg",
@@ -363,6 +371,7 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
       "--title-reveal-progress": 0,
       "--title-exit-progress": 1,
       "--title-progress": 0,
+      "--title-sheen-position": "150%",
       "--handoff-progress": 1,
         "--orbit-progress": 1,
         "--orbit-angle": "25deg",
@@ -425,7 +434,15 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
           </div>
         )}
         <p className="hero-cloud-title" aria-hidden="true">
-          {AIR_TAGLINE}
+          <ShinyText
+            className="hero-cloud-shiny"
+            color="#eaf8ff"
+            shineColor="#ffffff"
+            spread={102}
+            disabled={!cinematicActive}
+          >
+            {AIR_TAGLINE}
+          </ShinyText>
         </p>
         <div className="hero-grain" aria-hidden />
 
