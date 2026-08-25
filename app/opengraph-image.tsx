@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-export const alt = "Air by WZRD — Your personal creative assistant in your iMessages";
+export const alt = "Air by WZRD — Your personal, creative, composable computer";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -27,11 +27,11 @@ export default function OpenGraphImage() {
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
           <div style={{ display: "flex", flexDirection: "column", fontSize: 92, lineHeight: 0.93, letterSpacing: "-0.06em" }}>
-            <div>Your personal creative assistant</div>
-            <div>in your iMessages.</div>
+            <div>Your personal, creative,</div>
+            <div>composable computer.</div>
           </div>
           <div style={{ fontSize: 24, opacity: 0.78, letterSpacing: "0.01em" }}>
-            Text a thought, a reference, or a rough brief. Air brings the next creative move back to the thread.
+            One persistent AI agent with its own workspace, memory, tools, connections, and Mini Apps.
           </div>
         </div>
         <div

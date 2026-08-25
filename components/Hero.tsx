@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 
 import { AirExperience } from "@/components/AirExperience";
-import { IMessageDemo } from "@/components/IMessageDemo";
+import { IMessageComputerDemo } from "@/components/IMessageComputerDemo";
 import { resolveAirFeatureFlags } from "@/lib/feature-flags";
 
 export function Hero({ children }: { children?: ReactNode }) {
@@ -11,7 +11,7 @@ export function Hero({ children }: { children?: ReactNode }) {
     <AirExperience
       cinematicEnabled={cinematicEnabled}
       memoryEchoEnabled={memoryEchoEnabled}
-      phoneDemo={<IMessageDemo />}
+      phoneDemo={<IMessageComputerDemo />}
     >
       {children}
     </AirExperience>

@@ -362,6 +362,22 @@ html:has(.site-header:focus-within) .hero-frame {
   filter: saturate(0.92) contrast(0.98) brightness(1.025);
 }
 
+.hero-opening-title {
+  position: absolute;
+  left: clamp(1.5rem, 5vw, 5rem);
+  bottom: clamp(2rem, 6vw, 5.5rem);
+  z-index: 2;
+  max-width: 12ch;
+  margin: 0;
+  color: #f7fbfd;
+  font-size: clamp(2.8rem, 6vw, 6.5rem);
+  font-weight: 390;
+  letter-spacing: -0.068em;
+  line-height: 0.9;
+  text-shadow: 0 1rem 3rem rgba(4, 32, 63, 0.32);
+  text-wrap: balance;
+}
+
 .hero-opening::after {
   content: "";
   position: absolute;
@@ -1371,6 +1387,24 @@ html[data-air-hydrated="timeout"] .hero-content {
   z-index: 1;
   background: linear-gradient(145deg, rgba(3, 14, 29, 0.58), rgba(5, 30, 61, 0.34));
 }
+
+.preorder-interest {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 0 0 0.75rem;
+  padding: 0.72rem 0.8rem;
+  border: 1px solid rgba(185, 221, 246, 0.24);
+  color: rgba(218, 239, 252, 0.68);
+  background: rgba(1, 9, 19, 0.38);
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.preorder-interest strong { color: #9bd8fb; font-weight: 650; }
 
 .preorder-form > label:not(.consent-row) {
   color: rgba(201, 229, 249, 0.68);

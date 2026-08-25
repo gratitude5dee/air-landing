@@ -1,8 +1,8 @@
 # Air by WZRD — landing page
 
-Native Next.js landing page for [air.wzrd.tech](https://air.wzrd.tech): a private creative-assistant preview built around iMessage.
+Native Next.js landing page for [air.wzrd.tech](https://air.wzrd.tech): a private-beta personal, creative, composable computer built around one persistent agent and continuous context across iMessage and web.
 
-The public product story is deliberately bounded: one text becomes a curated first visual, Tapbacks direct a deterministic interface preview, and the matching Golden Gate study continues to a storyboard and eight-second first cut. Storyboard-only directions are labeled as such; the page does not imply live browser generation or a guaranteed latency.
+The public product story is deliberately bounded: Ubuntu compute and persistent per-user context are private-beta capabilities; Omarchy and macOS are coming soon; Mini App monetization is rolling out; and agent mesh/Tailscale support is roadmap. The page does not imply 1,000+ selectable models, unlimited usage, guaranteed latency, or guaranteed hardware SKUs.
 
 ## Local development
 

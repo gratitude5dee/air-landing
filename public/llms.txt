@@ -1,0 +1,37 @@
+# Air by WZRD
+
+> Air is a personal, creative, composable computer: one persistent AI agent with its own workspace, memory, skills, supported app connections, and Mini Apps.
+
+Canonical site: https://air.wzrd.tech
+
+## What Air does
+
+- Runs one durable managed computer per user.
+- Keeps useful context continuous across iMessage and web.
+- Uses persistent memory, files, browser, terminal, skills, and supported model providers.
+- Connects to a catalog of 1,000+ app toolkits; individual availability and permissions vary.
+- Creates and runs focused Mini Apps.
+- Pauses connecting, sending, publishing, spending, and other consequential actions for human approval.
+
+## Availability
+
+- Ubuntu compute: private beta.
+- Omarchy: coming soon.
+- Apple-silicon macOS: coming soon; hardware and regional capacity vary.
+- Mini App publishing: private beta.
+- Mini App monetization: rolling out.
+- Agent mesh networking and Tailscale support: exploring / roadmap.
+
+## Important limits
+
+- Air offers a curated supported-model catalog, not 1,000+ AI models.
+- Included usage is metered and subject to safety, fair-use, and infrastructure limits.
+- The current website preorder form collects no payment.
+- All product previews and plans should be read with their visible availability labels.
+
+## Key pages
+
+- Home: https://air.wzrd.tech/
+- How it works: https://air.wzrd.tech/how-it-works
+- Composable computer: https://air.wzrd.tech/composable-computer
+- Capabilities: https://air.wzrd.tech/capabilities

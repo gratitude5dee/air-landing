@@ -9,7 +9,7 @@ export type Preorder = {
   imessage: string;
   consent: boolean;
   createdAt: string;
-  source: "air-landing";
+  source: string;
 };
 
 declare global {
@@ -105,6 +105,7 @@ export async function savePreorder(preorder: Preorder) {
         email = EXCLUDED.email,
         imessage = EXCLUDED.imessage,
         consent = EXCLUDED.consent,
+        source = EXCLUDED.source,
         updated_at = now()
       RETURNING id
     `;

@@ -15,29 +15,39 @@ import "./typography.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://air.wzrd.tech"),
-  title: "Air by WZRD — Your personal creative assistant in your iMessages",
+  title: "Air by WZRD | Personal Composable AI Computer",
   description:
-    "Text a thought, a reference, or a rough brief. Air helps shape the next creative move and brings it back to your thread—without another dashboard.",
+    "Air is a personal composable computer: one persistent AI agent with private compute, memory, Mini Apps, app connections, and approval controls.",
   applicationName: "Air by WZRD.tech",
-  keywords: ["creative assistant", "iMessage assistant", "AI agent", "WZRD.tech"],
+  keywords: [
+    "personal AI computer",
+    "AI agent with its own computer",
+    "iMessage AI assistant",
+    "persistent AI memory",
+    "composable AI agent",
+    "AI Mini App Store",
+    "WZRD.tech",
+  ],
+  alternates: { canonical: "/" },
   openGraph: {
     type: "website",
     siteName: "Air by WZRD.tech",
-    title: "Your personal creative assistant in your iMessages.",
-    description: "Text a thought, a reference, or a rough brief. Air brings the next creative move back to the thread.",
+    title: "Air — Your personal, creative, composable computer",
+    description: "One persistent AI agent with its own computer, memory, tools, connections, and Mini Apps.",
     url: "https://air.wzrd.tech",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Air by WZRD — Your personal creative assistant in your iMessages",
-    description: "Text a thought. Air brings the next creative move back to the thread.",
+    title: "Air by WZRD | Personal Composable AI Computer",
+    description: "One persistent AI agent with its own computer, memory, tools, connections, and Mini Apps.",
+    images: ["/opengraph-image"],
   },
   robots: { index: true, follow: true },
 };
 
 export const viewport: Viewport = {
   colorScheme: "light",
-  themeColor: "#c5e6f8",
+  themeColor: "#d9edf7",
   width: "device-width",
   initialScale: 1,
 };

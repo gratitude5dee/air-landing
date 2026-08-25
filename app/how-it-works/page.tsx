@@ -4,14 +4,14 @@ import { DetailArrowLink, DetailPageShell } from "@/components/DetailPageShell";
 import styles from "@/components/DetailPageShell.module.css";
 
 export const metadata: Metadata = {
-  title: "How Air works — creative assistance in your iMessages | Air by WZRD",
+  title: "How Air works — personal composable AI computer | Air by WZRD",
   description:
-    "A private-beta preview of the creative thread: text the outcome, coordinate approved tools, and review the next move in iMessage.",
+    "Message the outcome, let Air compose its persistent computer around the task, and review consequential actions in iMessage or the web.",
   alternates: { canonical: "/how-it-works" },
   openGraph: {
-    title: "How Air works — creative assistance in your iMessages",
+    title: "How Air works — one request, one composable computer",
     description:
-      "Text the outcome, coordinate approved tools, and review the next move in one private thread.",
+      "Message the outcome, compose the stack, and review what matters in one continuous context.",
     url: "/how-it-works",
   },
 };
@@ -40,8 +40,8 @@ export default function HowItWorksPage() {
     <DetailPageShell
       current="how-it-works"
       eyebrow="AIR BY WZRD.TECH · PRIVATE BETA"
-      title="The creative thread is where the work starts."
-      description="Text an outcome, a reference, or a rough brief. Air helps prepare the next creative move through the connections you approve—and returns the work to your iMessage thread."
+      title="Message the outcome. Air composes the computer."
+      description="Start with a message, link, image, or file. Air combines persistent context, compute, skills, and supported connections around the job—and returns the important moments for review."
     >
       <section
         className={styles.chapter}
@@ -54,14 +54,14 @@ export default function HowItWorksPage() {
       >
         <div className="shell">
           <div className={styles.rail}>
-            <span>The creative thread</span>
+            <span>The composable workflow</span>
             <span>Private-beta interface preview</span>
           </div>
           <div className={styles.chapterHeading}>
-            <h2 id="thread-start-title">One thought, not six tabs.</h2>
+            <h2 id="thread-start-title">One request, not six disconnected tools.</h2>
             <p>
-              Instead of switching between your analytics, ChatGPT, your creative suite, and Meta Ads,
-              begin with the outcome in one private thread.
+              Begin with the outcome. Air assembles the memory, compute, models, skills, files, and
+              approved app connections the job actually needs.
             </p>
           </div>
 
@@ -129,12 +129,12 @@ export default function HowItWorksPage() {
         <div className="shell">
           <div>
             <p className="eyebrow">Behind the thread</p>
-            <h2 id="behind-thread-title">A private operating surface, not another dashboard.</h2>
+            <h2 id="behind-thread-title">A persistent operating surface, not another disposable chat.</h2>
           </div>
           <div className={styles.calloutAside}>
             <p>
-              The workspace, phone line, inbox, scoped secrets, and connector catalog exist to support the
-              conversation—not pull you away from it.
+              The workspace, memory, iMessage access, inbox, scoped secrets, and app-toolkit catalog support
+              the same agent and context.
             </p>
             <DetailArrowLink href="/capabilities">See what sits behind the thread</DetailArrowLink>
           </div>

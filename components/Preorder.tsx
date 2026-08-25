@@ -12,7 +12,15 @@ import {
 } from "react";
 import { LuArrowUpRight, LuCalendarDays, LuCheck, LuX } from "react-icons/lu";
 
-type PreorderContextValue = { openPreorder: () => void };
+export type PreorderInterest =
+  | "General"
+  | "Personal"
+  | "Adaptive"
+  | "Creator OS"
+  | "Dedicated Mac"
+  | "Enterprise";
+
+type PreorderContextValue = { openPreorder: (interest?: PreorderInterest) => void };
 type PreorderStage = "form" | "saving" | "saved";
 type CalendarState = "loading" | "ready" | "blocked";
 type PreorderResponse = {
@@ -34,9 +42,11 @@ export function PreorderProvider({ children }: { children: ReactNode }) {
   const [stage, setStage] = useState<PreorderStage>("form");
   const [calendarState, setCalendarState] = useState<CalendarState>("loading");
   const [error, setError] = useState("");
+  const [interest, setInterest] = useState<PreorderInterest>("General");
 
-  const openPreorder = () => {
+  const openPreorder = (nextInterest: PreorderInterest = "General") => {
     setError("");
+    setInterest(nextInterest);
     const dialog = dialogRef.current;
     if (dialog && !dialog.open) {
       document.body.classList.add("modal-open");
@@ -71,6 +81,7 @@ export function PreorderProvider({ children }: { children: ReactNode }) {
       imessage: String(form.get("imessage") || ""),
       consent: form.get("consent") === "on",
       company: String(form.get("company") || ""),
+      interest,
     };
 
     // The server also treats this as a honeypot. Refuse to unlock Cal on the
@@ -159,6 +170,10 @@ export function PreorderProvider({ children }: { children: ReactNode }) {
               </div>
 
               <form className="preorder-form" onSubmit={submit} aria-busy={saving}>
+                <p className="preorder-interest">
+                  <span>Selected interest</span>
+                  <strong>{interest === "General" ? "Air private beta" : interest}</strong>
+                </p>
                 <label htmlFor="preorder-name">Name</label>
                 <input id="preorder-name" name="name" autoComplete="name" required placeholder="Your name" />
 
@@ -246,7 +261,17 @@ export function PreorderProvider({ children }: { children: ReactNode }) {
   );
 }
 
-export function PreorderButton({ className = "", compact = false }: { className?: string; compact?: boolean }) {
+export function PreorderButton({
+  className = "",
+  compact = false,
+  interest = "General",
+  label = "pre-order air today",
+}: {
+  className?: string;
+  compact?: boolean;
+  interest?: PreorderInterest;
+  label?: string;
+}) {
   const context = useContext(PreorderContext);
   if (!context) throw new Error("PreorderButton must be used inside PreorderProvider");
 
@@ -254,9 +279,9 @@ export function PreorderButton({ className = "", compact = false }: { className?
     <button
       type="button"
       className={`button button-primary ${compact ? "button-compact" : ""} ${className}`}
-      onClick={context.openPreorder}
+      onClick={() => context.openPreorder(interest)}
     >
-      pre-order air today <LuArrowUpRight aria-hidden />
+      {label} <LuArrowUpRight aria-hidden />
     </button>
   );
 }

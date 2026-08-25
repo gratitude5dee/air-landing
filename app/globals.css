@@ -340,7 +340,13 @@ html[data-air-hero-header="covered"] .site-header:focus-within {
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
-.intro-brand small { color: rgba(255,255,255,0.68); }
+.intro-brand small {
+  display: block;
+  max-width: 29rem;
+  margin-top: 0.75rem;
+  color: rgba(255,255,255,0.76);
+  line-height: 1.5;
+}
 .intro-controls {
   position: absolute;
   right: clamp(1.2rem, 4vw, 3rem);

@@ -6,7 +6,7 @@ import { PreorderButton } from "@/components/Preorder";
 
 import styles from "./DetailPageShell.module.css";
 
-export type DetailPage = "how-it-works" | "text-to-film" | "capabilities";
+export type DetailPage = "how-it-works" | "composable-computer" | "capabilities";
 
 type DetailPageShellProps = {
   current: DetailPage;
@@ -18,7 +18,7 @@ type DetailPageShellProps = {
 
 const routes: readonly { href: `/${DetailPage}`; label: string; key: DetailPage; number: string }[] = [
   { href: "/how-it-works", label: "How it works", key: "how-it-works", number: "01" },
-  { href: "/text-to-film", label: "Text to film", key: "text-to-film", number: "02" },
+  { href: "/composable-computer", label: "Composable computer", key: "composable-computer", number: "02" },
   { href: "/capabilities", label: "Capabilities", key: "capabilities", number: "03" },
 ];
 
@@ -61,7 +61,7 @@ export function DetailPageShell({
                 Explore the proof <span aria-hidden>↓</span>
               </a>
             </div>
-            <p className={styles.heroFootnote}>Private beta · interface previews · approval stays in the loop</p>
+            <p className={styles.heroFootnote}>Private beta · availability labeled · approval stays in the loop</p>
           </div>
         </section>
 
@@ -91,17 +91,17 @@ export function DetailPageShell({
           <div className={styles.ctaDither} aria-hidden />
           <div className={`shell ${styles.ctaInner}`}>
             <div className={styles.ctaCopy}>
-              <p className="eyebrow">Air is taking shape now</p>
-              <h2 id="detail-cta-title">Keep the next idea moving.</h2>
-              <p>Reserve early access, then choose a short onboarding conversation with WZRD.</p>
+              <p className="eyebrow">Your computer is taking shape</p>
+              <h2 id="detail-cta-title">Compose an Air around the way you work.</h2>
+              <p>Join the private beta, then map the first job, tools, and approval boundaries with WZRD.</p>
               <div className={styles.ctaActions}>
-                <PreorderButton />
+                <PreorderButton label="Join the private beta" />
                 <span>No payment today</span>
               </div>
             </div>
             <div className={styles.ctaProof} aria-label="What preorder includes">
               <span className={styles.ctaOrb} aria-hidden>✦</span>
-              <p>Founding access</p>
+              <p>Private-beta access</p>
               <ul>
                 <li>Private beta</li>
                 <li>Approval stays with you</li>

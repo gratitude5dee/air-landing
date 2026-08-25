@@ -167,7 +167,7 @@ export function AirExperience({
 }
 
 function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
-  const { state, directions, dispatch, cinematicEnabled } = useAirExperience();
+  const { state, cinematicEnabled } = useAirExperience();
   const sectionRef = useRef<HTMLElement>(null);
   const skyRef = useRef<HTMLElement>(null);
   const cinematicActiveRef = useRef(false);
@@ -391,6 +391,7 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
             height={1080}
             fetchPriority="high"
           />
+          <p className="hero-opening-title">your personal, creative composable computer</p>
         </div>
 
         {cinematicActive &&
@@ -421,7 +422,7 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
 
         <div className="hero-frame" aria-hidden>
           <span>air.wzrd.tech</span>
-          <span>creative intelligence / iMessage</span>
+          <span>personal compute / iMessage</span>
         </div>
 
         <div className="hero-content shell">
@@ -432,7 +433,7 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
             </div>
             <h1
               id="hero-title"
-              aria-label="Your personal creative assistant in your iMessages."
+              aria-label="Your personal, creative, composable computer."
             >
               <ShinyText
                 className="hero-shiny-line"
@@ -441,7 +442,7 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
                 speed={13.2}
                 spread={112}
               >
-                Your personal creative
+                Your personal,
               </ShinyText>
               <ShinyText
                 className="hero-shiny-line"
@@ -451,7 +452,7 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
                 delay={0.42}
                 spread={112}
               >
-                assistant in your
+                creative composable
               </ShinyText>
               <ShinyText
                 className="hero-shiny-line hero-shiny-line--signal"
@@ -461,53 +462,25 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
                 delay={0.84}
                 spread={112}
               >
-                iMessages.
+                computer.
               </ShinyText>
             </h1>
             <p>
-              Text a thought, a reference, or a rough brief. Air helps shape the
-              next creative move and brings it back to the thread—without another
-              dashboard.
+              One persistent AI agent with its own workspace, memory, skills, app
+              connections, and Mini Apps—available from iMessage and the web.
             </p>
             <p className="hero-status">
-              Interface preview · one private thread · approval stays in the loop.
+              Ubuntu private beta · 1,000+ app-toolkit catalog · human approval built in.
             </p>
 
-            <div
-              className="direction-cues"
-              role="group"
-              aria-label="Choose a creative cue · Interface preview"
-            >
-              {directions.map((direction) => {
-                const selected = state.directionId === direction.id;
-                return (
-                  <button
-                    key={direction.id}
-                    type="button"
-                    className={`direction-chip${selected ? " is-selected" : ""}`}
-                    aria-pressed={selected}
-                    aria-current={selected ? "true" : undefined}
-                    style={{ minHeight: 44 }}
-                    onClick={() =>
-                      dispatch({
-                        type: "select-direction",
-                        directionId: direction.id,
-                      })
-                    }
-                  >
-                    {direction.cueLabel}
-                  </button>
-                );
-              })}
-            </div>
-
             <div className="hero-actions">
-              <PreorderButton />
+              <PreorderButton label="Join the private beta" />
+              <a className="text-link" href="#what-is-air">Explore the computer <span aria-hidden>↓</span></a>
             </div>
             <ul className="hero-proof" aria-label="Air preview status">
-              <li><LuCheck aria-hidden /> private beta</li>
-              <li><LuCheck aria-hidden /> storyboard · approval required</li>
-              <li><LuCheck aria-hidden /> connector catalog · expanding</li>
+              <li><LuCheck aria-hidden /> one person · one persistent agent</li>
+              <li><LuCheck aria-hidden /> iMessage + web continuity</li>
+              <li><LuCheck aria-hidden /> approval required</li>
             </ul>
           </div>
 

@@ -12,9 +12,10 @@ export function Header() {
       </Link>
       <nav aria-label="Primary navigation">
         <Link href="/how-it-works">how it works</Link>
-        <Link className="nav-optional" href="/text-to-film">text to film</Link>
-        <Link className="nav-optional" href="/capabilities">capabilities</Link>
-        <PreorderButton compact />
+        <Link className="nav-optional" href="/composable-computer">composable computer</Link>
+        <Link className="nav-optional" href="/#mini-apps">mini apps</Link>
+        <Link className="nav-optional" href="/#pricing">pricing</Link>
+        <PreorderButton compact label="join beta" />
       </nav>
     </header>
   );
@@ -29,13 +30,16 @@ export function Footer() {
             <span>air by</span>
             <Image src="/images/wzrd-wordmark.png" alt="WZRD.tech" width={1600} height={396} />
           </Link>
-          <p>Your personal creative assistant in your iMessages.</p>
+          <p>Your personal, creative, composable computer.</p>
         </div>
         <nav aria-label="Footer navigation">
           <a href="#top">Top</a>
           <Link href="/how-it-works">How it works</Link>
-          <Link href="/text-to-film">Text to film</Link>
+          <Link href="/composable-computer">Composable computer</Link>
           <Link href="/capabilities">Capabilities</Link>
+          <a href="/#mini-apps">Mini Apps</a>
+          <a href="/#roadmap">Roadmap</a>
+          <a href="/#pricing">Pricing</a>
           <a href="https://wzrd.tech" target="_blank" rel="noreferrer">WZRD.tech ↗</a>
         </nav>
         <div className="footer-meta">

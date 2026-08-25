@@ -280,10 +280,11 @@ export function IntroFilm() {
           />
           <div className="intro-vignette" aria-hidden />
           <div className="intro-brand">
-            <span id="air-intro-title" className="intro-brand-title">WZRD.tech introduction</span>
+            <span id="air-intro-title" className="intro-brand-title">Air, your personal creative composable computer</span>
             <span className="intro-logo" aria-hidden="true">
               <Image src="/images/wzrd-wordmark.png" alt="" width={1600} height={396} priority />
             </span>
+            <small>your personal, creative composable computer</small>
           </div>
           <div className="intro-controls">
             <button type="button" onClick={toggleSound} disabled={mediaState === "error" || isHandingOff} aria-label={muted ? "Turn intro sound on" : "Mute intro"}>

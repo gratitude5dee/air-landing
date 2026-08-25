@@ -1,0 +1,13 @@
+import type { MetadataRoute } from "next";
+
+export default function robots(): MetadataRoute.Robots {
+  return {
+    rules: {
+      userAgent: "*",
+      allow: "/",
+      disallow: ["/api/", "/internal/"],
+    },
+    sitemap: "https://air.wzrd.tech/sitemap.xml",
+    host: "https://air.wzrd.tech",
+  };
+}
