@@ -173,12 +173,17 @@
 
 .domeLoading { min-height: clamp(28rem, 45vw, 38rem); border: 1px solid rgba(193, 233, 255, 0.2); border-radius: 1.45rem; background: rgba(235, 251, 255, 0.07); }
 
-/* Desktop enhancement: expand the Mini App field into a product surface with
-   generated Air icon art, while semantic controls remain below the canvas. */
+/* Desktop enhancement: turn the Mini App field into a full agent-routing
+   surface while the semantic Mini App controls remain below the canvas. */
 .domeStage {
-  min-height: clamp(33rem, 52vw, 46rem);
+  --dome-pitch: -8deg;
+  --dome-yaw: 0deg;
+  --dome-radius: clamp(17rem, 29vw, 30rem);
+
+  min-height: clamp(42rem, 64vw, 60rem);
   border-radius: 1.65rem;
-  perspective: 72rem;
+  isolation: isolate;
+  perspective: 88rem;
   background:
     radial-gradient(ellipse at 50% 44%, rgba(101, 212, 255, 0.22), transparent 34%),
     radial-gradient(ellipse at 50% 104%, rgba(26, 190, 155, 0.34), transparent 42%),
@@ -190,20 +195,35 @@
 .domeTelemetry { position: absolute; top: 1rem; right: 1.1rem; left: 1.1rem; z-index: 4; display: flex; align-items: center; justify-content: space-between; gap: 1rem; color: rgba(220, 245, 255, 0.58); font-family: var(--font-mono); font-size: 0.55rem; letter-spacing: 0.09em; text-transform: uppercase; }
 .domeTelemetry span { display: inline-flex; align-items: center; gap: 0.45rem; }
 .domeTelemetry i { width: 0.42rem; height: 0.42rem; border-radius: 50%; background: #42d69f; box-shadow: 0 0 0 0.24rem rgba(66, 214, 159, 0.12); }
-.domeLatitude, .domeLongitude { position: absolute; top: 50%; left: 50%; z-index: 0; width: min(62%, 34rem); aspect-ratio: 1.4; border: 1px solid rgba(163, 225, 255, 0.18); border-radius: 50%; transform: translate(-50%, -50%); }
+.domeLatitude, .domeLongitude { position: absolute; top: 50%; left: 50%; z-index: 0; width: min(78%, 54rem); aspect-ratio: 1.4; border: 1px solid rgba(163, 225, 255, 0.18); border-radius: 50%; transform: translate(-50%, -50%); }
 .domeLatitude { box-shadow: 0 0 0 3.1rem rgba(130, 213, 255, 0.025), 0 0 0 6.2rem rgba(130, 213, 255, 0.016); }
-.domeLongitude { height: min(72%, 34rem); aspect-ratio: auto; transform: translate(-50%, -50%) rotate(90deg); }
-.domeGlow { bottom: -19%; width: 66%; z-index: 0; background: radial-gradient(circle, rgba(129, 226, 255, 0.48), rgba(34, 165, 210, 0.15) 40%, transparent 68%); filter: blur(26px); }
+.domeLongitude { height: min(82%, 54rem); aspect-ratio: auto; transform: translate(-50%, -50%) rotate(90deg); }
+.domeGlow { bottom: -21%; width: 78%; z-index: 0; background: radial-gradient(circle, rgba(129, 226, 255, 0.48), rgba(34, 165, 210, 0.15) 40%, transparent 68%); filter: blur(26px); }
 .domeReadout { position: absolute; right: 1.1rem; bottom: 1.1rem; z-index: 5; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 0.55rem; align-items: center; min-width: 11.5rem; padding: 0.48rem 0.62rem; border: 1px solid rgba(200, 239, 255, 0.26); border-radius: 0.9rem; color: #effbff; background: rgba(3, 21, 42, 0.72); box-shadow: inset 0 1px rgba(255, 255, 255, 0.12), 0 0.8rem 2rem rgba(0, 4, 16, 0.24); }
 .domeReadoutIcon { width: 2.4rem; height: 2.4rem; overflow: hidden; border: 1px solid rgba(220, 246, 255, 0.38); border-radius: 0.68rem; }
 .domeReadout small, .domeReadout span > span { display: block; }
 .domeReadout small { color: rgba(220, 245, 255, 0.5); font-family: var(--font-mono); font-size: 0.46rem; letter-spacing: 0.08em; text-transform: uppercase; }
 .domeReadout > span:last-child { font-size: 0.78rem; font-weight: 650; letter-spacing: -0.02em; }
-.domeSphere { z-index: 2; }
-.domeTile { width: clamp(3.25rem, 4.2vw, 4.35rem); height: clamp(3.25rem, 4.2vw, 4.35rem); overflow: hidden; }
+.domeSphere { z-index: 2; transform: rotateX(var(--dome-pitch)) rotateY(var(--dome-yaw)); transition: transform 480ms var(--settle); will-change: transform; }
+.domeStage.isMoving .domeSphere { transition: none; }
+.domeTile { width: clamp(2.8rem, 3.75vw, 4.6rem); height: clamp(2.8rem, 3.75vw, 4.6rem); overflow: hidden; transform: translate(-50%, -50%) rotateY(var(--dome-longitude)) rotateX(var(--dome-latitude)) translateZ(var(--dome-depth)); }
 .domeTileActive { box-shadow: inset 0 1px rgba(255, 255, 255, 0.68), 0 0 0 0.3rem rgba(149, 229, 255, 0.16), 0 1rem 2rem rgba(4, 35, 69, 0.42); }
 .domeActiveIcon { overflow: hidden; }
-.domeLoading { min-height: clamp(33rem, 52vw, 46rem); border-radius: 1.65rem; }
+.domeAgentMark { position: relative; width: 100%; height: 100%; display: grid; place-items: center; overflow: hidden; color: #effcff; background: radial-gradient(circle at 50% 18%, rgba(255, 255, 255, 0.55), transparent 37%), linear-gradient(145deg, rgba(169, 236, 255, 0.28), rgba(7, 63, 112, 0.16)); }
+.domeAgentMark svg { position: relative; z-index: 1; width: 48%; height: 48%; filter: drop-shadow(0 0.16rem 0.35rem rgba(4, 38, 89, 0.36)); }
+.domeAgentMark b { position: absolute; right: 0.16rem; bottom: 0.1rem; z-index: 2; color: rgba(241, 253, 255, 0.9); font-family: var(--font-mono); font-size: clamp(0.37rem, 0.55vw, 0.55rem); line-height: 1; letter-spacing: -0.08em; text-shadow: 0 1px 0.25rem rgba(1, 22, 52, 0.76); }
+.domeAgentMark[data-agent="openclaw"] { color: #eafffb; background: radial-gradient(circle at 50% 15%, #bdf5e8, transparent 38%), linear-gradient(145deg, #276b78, #063748); }
+.domeAgentMark[data-agent="hermes"] { color: #e8fdff; background: radial-gradient(circle at 50% 15%, #caefff, transparent 38%), linear-gradient(145deg, #336b99, #0a355e); }
+.domeAgentMark[data-agent="pi"] { color: #f4fdff; background: radial-gradient(circle at 50% 15%, #d7f4ff, transparent 38%), linear-gradient(145deg, #4b709c, #1e3b6a); }
+.domeAgentMark[data-agent="opencode"] { color: #eafffb; background: radial-gradient(circle at 50% 15%, #bceef4, transparent 38%), linear-gradient(145deg, #216c87, #0a3f63); }
+.domeTileActive .domeAgentMark { filter: saturate(1.16) brightness(1.12); }
+.domeReadoutIcon .domeAgentMark { border-radius: inherit; }
+.domeLoading { min-height: clamp(42rem, 64vw, 60rem); border-radius: 1.65rem; }
+.domeFieldFooter { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-top: 0.8rem; padding: 0 0.2rem; color: rgba(220, 245, 255, 0.64); font-family: var(--font-mono); font-size: 0.55rem; letter-spacing: 0.04em; line-height: 1.45; }
+.domeFieldFooter p { max-width: 46rem; margin: 0; }
+.domeFieldFooter button { display: inline-flex; flex: none; align-items: center; gap: 0.45rem; padding: 0.5rem 0.65rem; border: 1px solid rgba(193, 233, 255, 0.25); border-radius: 0.65rem; color: #dff7ff; background: rgba(238, 252, 255, 0.08); font: inherit; cursor: pointer; }
+.domeFieldFooter button:hover { border-color: rgba(216, 246, 255, 0.6); background: rgba(238, 252, 255, 0.14); }
+.domeFieldFooter button:focus-visible { outline: 3px solid #d8f5ff; outline-offset: 3px; }
 .liveRegion { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; }
 
 .appDialog { width: min(34rem, calc(100vw - 1.5rem)); padding: 0; border: 0; border-radius: 1.5rem; color: #edf9ff; background: transparent; box-shadow: 0 1.5rem 6rem rgba(0, 9, 25, 0.56); }
