@@ -75,12 +75,12 @@ export default function Home() {
       <main id="main">
         <div id="top" />
         <Hero>
+          <IMessageDrop />
+          <IMessageControlPlane />
           <ComposableDefinition />
           <ComposableCapabilities />
           <ProductSequence />
           <MiniAppStore />
-          <IMessageDrop />
-          <IMessageControlPlane />
           <Roadmap />
           <Pricing />
           <ComposableFaq />
