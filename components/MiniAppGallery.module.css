@@ -172,6 +172,38 @@
 .domeActiveButton > svg { width: 0.9rem; color: #a8e5ff; }
 
 .domeLoading { min-height: clamp(28rem, 45vw, 38rem); border: 1px solid rgba(193, 233, 255, 0.2); border-radius: 1.45rem; background: rgba(235, 251, 255, 0.07); }
+
+/* Desktop enhancement: expand the Mini App field into a product surface with
+   generated Air icon art, while semantic controls remain below the canvas. */
+.domeStage {
+  min-height: clamp(33rem, 52vw, 46rem);
+  border-radius: 1.65rem;
+  perspective: 72rem;
+  background:
+    radial-gradient(ellipse at 50% 44%, rgba(101, 212, 255, 0.22), transparent 34%),
+    radial-gradient(ellipse at 50% 104%, rgba(26, 190, 155, 0.34), transparent 42%),
+    linear-gradient(180deg, rgba(13, 67, 108, 0.26), rgba(0, 8, 19, 0.38) 60%),
+    rgba(0, 7, 17, 0.35);
+}
+.domeStage::before { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0.34; background-image: linear-gradient(rgba(183, 232, 255, 0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(183, 232, 255, 0.08) 1px, transparent 1px); background-size: 3.5rem 3.5rem; mask-image: radial-gradient(ellipse at 50% 52%, #000, transparent 74%); }
+.domeStage::after { content: ""; position: absolute; inset: 0; pointer-events: none; border: 1px solid rgba(219, 247, 255, 0.06); border-radius: inherit; box-shadow: inset 0 0 8rem rgba(1, 12, 30, 0.52); }
+.domeTelemetry { position: absolute; top: 1rem; right: 1.1rem; left: 1.1rem; z-index: 4; display: flex; align-items: center; justify-content: space-between; gap: 1rem; color: rgba(220, 245, 255, 0.58); font-family: var(--font-mono); font-size: 0.55rem; letter-spacing: 0.09em; text-transform: uppercase; }
+.domeTelemetry span { display: inline-flex; align-items: center; gap: 0.45rem; }
+.domeTelemetry i { width: 0.42rem; height: 0.42rem; border-radius: 50%; background: #42d69f; box-shadow: 0 0 0 0.24rem rgba(66, 214, 159, 0.12); }
+.domeLatitude, .domeLongitude { position: absolute; top: 50%; left: 50%; z-index: 0; width: min(62%, 34rem); aspect-ratio: 1.4; border: 1px solid rgba(163, 225, 255, 0.18); border-radius: 50%; transform: translate(-50%, -50%); }
+.domeLatitude { box-shadow: 0 0 0 3.1rem rgba(130, 213, 255, 0.025), 0 0 0 6.2rem rgba(130, 213, 255, 0.016); }
+.domeLongitude { height: min(72%, 34rem); aspect-ratio: auto; transform: translate(-50%, -50%) rotate(90deg); }
+.domeGlow { bottom: -19%; width: 66%; z-index: 0; background: radial-gradient(circle, rgba(129, 226, 255, 0.48), rgba(34, 165, 210, 0.15) 40%, transparent 68%); filter: blur(26px); }
+.domeReadout { position: absolute; right: 1.1rem; bottom: 1.1rem; z-index: 5; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 0.55rem; align-items: center; min-width: 11.5rem; padding: 0.48rem 0.62rem; border: 1px solid rgba(200, 239, 255, 0.26); border-radius: 0.9rem; color: #effbff; background: rgba(3, 21, 42, 0.72); box-shadow: inset 0 1px rgba(255, 255, 255, 0.12), 0 0.8rem 2rem rgba(0, 4, 16, 0.24); }
+.domeReadoutIcon { width: 2.4rem; height: 2.4rem; overflow: hidden; border: 1px solid rgba(220, 246, 255, 0.38); border-radius: 0.68rem; }
+.domeReadout small, .domeReadout span > span { display: block; }
+.domeReadout small { color: rgba(220, 245, 255, 0.5); font-family: var(--font-mono); font-size: 0.46rem; letter-spacing: 0.08em; text-transform: uppercase; }
+.domeReadout > span:last-child { font-size: 0.78rem; font-weight: 650; letter-spacing: -0.02em; }
+.domeSphere { z-index: 2; }
+.domeTile { width: clamp(3.25rem, 4.2vw, 4.35rem); height: clamp(3.25rem, 4.2vw, 4.35rem); overflow: hidden; }
+.domeTileActive { box-shadow: inset 0 1px rgba(255, 255, 255, 0.68), 0 0 0 0.3rem rgba(149, 229, 255, 0.16), 0 1rem 2rem rgba(4, 35, 69, 0.42); }
+.domeActiveIcon { overflow: hidden; }
+.domeLoading { min-height: clamp(33rem, 52vw, 46rem); border-radius: 1.65rem; }
 .liveRegion { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; }
 
 .appDialog { width: min(34rem, calc(100vw - 1.5rem)); padding: 0; border: 0; border-radius: 1.5rem; color: #edf9ff; background: transparent; box-shadow: 0 1.5rem 6rem rgba(0, 9, 25, 0.56); }

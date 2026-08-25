@@ -4,7 +4,7 @@ import { useDrag } from "@use-gesture/react";
 import { type CSSProperties, type KeyboardEvent, useEffect, useMemo, useRef } from "react";
 import { LuChevronLeft, LuChevronRight, LuMaximize2 } from "react-icons/lu";
 
-import { MiniAppIcon } from "@/components/MiniAppIcon";
+import { MiniAppArtIcon } from "@/components/MiniAppArtIcon";
 import type { MiniAppDomeItem } from "@/lib/mini-apps";
 
 import styles from "./MiniAppGallery.module.css";
@@ -139,14 +139,24 @@ export default function MiniAppDome({ activeIndex, items, onOpen, onSelect }: Mi
         aria-hidden="true"
         {...bindDrag()}
       >
+        <div className={styles.domeTelemetry} aria-hidden="true">
+          <span><i /> Air app field</span>
+          <span>{items.length} first-party apps</span>
+        </div>
+        <div className={styles.domeLatitude} aria-hidden="true" />
+        <div className={styles.domeLongitude} aria-hidden="true" />
         <div className={styles.domeGlow} />
+        <div className={styles.domeReadout} aria-hidden="true">
+          <span className={styles.domeReadoutIcon}><MiniAppArtIcon iconKey={activeApp.iconKey} /></span>
+          <span><small>Now orbiting</small>{activeApp.name}</span>
+        </div>
         <div className={styles.domeSphere}>
           {slots.map(({ appIndex, latitude, longitude }, index) => {
             const app = items[appIndex];
             const style = {
               "--dome-latitude": `${latitude * 33 - 49.5}deg`,
               "--dome-longitude": `${longitude * 30}deg`,
-              "--dome-depth": `${9.7 - Math.abs(latitude - 1.5) * 0.9}rem`,
+              "--dome-depth": `${14.2 - Math.abs(latitude - 1.5) * 1.15}rem`,
             } as CSSProperties;
             return (
               <span
@@ -155,7 +165,7 @@ export default function MiniAppDome({ activeIndex, items, onOpen, onSelect }: Mi
                 style={style}
                 onClick={() => select(appIndex)}
               >
-                <MiniAppIcon iconKey={app.iconKey} />
+                <MiniAppArtIcon iconKey={app.iconKey} />
               </span>
             );
           })}
@@ -175,7 +185,7 @@ export default function MiniAppDome({ activeIndex, items, onOpen, onSelect }: Mi
           }}
           aria-label={`Open ${activeApp.name}, ${activeIndex + 1} of ${items.length}`}
         >
-          <span className={styles.domeActiveIcon}><MiniAppIcon iconKey={activeApp.iconKey} /></span>
+          <span className={styles.domeActiveIcon}><MiniAppArtIcon iconKey={activeApp.iconKey} /></span>
           <span><small>Open Mini App</small>{activeApp.name}</span>
           <LuMaximize2 aria-hidden />
         </button>
