@@ -16,7 +16,7 @@ import "./typography.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://air.wzrd.tech"),
-  title: "Air by WZRD | Personal Composable AI Computer",
+  title: "Air by WZRD | Personal Assistant for Daily Work",
   description:
     `Air is ${AIR_TAGLINE.toLowerCase()} ${AIR_PRODUCT_DESCRIPTION}`,
   applicationName: "Air by WZRD.tech",

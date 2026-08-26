@@ -1,5 +1,5 @@
 /** The product promise is intentionally shared by the hero, metadata, and JSON-LD. */
-export const AIR_TAGLINE = "Your personal, composable computer.";
+export const AIR_TAGLINE = "Your personal assistant for the daily work";
 
 export const AIR_PRODUCT_DESCRIPTION =
-  "One persistent AI agent with its own computer, workspace, memory, tools, connections, and Mini Apps.";
+  "A private workspace that helps you create, organize, and keep you in the zone.";

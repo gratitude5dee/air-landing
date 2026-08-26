@@ -47,7 +47,7 @@ import {
   getDirection,
   type DirectionSpec,
 } from "@/content/directions";
-import { AIR_TAGLINE } from "@/lib/air-copy";
+import { AIR_PRODUCT_DESCRIPTION, AIR_TAGLINE } from "@/lib/air-copy";
 import { resolveHeroTimeline } from "@/lib/hero-timeline";
 import { ShinyText } from "@/components/ShinyText";
 import { PlasmaButton } from "@/components/PlasmaButton";
@@ -621,35 +621,10 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
                 speed={13.2}
                 spread={112}
               >
-                Your personal,
-              </ShinyText>
-              {" "}
-              <ShinyText
-                className="hero-shiny-line"
-                color="#03234d"
-                shineColor="#3d7faa"
-                speed={13.2}
-                delay={0.42}
-                spread={112}
-              >
-                composable
-              </ShinyText>
-              {" "}
-              <ShinyText
-                className="hero-shiny-line hero-shiny-line--signal"
-                color="#045991"
-                shineColor="#4b8fc1"
-                speed={13.2}
-                delay={0.84}
-                spread={112}
-              >
-                computer.
+                {AIR_TAGLINE}
               </ShinyText>
             </h1>
-            <p>
-              One persistent AI agent with its own workspace, memory, skills, app
-              connections, and Mini Apps—available from iMessage and the web.
-            </p>
+            <p>{AIR_PRODUCT_DESCRIPTION}</p>
             <p className="hero-status">
               Ubuntu private beta · 1,000+ app-toolkit catalog · human approval built in.
             </p>
