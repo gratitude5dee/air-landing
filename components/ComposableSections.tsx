@@ -29,6 +29,9 @@ import { SiHermes, SiOpencode } from "react-icons/si";
 
 import { PreorderButton } from "@/components/Preorder";
 import { MiniAppGallery } from "@/components/MiniAppGallery";
+import { PixelCard } from "@/components/PixelCard";
+import { ProfileCard } from "@/components/ProfileCard";
+import { ShinyText } from "@/components/ShinyText";
 import { AIR_MINI_APPS } from "@/lib/mini-apps";
 
 import styles from "./ComposableSections.module.css";
@@ -382,26 +385,30 @@ export function ComposableCapabilities() {
 
         <div className={styles.capabilityGrid}>
           {capabilityCards.map(({ Icon, number, title, status, body, signal }, index) => (
-            <article
-              className={styles.capabilityCard}
-              data-reveal
-              style={{ "--delay": `${index * 70}ms` } as CSSProperties}
-              key={title}
-            >
-              <header>
-                <span>{number}</span>
-                <span className={styles.statusChip}>{status}</span>
-              </header>
-              <div className={styles.capabilityVisual} aria-hidden="true">
-                <span /><span /><span /><i />
-                <div className={styles.capabilityIcon}><Icon /></div>
-              </div>
-              <h3>{title}</h3>
-              <p>{body}</p>
-              <footer>
-                {signal.map((item) => <span key={item}>{item}</span>)}
-              </footer>
-            </article>
+            <div data-reveal style={{ "--delay": `${index * 70}ms` } as CSSProperties} key={title}>
+              <PixelCard
+                className={styles.capabilityPixelCard}
+                colors={index % 2 === 0 ? ["#dff8ff", "#74d7fb", "#51a7de"] : ["#e0fff5", "#9eeedb", "#55b9af"]}
+                gap={7}
+                noFocus
+              >
+                <article className={styles.capabilityCard}>
+                  <header>
+                    <span>{number}</span>
+                    <span className={styles.statusChip}>{status}</span>
+                  </header>
+                  <div className={styles.capabilityVisual} aria-hidden="true">
+                    <span /><span /><span /><i />
+                    <div className={styles.capabilityIcon}><Icon /></div>
+                  </div>
+                  <h3><ShinyText color="#f0faff" shineColor="#c5f1ff" speed={6 + index * 0.35} delay={index * 0.18} spread={112} pauseOnHover>{title}</ShinyText></h3>
+                  <p>{body}</p>
+                  <footer>
+                    {signal.map((item) => <span key={item}>{item}</span>)}
+                  </footer>
+                </article>
+              </PixelCard>
+            </div>
           ))}
         </div>
       </div>
@@ -573,6 +580,13 @@ export function IMessageDrop() {
         </div>
         <div className={styles.dropPanel}>
           <div className={styles.dropGrid}>
+            <ProfileCard
+              className={styles.dropIdentity}
+              name="Air identity"
+              title="iMessage as an Identity Layer"
+              handle="air"
+              status="Private beta"
+            />
             <div className={styles.dropCopy} data-reveal>
             <p className="eyebrow">Drop in a thought</p>
             <h2 id="drop-title">Get back something you can use.</h2>

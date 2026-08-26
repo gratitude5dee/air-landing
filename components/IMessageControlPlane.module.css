@@ -12,7 +12,8 @@
 .controlSection :global(.eyebrow) { color: #9edcff; }
 
 .heading { display: grid; grid-template-columns: minmax(0, 1.18fr) minmax(18rem, 0.62fr); gap: clamp(2rem, 7vw, 7rem); align-items: end; margin-bottom: clamp(3rem, 6vw, 5rem); }
-.heading h2 { max-width: 49rem; margin: 0; color: #f7fbfd; font-size: clamp(2.9rem, 5.2vw, 5.7rem); font-weight: 390; letter-spacing: -0.067em; line-height: 0.92; text-wrap: balance; }
+.heading > div { min-width: 0; }
+.heading h2 { max-width: 19ch; margin: 0; color: #f7fbfd; font-size: clamp(2.65rem, 4.9vw, 5.35rem); font-weight: 390; letter-spacing: -0.067em; line-height: 0.92; text-wrap: balance; overflow-wrap: anywhere; hyphens: auto; }
 .heading > p { margin: 0; color: rgba(226, 242, 251, 0.7); font-size: 1.05rem; line-height: 1.62; }
 
 .controlGrid { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(18rem, 0.55fr); gap: clamp(1.25rem, 3vw, 2.25rem); align-items: stretch; }

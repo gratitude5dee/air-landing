@@ -1,9 +1,11 @@
 "use client";
 
 import { useDrag } from "@use-gesture/react";
-import { type CSSProperties, type KeyboardEvent, useRef, useState } from "react";
+import { Fragment, type CSSProperties, type KeyboardEvent, useRef, useState } from "react";
 import { LuBot, LuRefreshCcw, LuSend, LuSparkles } from "react-icons/lu";
 import { SiHermes, SiOpencode } from "react-icons/si";
+
+import { ShinyText } from "@/components/ShinyText";
 
 import styles from "./IMessageControlPlane.module.css";
 
@@ -114,7 +116,11 @@ export function IMessageControlPlane() {
         <div className={styles.heading} data-reveal>
           <div>
             <p className="eyebrow">One message, a coordinated system</p>
-            <h2 id="control-plane-title">a control plane for your agents that lives in your iMessage</h2>
+            <h2 id="control-plane-title">
+              <ShinyText color="#f7fbfd" shineColor="#bceeff" speed={6.2} spread={114} pauseOnHover>
+                a remote control for your managed agent mesh network
+              </ShinyText>
+            </h2>
           </div>
           <p>
             Give Air a job in the conversation you already use. It can organize the agents and tools
@@ -147,12 +153,12 @@ export function IMessageControlPlane() {
                 const position = positions[id];
                 const toneClass = styles[`tone${tone[0].toUpperCase()}${tone.slice(1)}`];
                 return (
+                  <Fragment key={id}>
                   <button
                     {...bindAgentDrag(id)}
                     type="button"
                     className={`${styles.agentCard} ${toneClass}`}
                     data-agent-id={id}
-                    key={id}
                     style={{ "--agent-x": position ? `${position.x}px` : x, "--agent-y": position ? `${position.y}px` : y } as CSSProperties}
                     aria-pressed={activeAgentId === id}
                     aria-label={`${name}: ${description}. Drag to arrange, or use arrow keys to reposition.`}
@@ -166,6 +172,7 @@ export function IMessageControlPlane() {
                     </span>
                     <Icon aria-hidden="true" />
                   </button>
+                  </Fragment>
                 );
               })}
 
