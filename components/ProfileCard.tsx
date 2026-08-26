@@ -1,6 +1,6 @@
 "use client";
 
-import { createElement, type CSSProperties, type PointerEvent, useEffect, useRef, useState } from "react";
+import { type CSSProperties, type PointerEvent, useEffect, useRef, useState } from "react";
 import {
   LuBadgeCheck,
   LuFingerprint,
@@ -35,9 +35,9 @@ type ProfileCardProps = {
 
 const identityStudies = [
   {
-    id: "identity",
-    eyebrow: "01 / identity",
-    label: "iMessage-bound identity",
+    id: "koi",
+    eyebrow: "01 / koi study",
+    label: "iMessage identity current",
     detail: "A private, recognizable presence in the thread.",
     Icon: LuFingerprint,
   },
@@ -57,13 +57,27 @@ const identityStudies = [
   },
 ] as const;
 
+function KoiFish() {
+  return (
+    <svg className={styles.koiFish} viewBox="0 0 160 110" aria-hidden="true">
+      <path d="M31 55 7 29 9 55 7 81Z" fill="#f7b366" stroke="#fff0c9" strokeWidth="2" />
+      <path d="M31 55c8-27 39-39 76-28 25 8 39 26 40 28-1 2-15 21-40 28-37 11-68-1-76-28Z" fill="#fff0cf" stroke="#d5f5f4" strokeWidth="2" />
+      <path d="M58 29c7 8 11 17 10 26-1 8-3 16-10 25" fill="none" stroke="#ff704f" strokeLinecap="round" strokeWidth="12" />
+      <path d="M100 28c8 9 11 18 10 27-1 8-4 17-11 25" fill="none" stroke="#ea5a45" strokeLinecap="round" strokeWidth="9" />
+      <path d="M69 22 83 9l8 24M70 88l15 13 7-23" fill="#f4bd70" stroke="#fff1cb" strokeLinejoin="round" strokeWidth="2" />
+      <circle cx="121" cy="46" r="4" fill="#08385a" /><circle cx="122.5" cy="44.5" r="1.2" fill="#fff" />
+      <path d="M131 62c5 2 9 2 14 0" fill="none" stroke="#d77b5d" strokeLinecap="round" strokeWidth="2" />
+      <circle cx="33" cy="22" r="3" fill="#9ff4e2" opacity=".9" /><circle cx="42" cy="15" r="2" fill="#c7f9ff" opacity=".8" /><circle cx="132" cy="18" r="2.5" fill="#b9eaff" opacity=".78" />
+    </svg>
+  );
+}
+
 /**
  * An Air-adapted ProfileCard with the public React Bits-style prop surface.
  * It keeps the profile treatment purpose-built for product identity rather
  * than borrowing a social-card visual language wholesale.
  */
 function ProfileCard({
-  avatarUrl,
   behindGlowEnabled = false,
   className = "",
   contactText,
@@ -201,7 +215,7 @@ function ProfileCard({
       <div className={styles.shell}>
         <div className={styles.glare} aria-hidden="true" />
         <header className={styles.cardHeader}>
-          <span><i /> verified identity</span>
+          <span><i /> koi identity study</span>
           <LuFingerprint aria-hidden="true" />
         </header>
 
@@ -252,16 +266,9 @@ function ProfileCard({
                 <span className={styles.studyCard} data-order={order} key={id}>
                   <span className={styles.studyTopline}>{eyebrow}</span>
                   <span className={styles.studyGlyph}>
-                    {id === "identity" ? (
+                    {id === "koi" ? (
                       <>
-                        {avatarUrl ? <img src={avatarUrl} alt="" /> : createElement("dk-avatar", {
-                          className: styles.studyAvatarDither,
-                          name: "onairos",
-                          from: "cyan",
-                          cells: "5",
-                          bloom: "low",
-                        })}
-                        <span className={styles.studyAvatarMark}>O</span>
+                        <KoiFish />
                       </>
                     ) : <Icon />}
                   </span>

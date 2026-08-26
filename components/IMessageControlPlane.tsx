@@ -1,23 +1,25 @@
 "use client";
 
+import Image from "next/image";
 import { useDrag } from "@use-gesture/react";
 import { Fragment, type CSSProperties, type KeyboardEvent, useRef, useState } from "react";
-import { LuBot, LuRefreshCcw, LuSend, LuSparkles } from "react-icons/lu";
-import { SiHermes, SiOpencode } from "react-icons/si";
+import { LuRefreshCcw, LuSend, LuSparkles } from "react-icons/lu";
 
 import { ShinyText } from "@/components/ShinyText";
+import { AIR_AGENT_MARKS } from "@/lib/agent-marks";
 
 import styles from "./IMessageControlPlane.module.css";
 
-type AgentId = "openclaw" | "hermes" | "pi" | "opencode";
 type Point = { x: number; y: number };
 
 const agents = [
-  { id: "openclaw", name: "OpenClaw", mark: "OC", Icon: LuBot, description: "Research and browser work", x: "6%", y: "15%", tone: "sky" },
-  { id: "hermes", name: "Hermes", mark: "H", Icon: SiHermes, description: "Routing and handoffs", x: "59%", y: "11%", tone: "seafoam" },
-  { id: "pi", name: "Pi", mark: "π", Icon: LuSparkles, description: "Long-running context", x: "15%", y: "62%", tone: "blue" },
-  { id: "opencode", name: "OpenCode", mark: "</>", Icon: SiOpencode, description: "Code and execution", x: "65%", y: "62%", tone: "ice" },
+  { ...AIR_AGENT_MARKS[0], description: "Research and browser work", x: "6%", y: "15%", tone: "sky" },
+  { ...AIR_AGENT_MARKS[1], description: "Routing and handoffs", x: "59%", y: "11%", tone: "seafoam" },
+  { ...AIR_AGENT_MARKS[2], description: "Long-running context", x: "15%", y: "62%", tone: "blue" },
+  { ...AIR_AGENT_MARKS[3], description: "Code and execution", x: "65%", y: "62%", tone: "ice" },
 ] as const;
+
+type AgentId = (typeof agents)[number]["id"];
 
 const initialActiveAgent = agents[0];
 
@@ -149,7 +151,7 @@ export function IMessageControlPlane() {
                 <strong>approval-aware</strong>
               </div>
 
-              {agents.map(({ id, name, mark, Icon, description, x, y, tone }) => {
+              {agents.map(({ id, name, src, shape, description, x, y, tone }) => {
                 const position = positions[id];
                 const toneClass = styles[`tone${tone[0].toUpperCase()}${tone.slice(1)}`];
                 return (
@@ -165,12 +167,14 @@ export function IMessageControlPlane() {
                     onClick={() => setActiveAgentId(id)}
                     onKeyDown={(event) => onAgentKeyDown(event, id)}
                   >
-                    <span className={styles.agentMark} aria-hidden="true">{mark}</span>
+                    <span className={styles.agentMark} data-agent={id} aria-hidden="true">
+                      <Image src={src} alt="" width={72} height={72} data-logo-shape={shape} />
+                    </span>
                     <span>
                       <strong>{name}</strong>
                       <small>{description}</small>
                     </span>
-                    <Icon aria-hidden="true" />
+                    <LuSparkles aria-hidden="true" />
                   </button>
                   </Fragment>
                 );
@@ -184,7 +188,7 @@ export function IMessageControlPlane() {
 
           <aside className={styles.controlNotes} aria-label="Control plane details">
             <p className="eyebrow">Orchestrate what you run</p>
-            <h3>OpenClaw, Hermes, Pi, OpenCode, and your own agents.</h3>
+            <h3>OpenClaw, Hermes, Pi, Codex, and your own agents.</h3>
             <p>
               Arrange the cards to sketch a working team. Each local mark represents an agent you can
               bring into the flow; actual connections and execution vary by environment.

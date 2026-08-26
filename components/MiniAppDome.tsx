@@ -3,10 +3,10 @@
 import Image from "next/image";
 import { useDrag } from "@use-gesture/react";
 import { type CSSProperties, type KeyboardEvent, useEffect, useMemo, useRef } from "react";
-import { LuBot, LuChevronLeft, LuChevronRight, LuMaximize2, LuRefreshCcw, LuSparkles } from "react-icons/lu";
-import { SiHermes, SiOpencode } from "react-icons/si";
+import { LuChevronLeft, LuChevronRight, LuMaximize2, LuRefreshCcw } from "react-icons/lu";
 
 import { MiniAppArtIcon } from "@/components/MiniAppArtIcon";
+import { AIR_AGENT_MARKS } from "@/lib/agent-marks";
 import type { MiniAppDomeItem } from "@/lib/mini-apps";
 
 import styles from "./MiniAppGallery.module.css";
@@ -25,14 +25,8 @@ const PITCH_MAX = 24;
 
 type DomeRotation = { pitch: number; yaw: number };
 
-// These local marks match the agent names used in Air's iMessage control
-// plane. They are visual routing concepts rather than connection status.
-const AGENT_FIELD = [
-  { id: "openclaw", name: "OpenClaw", mark: "OC", Icon: LuBot },
-  { id: "hermes", name: "Hermes", mark: "H", Icon: SiHermes },
-  { id: "pi", name: "Pi", mark: "π", Icon: LuSparkles },
-  { id: "opencode", name: "OpenCode", mark: "</>", Icon: SiOpencode },
-] as const;
+// These supplied marks are visual routing concepts, not connection status.
+const AGENT_FIELD = AIR_AGENT_MARKS;
 
 function wrapIndex(index: number, length: number) {
   return ((index % length) + length) % length;
@@ -43,18 +37,9 @@ function clamp(value: number, min: number, max: number) {
 }
 
 function AgentDomeMark({ agent }: { agent: (typeof AGENT_FIELD)[number] }) {
-  const Icon = agent.Icon;
   return (
     <span className={styles.domeAgentMark} data-agent={agent.id}>
-      {agent.id === "openclaw" ? (
-        <Image
-          src="/images/agents/v2026-08-25-a/openclaw-pixel-lobster.svg"
-          alt=""
-          width={40}
-          height={40}
-          aria-hidden="true"
-        />
-      ) : <Icon aria-hidden="true" />}
+      <Image src={agent.src} alt="" width={80} height={80} data-logo-shape={agent.shape} aria-hidden="true" />
       <b>{agent.mark}</b>
     </span>
   );

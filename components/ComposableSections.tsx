@@ -28,12 +28,11 @@ import {
   LuStore,
   LuWorkflow,
 } from "react-icons/lu";
-import { SiHermes, SiOpencode } from "react-icons/si";
-
 import { PreorderButton } from "@/components/Preorder";
 import { MiniAppGallery } from "@/components/MiniAppGallery";
 import { PixelCard } from "@/components/PixelCard";
 import { ShinyText } from "@/components/ShinyText";
+import { AIR_AGENT_MARKS } from "@/lib/agent-marks";
 import { AIR_MINI_APPS } from "@/lib/mini-apps";
 
 import ProfileCard from "./ProfileCard";
@@ -580,27 +579,24 @@ export function MiniAppStore() {
         <div className={styles.agentCloud} data-reveal>
           <div>
             <p className="eyebrow">Agent field</p>
-            <p>Give the Mini App Store a team: OpenClaw, Hermes, Pi, OpenCode, and the agents you bring to Air.</p>
+            <p>Give the Mini App Store a team: your preferred agent runtimes orbit the same private Air workspace.</p>
           </div>
           <ul aria-label="Agent marks represented in the Air Mini App Store">
-            <li>
-              <span className={styles.agentMark} data-agent="openclaw">
-                <Image src="/images/agents/v2026-08-25-a/openclaw-pixel-lobster.svg" alt="" width={36} height={36} />
-              </span>
-              <span>OpenClaw</span>
-            </li>
-            <li>
-              <span className={styles.agentMark} data-agent="hermes"><SiHermes aria-hidden /></span>
-              <span>Hermes</span>
-            </li>
-            <li>
-              <span className={styles.agentMark} data-agent="pi" aria-hidden>π</span>
-              <span>Pi</span>
-            </li>
-            <li>
-              <span className={styles.agentMark} data-agent="opencode"><SiOpencode aria-hidden /></span>
-              <span>OpenCode</span>
-            </li>
+            {AIR_AGENT_MARKS.map((agent) => (
+              <li key={agent.id}>
+                <span className={styles.agentMark} data-agent={agent.id}>
+                  <Image
+                    src={agent.src}
+                    alt=""
+                    width={72}
+                    height={72}
+                    data-logo-shape={agent.shape}
+                    aria-hidden="true"
+                  />
+                </span>
+                <span>{agent.name}</span>
+              </li>
+            ))}
           </ul>
         </div>
 
@@ -641,23 +637,15 @@ export function PrivacyFirst() {
           <span>Private by default</span>
           <span>Zero data retention</span>
         </div>
-        <div className={styles.privacyGrid}>
-          <ProfileCard
-            className={styles.privacyProfile}
-            name="Onairos"
-            title="iMessage as an Identity Layer"
-            handle="onairos-identity"
-            status="Private identity active"
-            showUserInfo={true}
-            enableTilt={true}
-            enableMobileTilt={false}
-            behindGlowEnabled
-            innerGradient="linear-gradient(145deg, rgba(63, 145, 200, 0.82) 0%, rgba(4, 28, 55, 0.98) 51%, rgba(27, 142, 134, 0.72) 100%)"
-          />
+        <div className={styles.privacyIdentityHeading} data-reveal>
+          <p className="eyebrow">A recognizable presence in your private thread</p>
+          <h2 id="privacy-title">iMessage as an Identity Layer</h2>
+        </div>
 
+        <div className={styles.privacyGrid}>
           <div className={styles.privacyCopy} data-reveal>
             <p className="eyebrow">A hard boundary around your work</p>
-            <h2 id="privacy-title">Private context. Zero data retention.</h2>
+            <h3>Private context. Zero data retention.</h3>
             <p>
               Air processes the messages, files, and task content you send only to complete the work you request.
               It does not retain that content after processing or reuse it outside your work.
@@ -669,22 +657,27 @@ export function PrivacyFirst() {
             </ul>
           </div>
 
-          <aside className={styles.privacyPolicy} data-reveal aria-label="Zero-data-retention privacy policy">
-            <header>
-              <span><i /> Air privacy policy</span>
-              <LuLockKeyhole aria-hidden />
-            </header>
-            <div className={styles.retentionMark} aria-hidden="true">
-              <strong>0</strong>
-              <span>days<br />retained</span>
-            </div>
-            <dl>
-              <div><dt>Messages &amp; files</dt><dd>Processed for the requested task, then not retained.</dd></div>
-              <div><dt>Model training</dt><dd>Not used to train or improve models.</dd></div>
-              <div><dt>Agent permissions</dt><dd>Explicit, reviewable, and revocable by you.</dd></div>
-            </dl>
-            <p>Zero-data-retention policy · Private beta</p>
-          </aside>
+          <ProfileCard
+            className={styles.privacyProfile}
+            name="Onairos"
+            title="Koi identity studies"
+            handle="onairos-identity"
+            status="Private identity active"
+            showUserInfo={true}
+            enableTilt={true}
+            enableMobileTilt={false}
+            behindGlowEnabled
+            innerGradient="linear-gradient(145deg, rgba(63, 145, 200, 0.82) 0%, rgba(4, 28, 55, 0.98) 51%, rgba(27, 142, 134, 0.72) 100%)"
+          />
+        </div>
+
+        <div className={styles.privacyFooter} data-reveal aria-label="Zero-data-retention privacy policy">
+          <div className={styles.privacyRetention} aria-hidden="true"><strong>0</strong><span>days<br />retained</span></div>
+          <p>Messages and files are processed for the requested task, then not retained. They are not used to train or improve models.</p>
+          <dl>
+            <div><dt>Private context</dt><dd>Scoped to the work and permissions you approve.</dd></div>
+            <div><dt>Agent access</dt><dd>Explicit, reviewable, and revocable by you.</dd></div>
+          </dl>
         </div>
       </div>
     </section>

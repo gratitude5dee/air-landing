@@ -211,12 +211,14 @@
 .domeActiveIcon { overflow: hidden; }
 .domeAgentMark { position: relative; width: 100%; height: 100%; display: grid; place-items: center; overflow: hidden; color: #effcff; background: radial-gradient(circle at 50% 18%, rgba(255, 255, 255, 0.55), transparent 37%), linear-gradient(145deg, rgba(169, 236, 255, 0.28), rgba(7, 63, 112, 0.16)); }
 .domeAgentMark svg { position: relative; z-index: 1; width: 48%; height: 48%; filter: drop-shadow(0 0.16rem 0.35rem rgba(4, 38, 89, 0.36)); }
-.domeAgentMark img { position: relative; z-index: 1; width: 52%; height: 52%; object-fit: contain; image-rendering: pixelated; filter: drop-shadow(0 0.16rem 0.35rem rgba(4, 38, 89, 0.36)); }
+.domeAgentMark img { position: relative; z-index: 1; width: 58%; height: 58%; object-fit: contain; image-rendering: auto; filter: drop-shadow(0 0.16rem 0.35rem rgba(4, 38, 89, 0.36)); }
+.domeAgentMark img[data-logo-shape="wide"] { width: 80%; height: auto; }.domeAgentMark img[data-logo-shape="portrait"] { width: 78%; height: 78%; object-fit: cover; border-radius: 0.36rem; filter: grayscale(1) invert(1) drop-shadow(0 0.14rem 0.32rem rgba(4, 38, 89, 0.42)); mix-blend-mode: screen; }
 .domeAgentMark b { position: absolute; right: 0.16rem; bottom: 0.1rem; z-index: 2; color: rgba(241, 253, 255, 0.9); font-family: var(--font-mono); font-size: clamp(0.37rem, 0.55vw, 0.55rem); line-height: 1; letter-spacing: -0.08em; text-shadow: 0 1px 0.25rem rgba(1, 22, 52, 0.76); }
 .domeAgentMark[data-agent="openclaw"] { color: #eafffb; background: radial-gradient(circle at 50% 15%, #bdf5e8, transparent 38%), linear-gradient(145deg, #276b78, #063748); }
 .domeAgentMark[data-agent="hermes"] { color: #e8fdff; background: radial-gradient(circle at 50% 15%, #caefff, transparent 38%), linear-gradient(145deg, #336b99, #0a355e); }
 .domeAgentMark[data-agent="pi"] { color: #f4fdff; background: radial-gradient(circle at 50% 15%, #d7f4ff, transparent 38%), linear-gradient(145deg, #4b709c, #1e3b6a); }
 .domeAgentMark[data-agent="opencode"] { color: #eafffb; background: radial-gradient(circle at 50% 15%, #bceef4, transparent 38%), linear-gradient(145deg, #216c87, #0a3f63); }
+.domeAgentMark[data-agent="openclaw"] img { image-rendering: pixelated; }.domeAgentMark[data-agent="codex"] { background: radial-gradient(circle at 50% 15%, #d4d5ff, transparent 38%), linear-gradient(145deg, #384aa6, #172963); }.domeAgentMark[data-agent="claude-code"] { background: radial-gradient(circle at 50% 15%, #ffc2a6, transparent 38%), linear-gradient(145deg, #a95840, #51261f); }.domeAgentMark[data-agent="prime-intellect"] { background: radial-gradient(circle at 50% 15%, #b4d3ff, transparent 38%), linear-gradient(145deg, #1b3d68, #08192e); }.domeAgentMark[data-agent="headlong"] { background: radial-gradient(circle at 50% 15%, #c9e1ff, transparent 38%), linear-gradient(145deg, #263f69, #071629); }
 .domeTileActive .domeAgentMark { filter: saturate(1.16) brightness(1.12); }
 .domeReadoutIcon .domeAgentMark { border-radius: inherit; }
 .domeLoading { min-height: clamp(42rem, 64vw, 60rem); border-radius: 1.65rem; }

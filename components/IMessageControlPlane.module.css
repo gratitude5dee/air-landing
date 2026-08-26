@@ -52,6 +52,7 @@
 .agentCard small { overflow: hidden; color: rgba(226, 246, 255, 0.64); font-size: 0.56rem; line-height: 1.25; text-overflow: ellipsis; white-space: nowrap; }
 .agentCard > svg { color: #9edcff; }
 .agentMark { width: 2.65rem; height: 2.65rem; display: grid; place-items: center; overflow: hidden; border: 1px solid rgba(227, 247, 255, 0.34); border-radius: 0.72rem; color: #082a50; background: #d9f2ff; font-family: var(--font-mono); font-size: 0.72rem; font-weight: 800; letter-spacing: -0.08em; }
+.agentMark img { width: 76%; height: 76%; object-fit: contain; filter: drop-shadow(0 0.14rem 0.28rem rgba(4, 22, 52, 0.32)); }.agentMark img[data-logo-shape="portrait"] { width: 84%; height: 84%; object-fit: cover; border-radius: 0.42rem; filter: grayscale(1) invert(1) drop-shadow(0 0.12rem 0.28rem rgba(4, 22, 52, 0.42)); mix-blend-mode: screen; }.agentMark[data-agent="openclaw"] img { image-rendering: pixelated; }.agentMark[data-agent="pi"] { background: linear-gradient(145deg, #0b2745, #164c65); }.agentMark[data-agent="codex"] { background: linear-gradient(145deg, #384aa6, #172963); }
 .toneSeafoam .agentMark { color: #063b3b; background: #bdf4ea; }
 .toneBlue .agentMark { color: #0e285c; background: #c9d8ff; }
 .toneIce .agentMark { color: #143a4f; background: #e3f8ff; font-size: 0.62rem; }

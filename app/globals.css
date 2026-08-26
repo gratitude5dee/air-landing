@@ -148,6 +148,7 @@ button { color: inherit; }
 
 .section {
   position: relative;
+  scroll-margin-top: 7rem;
   padding: clamp(5.8rem, 10vw, 9rem) 0;
   overflow: hidden;
 }
