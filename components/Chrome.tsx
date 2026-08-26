@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { LuArrowUpRight, LuCircle, LuSparkles } from "react-icons/lu";
 
-import { PreorderButton } from "@/components/Preorder";
+import { PlasmaButton } from "@/components/PlasmaButton";
 import { AIR_TAGLINE } from "@/lib/air-copy";
 
 export function Header() {
@@ -17,7 +17,11 @@ export function Header() {
         <Link className="nav-optional" href="/composable-computer">composable computer</Link>
         <Link className="nav-optional" href="/#mini-apps">mini apps</Link>
         <Link className="nav-optional" href="/#pricing">pricing</Link>
-        <PreorderButton compact label="join beta" />
+        <PlasmaButton
+          className="header-plasma-button"
+          href="https://buy.stripe.com/bJe5kF8Pg49RaPw9M6a3u02"
+          label="Try Air"
+        />
       </nav>
     </header>
   );

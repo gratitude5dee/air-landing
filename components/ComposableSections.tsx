@@ -3,6 +3,7 @@ import type { CSSProperties, ReactNode } from "react";
 import {
   LuAppWindow,
   LuArrowDown,
+  LuArrowUpRight,
   LuBot,
   LuBox,
   LuBrainCircuit,
@@ -726,12 +727,20 @@ export function CommunicationLayer() {
               <div className={styles.desktopWindow}>
                 <div className={styles.desktopToolbar}><i /><i /><i /><span>air / workspace</span></div>
                 <div className={styles.desktopCanvas}>
-                  <div className={styles.desktopBrowser}><span /><span /><span /><b>Browser</b></div>
-                  <div className={styles.desktopFiles}><span>brief.md</span><span>launch-plan</span><span>assets</span></div>
-                  <div className={styles.desktopTerminal}><span>&gt; research sources</span><span>&gt; compose next step</span><b>Ready for review</b></div>
+                  <div className={styles.desktopBrowser}>
+                    <div className={styles.browserChrome}><i /><i /><span>research / air</span></div>
+                    <div className={styles.browserSky}><b>Research brief</b><span>Sources mapped · review ready</span></div>
+                    <div className={styles.browserLines}><span /><span /><span /></div>
+                    <small>Private browser session</small>
+                  </div>
+                  <div className={styles.desktopFiles}>
+                    <small>Attached context</small><span>brief.md</span><span>launch-plan</span><span>assets</span>
+                  </div>
+                  <div className={styles.desktopTerminal}><small>Agent activity</small><span>&gt; research sources</span><span>&gt; compose next step</span><b>Ready for review</b></div>
                 </div>
+                <div className={styles.desktopApproval}><LuShieldCheck /><span><small>Needs you</small><b>Approve publish</b></span><em>Review</em></div>
               </div>
-              <span className={styles.computerSignal}><LuSparkles /></span>
+              <span className={styles.computerSignal}><LuSparkles /><small>Live</small></span>
             </div>
             <h3>Computer</h3>
             <p>
@@ -751,6 +760,7 @@ export function CommunicationLayer() {
                 <p><small>Air line</small><strong>+1 (415) 555–AIR</strong></p>
                 <b>Beta</b>
               </div>
+              <span className={styles.phoneRings}><i /><i /><i /></span>
             </div>
             <h3>Phone number</h3>
             <p>A dedicated number for calls, texts, confirmations, and conversations that stay attached to the work.</p>
@@ -762,8 +772,8 @@ export function CommunicationLayer() {
               <span><LuInbox aria-hidden /><small>Private beta</small></span>
             </header>
             <div className={`${styles.communicationPreview} ${styles.inboxPreview}`} aria-hidden="true">
-              <div className={styles.inboxRow}><small>From Air</small><strong>Creator brief is ready</strong><span>3 assets attached · now</span></div>
-              <div className={styles.inboxRow}><small>To partners</small><strong>Launch follow-up</strong><span>Scheduled · 10:30</span></div>
+              <div className={styles.inboxRow}><i><LuSparkles /></i><p><small>From Air</small><strong>Creator brief is ready</strong></p><span>3 assets · now</span></div>
+              <div className={styles.inboxRow}><i><LuArrowUpRight /></i><p><small>To partners</small><strong>Launch follow-up</strong></p><span>Scheduled · 10:30</span></div>
             </div>
             <h3>Email and inbox</h3>
             <p>Air can draft, organize, follow up, and keep the details moving while you stay in iMessage.</p>

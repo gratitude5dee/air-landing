@@ -275,6 +275,21 @@ html[data-air-hero-header="covered"] .site-header:focus-within {
   background: rgba(219,237,255,0.18);
 }
 .site-header nav .button { order: 2; }
+.site-header nav .header-plasma-button {
+  order: 2;
+  min-height: 2.8rem;
+  flex: none;
+  padding: 0.65rem 1.08rem;
+  color: #f5fdff;
+  font-size: 0.57rem;
+  letter-spacing: 0.085em;
+  box-shadow:
+    inset 0 1px rgba(255, 255, 255, 0.6),
+    inset 0 -0.15rem 0 rgba(0, 10, 50, 0.26),
+    0 0.45rem 1.25rem rgba(12, 72, 159, 0.26),
+    0 0 0 1px rgba(13, 58, 124, 0.28);
+}
+.site-header nav .header-plasma-button > svg { width: 0.8rem; height: 0.8rem; }
 .site-header nav > a {
   min-height: 2.75rem;
   display: inline-flex;
@@ -1151,7 +1166,7 @@ html[data-air-hero-header="covered"] .site-header:focus-within {
 
 @media (max-width: 720px) {
   .shell { width:min(100% - 2rem,78rem) }
-  .site-header { inset:.75rem .75rem auto;min-height:4.25rem;padding:.5rem .65rem .5rem .85rem;border-radius:1rem;gap:.7rem }.brand img{width:5.55rem}.brand span{font-size:.86rem}.site-header nav{gap:.65rem}.site-header nav::before,.site-header nav>a{display:none}.button-compact{min-height:2.75rem;padding-inline:.78rem;font-size:.5rem}
+  .site-header { inset:.75rem .75rem auto;min-height:4.25rem;padding:.5rem .65rem .5rem .85rem;border-radius:1rem;gap:.7rem }.brand img{width:5.55rem}.brand span{font-size:.86rem}.site-header nav{gap:.65rem}.site-header nav::before,.site-header nav>a:not(.header-plasma-button){display:none}.site-header nav .header-plasma-button{min-height:2.75rem;padding-inline:.78rem;font-size:.5rem}.button-compact{min-height:2.75rem;padding-inline:.78rem;font-size:.5rem}
   .hero-sticky { padding:6.3rem 0 4.5rem; }
   .hero-content.shell { width:min(100% - 2.5rem,56rem) }
   .hero-content { gap:3.5rem;align-items:start }
@@ -1176,7 +1191,7 @@ html[data-air-hero-header="covered"] .site-header:focus-within {
 }
 
 @media (max-width: 340px) {
-  .site-header { padding-left:.65rem }.site-header .brand img{width:4.65rem}.button-compact{padding-inline:.55rem;font-size:.46rem;letter-spacing:.06em}
+  .site-header { padding-left:.65rem }.site-header .brand img{width:4.65rem}.site-header nav .header-plasma-button{padding-inline:.62rem;font-size:.46rem;letter-spacing:.06em}.button-compact{padding-inline:.55rem;font-size:.46rem;letter-spacing:.06em}
   .iphone-screen{aspect-ratio:9 / 23}
   .tapback-menu{width:10.5rem;flex-wrap:wrap;justify-content:center;top:-6.55rem;border-radius:1.2rem}
   .mini-app{min-height:17.5rem;padding:.5rem}.mini-app-head small{font-size:.46rem}.mini-app li{min-height:1.2rem;font-size:.49rem}.mini-progress{margin:.45rem 0 .35rem}
