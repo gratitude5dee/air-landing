@@ -1,5 +1,5 @@
 import Image from "next/image";
-import type { CSSProperties } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import {
   LuAppWindow,
   LuArrowDown,
@@ -12,6 +12,7 @@ import {
   LuCode,
   LuCpu,
   LuGlobe,
+  LuInbox,
   LuLayers3,
   LuLockKeyhole,
   LuMessageCircle,
@@ -19,6 +20,7 @@ import {
   LuMousePointer2,
   LuNetwork,
   LuPanelTop,
+  LuPhoneCall,
   LuRocket,
   LuShieldCheck,
   LuSparkles,
@@ -36,6 +38,8 @@ import { AIR_MINI_APPS } from "@/lib/mini-apps";
 import ProfileCard from "./ProfileCard";
 import styles from "./ComposableSections.module.css";
 
+type CapabilityVisualKind = "workspace" | "memory" | "conversation" | "catalog" | "mini-app" | "approval";
+
 const capabilityCards = [
   {
     Icon: LuMonitorCog,
@@ -44,6 +48,7 @@ const capabilityCards = [
     status: "Private beta",
     body: "A managed Ubuntu workspace that can browse, code, create files, render media, and run multi-step work.",
     signal: ["Ubuntu", "Browser", "Terminal"],
+    visual: "workspace",
   },
   {
     Icon: LuBrainCircuit,
@@ -52,6 +57,7 @@ const capabilityCards = [
     status: "Private beta",
     body: "Files, preferences, skills, and useful context stay with the same agent across iMessage and web.",
     signal: ["Files", "Taste", "Context"],
+    visual: "memory",
   },
   {
     Icon: LuMessageCircle,
@@ -60,6 +66,7 @@ const capabilityCards = [
     status: "Private beta",
     body: "Start in iMessage, continue on the web, and return to the same working context.",
     signal: ["iMessage", "Web", "Inbox"],
+    visual: "conversation",
   },
   {
     Icon: LuLayers3,
@@ -68,6 +75,7 @@ const capabilityCards = [
     status: "Catalog",
     body: "Search supported integrations for communication, design, commerce, analytics, and more. Access and permissions vary.",
     signal: ["Connect", "Scope", "Approve"],
+    visual: "catalog",
   },
   {
     Icon: LuAppWindow,
@@ -76,6 +84,7 @@ const capabilityCards = [
     status: "Private beta",
     body: "Turn agent work into focused interfaces for calendars, vaults, browsers, analytics, payments, and media.",
     signal: ["Install", "Create", "Publish"],
+    visual: "mini-app",
   },
   {
     Icon: LuShieldCheck,
@@ -84,8 +93,59 @@ const capabilityCards = [
     status: "Private beta",
     body: "Connecting, publishing, sending, spending, and other consequential actions wait for you.",
     signal: ["Needs you", "Review", "Run"],
+    visual: "approval",
   },
 ] as const;
+
+function CapabilityVisual({ icon, visual }: { icon: ReactNode; visual: CapabilityVisualKind }) {
+  return (
+    <div className={styles.capabilityVisual} data-visual={visual} aria-hidden="true">
+      {visual === "workspace" ? (
+        <div className={styles.visualWorkspace}>
+          <header><i /><i /><i /><span>air://computer</span></header>
+          <div><span /><span /><span /><b>browser</b></div>
+          <aside><span>brief.md</span><span>sources</span><span>terminal</span></aside>
+        </div>
+      ) : null}
+      {visual === "memory" ? (
+        <div className={styles.visualMemory}>
+          <span className={styles.memoryCore}>A</span>
+          <i /><i /><i /><i /><i />
+          <p>context retained<br />for this Air</p>
+        </div>
+      ) : null}
+      {visual === "conversation" ? (
+        <div className={styles.visualConversation}>
+          <span>Plan the launch from this deck.</span>
+          <span>On it. I’ll bring back what needs approval.</span>
+          <span>Launch room ready <b>Open</b></span>
+        </div>
+      ) : null}
+      {visual === "catalog" ? (
+        <div className={styles.visualCatalog}>
+          <span>IG</span><span>N</span><span>S</span><span>O</span>
+          <span>M</span><span>F</span><span>C</span><span>+</span>
+        </div>
+      ) : null}
+      {visual === "mini-app" ? (
+        <div className={styles.visualMiniApp}>
+          <header><span>chatbot</span><i>•••</i></header>
+          <p><span>Memory</span><span>Browser</span><span>Private beta</span></p>
+          <div><i /><i /><i /><i /><i /><i /><i /><i /><i /><i /><i /><i /></div>
+          <small><b /> running</small>
+        </div>
+      ) : null}
+      {visual === "approval" ? (
+        <div className={styles.visualApproval}>
+          <p>Ready to publish this Mini App?</p>
+          <span>Review first</span>
+          <span>Approve</span>
+        </div>
+      ) : null}
+      <div className={styles.capabilityIcon}>{icon}</div>
+    </div>
+  );
+}
 
 const miniAppActions = [
   {
@@ -389,7 +449,7 @@ export function ComposableCapabilities() {
         </div>
 
         <div className={styles.capabilityGrid}>
-          {capabilityCards.map(({ Icon, number, title, status, body, signal }, index) => (
+          {capabilityCards.map(({ Icon, number, title, status, body, signal, visual }, index) => (
             <div data-reveal style={{ "--delay": `${index * 70}ms` } as CSSProperties} key={title}>
               <PixelCard
                 className={styles.capabilityPixelCard}
@@ -402,10 +462,7 @@ export function ComposableCapabilities() {
                     <span>{number}</span>
                     <span className={styles.statusChip}>{status}</span>
                   </header>
-                  <div className={styles.capabilityVisual} aria-hidden="true">
-                    <span /><span /><span /><i />
-                    <div className={styles.capabilityIcon}><Icon /></div>
-                  </div>
+                  <CapabilityVisual icon={<Icon />} visual={visual} />
                   <h3><ShinyText color="#f0faff" shineColor="#c5f1ff" speed={6 + index * 0.35} delay={index * 0.18} spread={112} pauseOnHover>{title}</ShinyText></h3>
                   <p>{body}</p>
                   <footer>
@@ -584,6 +641,19 @@ export function PrivacyFirst() {
           <span>Zero data retention</span>
         </div>
         <div className={styles.privacyGrid}>
+          <ProfileCard
+            className={styles.privacyProfile}
+            name="Onairos"
+            title="iMessage as an Identity Layer"
+            handle="onairos-identity"
+            status="Private identity active"
+            showUserInfo={true}
+            enableTilt={true}
+            enableMobileTilt={false}
+            behindGlowEnabled
+            innerGradient="linear-gradient(145deg, rgba(63, 145, 200, 0.82) 0%, rgba(4, 28, 55, 0.98) 51%, rgba(27, 142, 134, 0.72) 100%)"
+          />
+
           <div className={styles.privacyCopy} data-reveal>
             <p className="eyebrow">A hard boundary around your work</p>
             <h2 id="privacy-title">Private context. Zero data retention.</h2>
@@ -614,19 +684,90 @@ export function PrivacyFirst() {
             </dl>
             <p>Zero-data-retention policy · Private beta</p>
           </aside>
+        </div>
+      </div>
+    </section>
+  );
+}
 
-          <ProfileCard
-            className={styles.privacyProfile}
-            name="Air private channel"
-            title="iMessage as an Identity Layer"
-            handle="private-context"
-            status="Zero data retention"
-            showUserInfo={true}
-            enableTilt={true}
-            enableMobileTilt={false}
-            behindGlowEnabled
-            innerGradient="linear-gradient(145deg, rgba(51, 119, 173, 0.72) 0%, rgba(5, 28, 55, 0.98) 52%, rgba(26, 142, 133, 0.68) 100%)"
-          />
+export function CommunicationLayer() {
+  return (
+    <section
+      className={`section ${styles.communicationSection}`}
+      id="communication"
+      data-air-scene="pearl"
+      data-air-cloud-progress="0.82"
+      data-air-cloud-rays="0.06"
+      data-air-cloud-opacity="0.1"
+      aria-labelledby="communication-title"
+    >
+      <div className="shell">
+        <div className="section-rail">
+          <span>Communication layer</span>
+          <span>Private beta</span>
+        </div>
+
+        <div className={styles.communicationIntro} data-reveal>
+          <p className="eyebrow">The work can move without losing its context</p>
+          <h2 id="communication-title">One private operating layer for the work around you.</h2>
+          <p>
+            Give Air the computer, phone, and inbox surfaces it needs to move work forward—while
+            you keep the thread, permissions, and final approval in one place.
+          </p>
+        </div>
+
+        <div className={styles.communicationGrid}>
+          <article className={`${styles.communicationCard} ${styles.communicationComputer}`} data-reveal>
+            <header>
+              <span>01</span>
+              <span><LuMonitorCog aria-hidden /><small>Private beta</small></span>
+            </header>
+            <div className={`${styles.communicationPreview} ${styles.computerPreview}`} aria-hidden="true">
+              <div className={styles.desktopWindow}>
+                <div className={styles.desktopToolbar}><i /><i /><i /><span>air / workspace</span></div>
+                <div className={styles.desktopCanvas}>
+                  <div className={styles.desktopBrowser}><span /><span /><span /><b>Browser</b></div>
+                  <div className={styles.desktopFiles}><span>brief.md</span><span>launch-plan</span><span>assets</span></div>
+                  <div className={styles.desktopTerminal}><span>&gt; research sources</span><span>&gt; compose next step</span><b>Ready for review</b></div>
+                </div>
+              </div>
+              <span className={styles.computerSignal}><LuSparkles /></span>
+            </div>
+            <h3>Computer</h3>
+            <p>
+              A private workspace that can browse, build, render, and finish the task—not just
+              describe it.
+            </p>
+          </article>
+
+          <article className={`${styles.communicationCard} ${styles.communicationPhone}`} data-reveal style={{ "--delay": "100ms" } as CSSProperties}>
+            <header>
+              <span>02</span>
+              <span><LuPhoneCall aria-hidden /><small>Private beta</small></span>
+            </header>
+            <div className={`${styles.communicationPreview} ${styles.phonePreview}`} aria-hidden="true">
+              <div className={styles.phoneChip}>
+                <span><LuPhoneCall /></span>
+                <p><small>Air line</small><strong>+1 (415) 555–AIR</strong></p>
+                <b>Beta</b>
+              </div>
+            </div>
+            <h3>Phone number</h3>
+            <p>A dedicated number for calls, texts, confirmations, and conversations that stay attached to the work.</p>
+          </article>
+
+          <article className={`${styles.communicationCard} ${styles.communicationInbox}`} data-reveal style={{ "--delay": "180ms" } as CSSProperties}>
+            <header>
+              <span>03</span>
+              <span><LuInbox aria-hidden /><small>Private beta</small></span>
+            </header>
+            <div className={`${styles.communicationPreview} ${styles.inboxPreview}`} aria-hidden="true">
+              <div className={styles.inboxRow}><small>From Air</small><strong>Creator brief is ready</strong><span>3 assets attached · now</span></div>
+              <div className={styles.inboxRow}><small>To partners</small><strong>Launch follow-up</strong><span>Scheduled · 10:30</span></div>
+            </div>
+            <h3>Email and inbox</h3>
+            <p>Air can draft, organize, follow up, and keep the details moving while you stay in iMessage.</p>
+          </article>
         </div>
       </div>
     </section>
@@ -659,6 +800,7 @@ export function IMessageDrop() {
               become a Mini App. Air keeps the work attached to one conversation while its computer
               handles the stack behind it.
             </p>
+            <pre className={styles.dropCode} aria-hidden="true"><code><i>const</i> air = computer.forYou(&#123; private: <b>true</b> &#125;)<br /><i>await</i> air.compose(request)<br /><i>await</i> air.returnWhenReady()</code></pre>
             <ul>
               <li><LuCheck /> Start with words, links, images, or files</li>
               <li><LuCheck /> Continue with the same context on the web</li>

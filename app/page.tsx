@@ -1,6 +1,7 @@
 import { Header, Footer } from "@/components/Chrome";
 import {
   AIR_FAQ_ITEMS,
+  CommunicationLayer,
   ComposableCapabilities,
   ComposableClosing,
   ComposableDefinition,
@@ -77,6 +78,7 @@ export default function Home() {
       <main id="main">
         <div id="top" />
         <Hero>
+          <CommunicationLayer />
           <PrivacyFirst />
           <IMessageDrop />
           <IMessageControlPlane />

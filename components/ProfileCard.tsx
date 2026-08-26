@@ -1,11 +1,10 @@
 "use client";
 
-import { type CSSProperties, type PointerEvent, useEffect, useRef, useState } from "react";
+import { createElement, type CSSProperties, type PointerEvent, useEffect, useRef, useState } from "react";
 import {
   LuBadgeCheck,
   LuFingerprint,
   LuLockKeyhole,
-  LuMessageCircle,
   LuShieldCheck,
   LuSparkles,
 } from "react-icons/lu";
@@ -128,7 +127,19 @@ function ProfileCard({
           <span className={styles.identityRing} />
           <span className={styles.identityGrid} />
           <span className={styles.avatar}>
-            {avatarUrl ? <img src={avatarUrl} alt="" /> : <LuMessageCircle />}
+            {avatarUrl ? <img src={avatarUrl} alt="" /> : (
+              <>
+                {createElement("dk-avatar", {
+                  className: styles.avatarDither,
+                  name: "onairos",
+                  from: "cyan",
+                  cells: "5",
+                  bloom: "low",
+                })}
+                <span className={styles.avatarMark}>O</span>
+                <span className={styles.avatarOrbit} />
+              </>
+            )}
           </span>
           <span className={styles.verified}><LuBadgeCheck /></span>
           {iconUrl ? <img className={styles.cornerIcon} src={iconUrl} alt="" /> : null}
