@@ -36,21 +36,21 @@ type ProfileCardProps = {
 const identityStudies = [
   {
     id: "koi",
-    eyebrow: "01 / koi study",
-    label: "iMessage identity current",
-    detail: "A private, recognizable presence in the thread.",
+    eyebrow: "01 / identity study",
+    label: "iMessage-bound identity",
+    detail: "A private, recognizable presence for the work in your thread.",
     Icon: LuFingerprint,
   },
   {
     id: "boundary",
-    eyebrow: "02 / boundary",
+    eyebrow: "02 / boundary study",
     label: "Permission boundary",
     detail: "Access stays explicit, scoped, and revocable.",
     Icon: LuShieldCheck,
   },
   {
     id: "context",
-    eyebrow: "03 / context",
+    eyebrow: "03 / context study",
     label: "Encrypted context",
     detail: "Continuity without a profile built from your work.",
     Icon: LuKeyRound,
@@ -59,15 +59,15 @@ const identityStudies = [
 
 function KoiFish() {
   return (
-    <svg className={styles.koiFish} viewBox="0 0 160 110" aria-hidden="true">
-      <path d="M31 55 7 29 9 55 7 81Z" fill="#f7b366" stroke="#fff0c9" strokeWidth="2" />
-      <path d="M31 55c8-27 39-39 76-28 25 8 39 26 40 28-1 2-15 21-40 28-37 11-68-1-76-28Z" fill="#fff0cf" stroke="#d5f5f4" strokeWidth="2" />
-      <path d="M58 29c7 8 11 17 10 26-1 8-3 16-10 25" fill="none" stroke="#ff704f" strokeLinecap="round" strokeWidth="12" />
-      <path d="M100 28c8 9 11 18 10 27-1 8-4 17-11 25" fill="none" stroke="#ea5a45" strokeLinecap="round" strokeWidth="9" />
-      <path d="M69 22 83 9l8 24M70 88l15 13 7-23" fill="#f4bd70" stroke="#fff1cb" strokeLinejoin="round" strokeWidth="2" />
-      <circle cx="121" cy="46" r="4" fill="#08385a" /><circle cx="122.5" cy="44.5" r="1.2" fill="#fff" />
-      <path d="M131 62c5 2 9 2 14 0" fill="none" stroke="#d77b5d" strokeLinecap="round" strokeWidth="2" />
-      <circle cx="33" cy="22" r="3" fill="#9ff4e2" opacity=".9" /><circle cx="42" cy="15" r="2" fill="#c7f9ff" opacity=".8" /><circle cx="132" cy="18" r="2.5" fill="#b9eaff" opacity=".78" />
+    <svg className={styles.koiFish} viewBox="0 0 300 260" aria-hidden="true">
+      <path d="M107 125C80 90 54 68 25 62c14 23 13 44 0 63 31-8 58 4 82 31-2-11 0-21 7-31-7-10-9-20-7-31Z" fill="#9f6424" opacity=".92" />
+      <path d="M100 126c9-62 67-99 125-82 34 10 56 39 61 81-9 45-39 73-80 82-59 13-108-25-106-81Z" fill="#e2a33e" stroke="#2b2419" strokeWidth="4" />
+      <path d="M127 66c23 14 34 35 32 62-2 28-12 50-32 68M177 48c24 20 37 46 36 77-1 31-12 56-33 77M220 65c17 20 24 41 20 65-3 19-11 36-24 50" fill="none" stroke="#2b2419" strokeLinecap="round" strokeWidth="17" />
+      <path d="M149 59c20 13 28 33 24 59-3 25-11 45-24 60" fill="none" stroke="#f4dca8" strokeLinecap="round" strokeWidth="8" opacity=".92" />
+      <path d="M111 96 83 72l12 44M119 159l-25 30 39-11M212 51l7-35 18 37M220 201l14 35-34-22" fill="#bb7828" stroke="#2b2419" strokeLinejoin="round" strokeWidth="4" />
+      <path d="M245 110c13 4 24 4 35-1" fill="none" stroke="#2b2419" strokeLinecap="round" strokeWidth="4" />
+      <circle cx="247" cy="93" r="8" fill="#1b1914" /><circle cx="249.5" cy="90.5" r="2.1" fill="#f9f0d6" />
+      <path d="M106 119c8 4 15 6 23 6M105 139c8-3 15-4 23-3M181 82c9 5 17 8 26 8M182 162c9-5 17-7 25-7" fill="none" stroke="#f5d99c" strokeLinecap="round" strokeWidth="5" opacity=".9" />
     </svg>
   );
 }
@@ -263,20 +263,22 @@ function ProfileCard({
             {identityStudies.map(({ detail, eyebrow, Icon, id, label }, index) => {
               const order = (index - activeStudy + identityStudies.length) % identityStudies.length;
               return (
-                <span className={styles.studyCard} data-order={order} key={id}>
-                  <span className={styles.studyTopline}>{eyebrow}</span>
-                  <span className={styles.studyGlyph}>
-                    {id === "koi" ? (
-                      <>
-                        <KoiFish />
-                      </>
-                    ) : <Icon />}
+                <span className={styles.studyCard} data-order={order} data-study={id} key={id}>
+                  <span className={styles.studyArtwork}>
+                    <span className={styles.studyWaterRings} aria-hidden="true"><i /><i /><i /></span>
+                    <span className={styles.studyReeds} aria-hidden="true"><i /><i /><i /></span>
+                    <span className={styles.studyGlyph}>
+                      {id === "koi" ? <KoiFish /> : <Icon />}
+                    </span>
                   </span>
-                  <span className={styles.studyCopy}>
-                    <strong>{label}</strong>
-                    <small>{detail}</small>
+                  <span className={styles.studyCaption}>
+                    <span className={styles.studyTopline}>{eyebrow}</span>
+                    <span className={styles.studyCopy}>
+                      <strong>{label}</strong>
+                      <small>{detail}</small>
+                    </span>
+                    <span className={styles.studySeal}><LuBadgeCheck /></span>
                   </span>
-                  <span className={styles.studySeal}><LuBadgeCheck /></span>
                 </span>
               );
             })}

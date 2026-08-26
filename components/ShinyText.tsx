@@ -68,14 +68,10 @@ export function ShinyText({
       className={[styles.shiny, disabled && styles.disabled, pauseOnHover && styles.pauseOnHover, className]
         .filter(Boolean)
         .join(" ")}
+      data-shiny-content={sheenContent ?? undefined}
       style={shinyStyle}
     >
       <span className={styles.content}>{content}</span>
-      {sheenContent ? (
-        <span className={styles.sheen} aria-hidden="true">
-          {sheenContent}
-        </span>
-      ) : null}
     </span>
   );
 }

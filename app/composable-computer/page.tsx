@@ -64,7 +64,7 @@ export default function ComposableComputerPage() {
   return (
     <DetailPageShell
       current="composable-computer"
-      eyebrow="YOUR PERSONAL, CREATIVE, COMPOSABLE COMPUTER"
+      eyebrow="YOUR PERSONAL, COMPOSABLE COMPUTER"
       title="One agent. One computer. Composed around you."
       description="Air gives one persistent AI agent a durable workspace, memory, skills, supported connections, and Mini Apps—then keeps the important decisions with you."
     >

@@ -244,6 +244,7 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
   const cinematicActiveRef = useRef(false);
   const [cinematicActive, setCinematicActive] = useState(false);
   const [cinematicBypassed, setCinematicBypassed] = useState(false);
+  const [introReady, setIntroReady] = useState(false);
   const useCinematicPresentation = cinematicEnabled && !cinematicBypassed;
 
   useEffect(() => {
@@ -262,6 +263,7 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
     let headerFocusActive = false;
     let latestRevealProgress = 1;
     let cancelled = false;
+    let introMeasureTimer = 0;
     let shaderStatus: "pending" | "ready" | "fallback" = "pending";
 
     const setSkyProgress = () => {
@@ -394,7 +396,15 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
       if ((event as IntroCompleteEvent).detail?.bypassCinematic) {
         setCinematicBypassed(true);
       }
-      window.requestAnimationFrame(scheduleUpdate);
+      setIntroReady(true);
+      // The dialog is removed on this same handoff frame. Measure after two
+      // paints, then once more after its exit transition, so a fast video
+      // completion cannot leave the poster or cloud timeline at a stale size.
+      window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(scheduleUpdate);
+      });
+      if (introMeasureTimer) window.clearTimeout(introMeasureTimer);
+      introMeasureTimer = window.setTimeout(scheduleUpdate, 140);
     };
     window.addEventListener("air:intro-complete", handleIntroComplete);
     section.addEventListener("focusin", handleFocusIn);
@@ -417,9 +427,18 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
       customElements.whenDefined("wz-sky").then(setSkyProgress);
     }
 
+    // The event can fire before this component has attached its listener on
+    // a warm navigation. In that case the intro state is the source of truth.
+    if (document.documentElement.dataset.airIntro === "complete") {
+      handleIntroComplete(new CustomEvent("air:intro-complete"));
+    } else if (document.documentElement.dataset.airIntro === "skip") {
+      setIntroReady(true);
+    }
+
     return () => {
       cancelled = true;
       if (animationFrame) cancelAnimationFrame(animationFrame);
+      if (introMeasureTimer) window.clearTimeout(introMeasureTimer);
       window.removeEventListener("scroll", scheduleUpdate);
       window.removeEventListener("resize", scheduleUpdate);
       window.removeEventListener("air:intro-complete", handleIntroComplete);
@@ -477,6 +496,7 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
       className="hero-scroll"
       style={heroStyle}
       data-air-presentation={useCinematicPresentation ? "cinematic-pending" : "static"}
+      data-air-intro-ready={introReady ? "true" : "false"}
       aria-labelledby="hero-title"
     >
       <div
@@ -522,8 +542,13 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
           <div className="cloud-curtain" aria-hidden>
             <div className="cloud-bank bank-one" />
             <div className="cloud-bank bank-two" />
-            <p>scroll to clear the clouds <LuChevronDown /></p>
           </div>
+        )}
+        {useCinematicPresentation && (
+          <p className="hero-scroll-prompt" aria-hidden>
+            <span>Scroll to clear clouds</span>
+            <LuChevronDown />
+          </p>
         )}
         <p className="hero-cloud-title" aria-hidden="true">
           <ShinyText
@@ -572,7 +597,7 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
                 delay={0.42}
                 spread={112}
               >
-                creative composable
+                composable
               </ShinyText>
               {" "}
               <ShinyText

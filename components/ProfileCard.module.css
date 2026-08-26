@@ -194,6 +194,310 @@
 .studySeal { align-self: end; width: 1.58rem; height: 1.58rem; display: grid; place-items: center; border-radius: 50%; color: #063b5c; background: #a9f3d3; box-shadow: 0 0 0 0.16rem rgba(4, 34, 63, 0.7); }
 .studySeal svg { width: 0.88rem; height: 0.88rem; }
 
+/* Koi studies: an Air-specific tactile deck, rather than a generic profile
+   card. The scene keeps the physical paper, ink, and depth language while
+   the keyboard and drag controls above continue to move between studies. */
+.card {
+  min-height: 36rem;
+  isolation: isolate;
+}
+
+.behindGlow {
+  inset: 8% 6%;
+  opacity: 0.52;
+  background:
+    radial-gradient(circle at 42% 36%, rgba(232, 166, 73, 0.36), transparent 28%),
+    radial-gradient(circle at 68% 80%, rgba(58, 183, 192, 0.32), transparent 32%);
+  filter: blur(2.8rem);
+}
+
+.shell {
+  min-height: inherit;
+  border-color: rgba(244, 222, 177, 0.28);
+  border-radius: 1.55rem;
+  background:
+    radial-gradient(circle at var(--profile-x) var(--profile-y), rgba(255, 224, 163, 0.12), transparent 27%),
+    linear-gradient(150deg, #201b14 0%, #0e1212 57%, #072d33 100%);
+  box-shadow:
+    inset 0 1px rgba(255, 244, 219, 0.22),
+    inset 0 -1px rgba(0, 0, 0, 0.68),
+    0 1.75rem 3.8rem rgba(2, 7, 13, 0.42);
+}
+
+.card:hover .shell {
+  box-shadow:
+    inset 0 1px rgba(255, 244, 219, 0.34),
+    inset 0 -1px rgba(0, 0, 0, 0.7),
+    0 2.2rem 4.4rem rgba(2, 7, 13, 0.55),
+    0 0 0 0.16rem rgba(239, 204, 137, 0.09);
+}
+
+.glare {
+  opacity: 0.44;
+  background:
+    linear-gradient(124deg, rgba(255, 238, 202, 0.19), transparent 23% 72%, rgba(68, 191, 194, 0.12)),
+    radial-gradient(circle at var(--profile-x) var(--profile-y), rgba(255, 248, 229, 0.2), transparent 23%);
+}
+
+.shell::after {
+  opacity: 0.2;
+  background-image: radial-gradient(rgba(241, 222, 184, 0.62) 0.55px, transparent 0.55px);
+  background-size: 4px 4px;
+  mask-image: linear-gradient(142deg, #000, transparent 58%);
+}
+
+.cardHeader {
+  position: absolute;
+  z-index: 6;
+  top: 0;
+  right: 0;
+  left: 0;
+  min-height: 3.05rem;
+  padding: 0 1rem;
+  border-bottom-color: rgba(244, 226, 189, 0.15);
+  color: rgba(245, 227, 193, 0.64);
+}
+
+.cardHeader i { background: #df9b3d; box-shadow: 0 0 0 0.22rem rgba(223, 155, 61, 0.14); }
+.cardHeader svg { color: rgba(244, 222, 178, 0.72); }
+
+.identityField {
+  min-height: 36rem;
+  height: 100%;
+  padding: 2.4rem 0 1rem;
+  background:
+    radial-gradient(ellipse at 50% 88%, rgba(18, 122, 128, 0.28), transparent 43%),
+    radial-gradient(circle at 50% 40%, rgba(241, 176, 70, 0.12), transparent 28%);
+}
+
+.identityField::before {
+  width: 23rem;
+  height: 23rem;
+  border-color: rgba(226, 189, 125, 0.13);
+  transform: translateY(16%) rotateX(64deg);
+}
+
+.identityField::after {
+  width: 13rem;
+  height: 13rem;
+  background: radial-gradient(circle, rgba(243, 172, 67, 0.28), transparent 67%);
+  filter: blur(1rem);
+}
+
+.identityGrid {
+  width: 21rem;
+  height: 21rem;
+  opacity: 0.15;
+  background-image:
+    linear-gradient(rgba(238, 213, 167, 0.46) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(238, 213, 167, 0.46) 1px, transparent 1px);
+  background-size: 0.6rem 0.6rem;
+  transform: rotate(45deg) scale(1.12);
+}
+
+.studyControl {
+  width: min(21.85rem, calc(100% - 2.25rem));
+  height: 28.7rem;
+  perspective: 78rem;
+}
+
+.studyCard {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: minmax(0, 1.56fr) minmax(8.7rem, 0.7fr);
+  gap: 0;
+  padding: 0;
+  border-color: rgba(238, 218, 179, 0.34);
+  border-radius: 1.6rem;
+  color: #f7ead5;
+  background: #292219;
+  box-shadow:
+    inset 0 1px rgba(255, 246, 221, 0.44),
+    inset 0 -1px rgba(0, 0, 0, 0.44),
+    0 1.5rem 2.4rem rgba(0, 0, 0, 0.46);
+}
+
+.studyCard::before {
+  z-index: 3;
+  opacity: 0.26;
+  background-image: linear-gradient(90deg, rgba(66, 52, 34, 0.15) 1px, transparent 1px), linear-gradient(rgba(66, 52, 34, 0.15) 1px, transparent 1px);
+  background-size: 0.5rem 0.5rem;
+  mask-image: none;
+}
+
+.studyCard::after {
+  z-index: 4;
+  right: 10%;
+  bottom: 6%;
+  width: 1.65rem;
+  height: 1.65rem;
+  border-color: rgba(208, 78, 45, 0.94);
+  border-radius: 0.15rem;
+  transform: rotate(4deg);
+}
+
+.studyCard[data-order="0"] {
+  transform: translate3d(var(--study-drag-x), var(--study-drag-y), 2rem) rotateX(var(--study-tilt-x)) rotateY(var(--study-tilt-y)) rotateZ(-1.2deg);
+}
+
+.studyCard[data-order="1"] {
+  filter: saturate(0.62) brightness(0.58);
+  transform: translate3d(-0.72rem, 1.05rem, 0.75rem) rotateZ(-5deg) scale(0.965);
+}
+
+.studyCard[data-order="2"] {
+  opacity: 0.88;
+  filter: saturate(0.45) brightness(0.45);
+  transform: translate3d(0.7rem, 1.85rem, 0) rotateZ(4deg) scale(0.93);
+}
+
+.studyArtwork {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  min-height: 0;
+  background:
+    radial-gradient(circle at 70% 27%, rgba(48, 42, 30, 0.16) 0 3%, transparent 4%),
+    radial-gradient(circle at 20% 82%, rgba(46, 38, 27, 0.26) 0 2%, transparent 3%),
+    linear-gradient(145deg, rgba(238, 226, 192, 0.98), rgba(209, 193, 153, 0.98));
+}
+
+.studyArtwork::before,
+.studyArtwork::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+}
+
+.studyArtwork::before {
+  inset: 0;
+  opacity: 0.64;
+  background:
+    radial-gradient(ellipse at 22% 75%, rgba(39, 56, 55, 0.52), transparent 27%),
+    radial-gradient(ellipse at 71% 17%, rgba(41, 49, 44, 0.25), transparent 23%),
+    linear-gradient(125deg, transparent 0 39%, rgba(54, 50, 39, 0.12) 40% 41%, transparent 42% 100%);
+  mix-blend-mode: multiply;
+}
+
+.studyArtwork::after {
+  inset: 0;
+  opacity: 0.26;
+  background-image: linear-gradient(rgba(61, 51, 34, 0.42) 0.45px, transparent 0.45px), linear-gradient(90deg, rgba(61, 51, 34, 0.42) 0.45px, transparent 0.45px);
+  background-size: 0.43rem 0.43rem;
+}
+
+.studyCard[data-study="boundary"] .studyArtwork {
+  background: linear-gradient(145deg, #dfe2d4, #829fa0 90%);
+}
+
+.studyCard[data-study="context"] .studyArtwork {
+  background: linear-gradient(145deg, #d6dfcf, #a3b6a5 58%, #627f7b);
+}
+
+.studyGlyph {
+  position: relative;
+  z-index: 2;
+  width: min(17.8rem, 86%);
+  height: min(15.4rem, 92%);
+  display: grid;
+  place-items: center;
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  color: #293a34;
+  background: none;
+  box-shadow: none;
+}
+
+.studyGlyph > svg:not(.koiFish) {
+  width: 4.75rem;
+  height: 4.75rem;
+  padding: 1rem;
+  border: 1px solid rgba(47, 57, 51, 0.35);
+  border-radius: 50%;
+  background: rgba(244, 237, 211, 0.44);
+  box-shadow: 0 1rem 1.4rem rgba(34, 39, 32, 0.2);
+}
+
+.studyGlyph .koiFish {
+  width: 128%;
+  height: 128%;
+  transform: rotate(-39deg) translate(0.42rem, -0.15rem);
+  filter: drop-shadow(0 0.8rem 0.55rem rgba(49, 39, 22, 0.34));
+}
+
+.studyWaterRings {
+  position: absolute;
+  z-index: 1;
+  top: 58%;
+  left: 52%;
+  width: 9rem;
+  height: 4.2rem;
+  transform: translate(-50%, -50%) rotate(-12deg);
+}
+
+.studyWaterRings i {
+  position: absolute;
+  inset: 0;
+  display: block;
+  border: 1px solid rgba(48, 61, 58, 0.38);
+  border-radius: 50%;
+}
+.studyWaterRings i:nth-child(2) { inset: 16%; }
+.studyWaterRings i:nth-child(3) { inset: 32%; }
+
+.studyReeds {
+  position: absolute;
+  z-index: 2;
+  bottom: -1.1rem;
+  left: 6%;
+  width: 6.5rem;
+  height: 9rem;
+  transform: rotate(-8deg);
+}
+.studyReeds i { position: absolute; bottom: 0; display: block; width: 0.16rem; height: 100%; border-radius: 99px; background: linear-gradient(#172d2b, #5b6552); transform-origin: bottom; }
+.studyReeds i:nth-child(1) { left: 1.2rem; height: 85%; transform: rotate(26deg); }.studyReeds i:nth-child(2) { left: 3.4rem; transform: rotate(8deg); }.studyReeds i:nth-child(3) { left: 5rem; height: 72%; transform: rotate(-19deg); }
+
+.studyCaption {
+  position: relative;
+  z-index: 5;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-rows: auto 1fr;
+  gap: 0.55rem 0.8rem;
+  padding: 1rem 1.1rem 1.08rem;
+  overflow: hidden;
+  color: #f7ebd8;
+  background: linear-gradient(140deg, #342b1f, #1e1b16 72%, #1a302f);
+}
+
+.studyCaption::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.22;
+  background-image: radial-gradient(rgba(246, 225, 182, 0.56) 0.5px, transparent 0.5px);
+  background-size: 4px 4px;
+}
+
+.studyTopline,
+.studyCopy,
+.studySeal { z-index: 1; }
+.studyTopline { grid-column: 1 / -1; color: rgba(247, 225, 183, 0.66); font-size: 0.45rem; }
+.studyCopy { align-self: end; }
+.studyCopy strong { max-width: 13ch; color: #f8ecd7; font-family: Georgia, "Times New Roman", serif; font-size: clamp(1.25rem, 2.2vw, 1.68rem); font-weight: 500; letter-spacing: -0.06em; line-height: 0.9; }
+.studyCopy small { max-width: 22ch; margin-top: 0.38rem; color: rgba(241, 222, 188, 0.62); font-family: var(--font-mono); font-size: 0.48rem; line-height: 1.42; }
+.studySeal { align-self: end; width: 1.7rem; height: 1.7rem; border: 1px solid rgba(242, 214, 157, 0.46); color: #3a281a; background: #e5b45d; box-shadow: 0 0 0 0.14rem rgba(47, 37, 23, 0.72); }
+
+.details,
+.statusRow,
+.cardFooter {
+  display: none;
+}
+
 .avatar {
   position: relative;
   z-index: 1;
@@ -240,6 +544,15 @@
 .cardFooter button:hover { border-color: rgba(226, 252, 255, 0.62); background: rgba(229, 250, 255, 0.16); }
 .cardFooter button:focus-visible { outline: 2px solid #d8f5ff; outline-offset: 3px; }
 
+/* The study caption carries the identity metadata inside the physical card.
+   Keeping this outer chrome out of view prevents the deck from reading as a
+   settings panel below the artwork. */
+.details,
+.statusRow,
+.cardFooter {
+  display: none;
+}
+
 @keyframes onairosAvatarDrift {
   0%, 100% { transform: scale(1.03) rotate(-4deg); filter: saturate(1.22) contrast(1.03); }
   50% { transform: scale(1.1) rotate(4deg); filter: saturate(1.55) contrast(1.14); }
@@ -259,7 +572,9 @@
 :global(html[data-air-save-data="true"]) .studyAvatarDither { animation: none; }
 
 @media (max-width: 720px) {
-  .card { min-height: 27rem; }
-  .identityField { min-height: 13.9rem; }
-  .studyControl { width: min(14.5rem, calc(100% - 1.5rem)); height: 10.2rem; }
+  .card { min-height: 31.5rem; }
+  .identityField { min-height: 31.5rem; padding-top: 2.2rem; }
+  .studyControl { width: min(18.3rem, calc(100% - 2rem)); height: 25rem; }
+  .studyCopy strong { font-size: 1.28rem; }
+  .studyArtwork::after { background-size: 0.36rem 0.36rem; }
 }

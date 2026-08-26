@@ -187,6 +187,122 @@
   text-transform: uppercase;
 }
 
+/* A restrained physical operating surface: layered paper/glass depth,
+   purpose-built task state, and an approval moment rather than generic tiles. */
+.systemMap {
+  border-color: rgba(7, 60, 105, 0.28);
+  border-radius: 1.7rem;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.96), rgba(222, 244, 254, 0.82));
+  box-shadow:
+    0 0.7rem 0 rgba(37, 112, 158, 0.09),
+    0 1.5rem 3rem rgba(18, 83, 126, 0.15),
+    inset 0 1px rgba(255, 255, 255, 0.9);
+}
+
+.systemMap::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  right: 1.2rem;
+  bottom: 2.3rem;
+  width: 38%;
+  height: 40%;
+  border: 1px solid rgba(44, 139, 188, 0.13);
+  border-radius: 1.2rem;
+  background: linear-gradient(135deg, rgba(129, 218, 247, 0.16), transparent);
+  transform: rotate(2.4deg);
+}
+
+.systemMap > header { min-height: 3.1rem; padding-inline: 1.1rem; }
+
+.systemWorkspace {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 0.62rem;
+  padding: 1rem;
+}
+
+.systemCore {
+  gap: 1.05rem;
+  margin: 0;
+  padding: clamp(1.05rem, 2.6vw, 1.65rem);
+  overflow: hidden;
+  border-color: rgba(7, 61, 106, 0.2);
+  border-radius: 1.15rem;
+  background:
+    radial-gradient(circle at 72% 35%, rgba(106, 223, 244, 0.38), transparent 25%),
+    linear-gradient(130deg, rgba(255,255,255,0.98), rgba(209, 239, 250, 0.78));
+  box-shadow: inset 0 1px rgba(255,255,255,0.9), 0 0.8rem 1.5rem rgba(42, 111, 154, 0.11);
+}
+
+.coreOrb {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  width: 3.65rem;
+  height: 3.65rem;
+  color: #f4feff;
+  background:
+    radial-gradient(circle at 35% 28%, #e3fbff 0 6%, transparent 7%),
+    radial-gradient(circle at 50% 50%, #51cbed 0 20%, #1574bb 52%, #072a63 74%);
+  box-shadow: inset 0 1px rgba(255,255,255,0.8), 0 0.7rem 1.2rem rgba(12, 106, 167, 0.22), 0 0 0 0.3rem rgba(73, 187, 227, 0.1);
+}
+
+.coreOrb::before,
+.coreOrb::after,
+.coreOrb > i { content: ""; position: absolute; border: 1px solid rgba(223, 252, 255, 0.42); border-radius: 50%; }
+.coreOrb::before { width: 4.5rem; height: 1.45rem; left: -0.42rem; top: 1.18rem; transform: rotate(-22deg); }
+.coreOrb::after { width: 2rem; height: 4.8rem; left: 0.82rem; top: -0.52rem; transform: rotate(34deg); }
+.coreOrb > i { width: 2.8rem; height: 2.8rem; left: 0.42rem; top: 0.42rem; opacity: 0.62; }
+.coreOrb svg { position: relative; z-index: 1; width: 1.26rem; height: 1.26rem; filter: drop-shadow(0 1px rgba(1, 31, 72, 0.38)); }
+
+.coreStatus { display: inline-flex; align-items: center; gap: 0.42rem; margin-top: 0.62rem; color: #11619c; font-family: var(--font-mono); font-size: 0.48rem; font-weight: 650; letter-spacing: 0.08em; text-transform: uppercase; }
+.coreStatus i { width: 0.4rem; height: 0.4rem; border-radius: 50%; background: #11a86b; box-shadow: 0 0 0 0.2rem rgba(17, 168, 107, 0.12); }
+
+.systemTaskRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.7rem;
+  padding: 0.62rem 0.72rem;
+  border: 1px solid rgba(7, 61, 106, 0.14);
+  border-radius: 0.78rem;
+  color: rgba(6, 49, 90, 0.66);
+  background: rgba(244, 252, 255, 0.65);
+  font-family: var(--font-mono);
+  font-size: 0.48rem;
+  letter-spacing: 0.055em;
+  text-transform: uppercase;
+}
+.systemTaskRow span { display: inline-flex; align-items: center; gap: 0.44rem; min-width: 0; }
+.systemTaskRow svg { flex: none; color: #0c77ba; }
+.systemTaskRow b { flex: none; color: #088567; font-weight: 650; }
+
+.systemModules { gap: 0.48rem; margin: 0; }
+.systemModules span { min-height: 3.45rem; border-radius: 0.76rem; background: rgba(238, 249, 253, 0.72); box-shadow: inset 0 1px rgba(255,255,255,0.8); }
+
+.systemApproval {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 0.65rem;
+  align-items: center;
+  padding: 0.74rem;
+  border: 1px solid rgba(180, 124, 30, 0.47);
+  border-radius: 0.86rem;
+  color: #563a0a;
+  background: linear-gradient(100deg, rgba(255, 237, 191, 0.8), rgba(255, 247, 223, 0.62));
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.72);
+}
+.systemApproval > svg { width: 1.22rem; height: 1.22rem; color: #a66b10; }
+.systemApproval span { min-width: 0; }
+.systemApproval small,.systemApproval strong { display: block; }
+.systemApproval small { color: rgba(105,70,11,0.66); font-family: var(--font-mono); font-size: 0.42rem; letter-spacing: 0.08em; text-transform: uppercase; }
+.systemApproval strong { margin-top: 0.1rem; overflow: hidden; font-size: 0.68rem; letter-spacing: -0.02em; text-overflow: ellipsis; white-space: nowrap; }
+.systemApproval b { padding: 0.32rem 0.42rem; border: 1px solid rgba(159,102,7,0.32); border-radius: 0.5rem; color: #805105; font-family: var(--font-mono); font-size: 0.4rem; letter-spacing: 0.06em; text-transform: uppercase; }
+.systemMap figcaption { position: relative; z-index: 1; padding: 0.18rem 1.1rem 0.9rem; font-size: 0.52rem; }
+
 .sectionLead { max-width: 57rem; margin-bottom: clamp(3rem, 6vw, 5.5rem); }
 
 .capabilitiesSection {
@@ -417,6 +533,67 @@
 .phoneChip { position: relative; z-index: 1; width: min(100%, 22rem); min-height: 4.5rem; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 0.75rem; padding: 0.7rem 0.9rem; border: 1px solid rgba(155, 226, 255, 0.34); border-radius: 1rem; color: #e9fbff; background: linear-gradient(115deg, #092b53, #164d78 62%, #0e7b76); box-shadow: inset 0 1px rgba(255, 255, 255, 0.16), 0 0.8rem 1.65rem rgba(18, 85, 129, 0.2); }.phoneChip > span { width: 2.15rem; height: 2.15rem; display: grid; place-items: center; border-radius: 50%; color: #b8eeff; background: rgba(97, 185, 255, 0.35); box-shadow: 0 0 0 0.35rem rgba(89, 190, 255, 0.07); }.phoneChip svg { width: 0.95rem; height: 0.95rem; }.phoneChip p { min-width: 0; margin: 0; }.phoneChip small,.phoneChip strong { display: block; }.phoneChip small { color: rgba(210, 244, 255, 0.64); font-family: var(--font-mono); font-size: 0.45rem; letter-spacing: 0.08em; text-transform: uppercase; }.phoneChip strong { overflow: hidden; color: #effdff; font-family: var(--font-mono); font-size: 0.62rem; font-weight: 560; letter-spacing: 0.04em; text-overflow: ellipsis; white-space: nowrap; }.phoneChip b { color: #9cf5bd; font-family: var(--font-mono); font-size: 0.48rem; letter-spacing: 0.08em; text-transform: uppercase; }.phoneRings { position: absolute; z-index: 0; width: 13rem; height: 13rem; border: 1px solid rgba(20, 108, 166, 0.2); border-radius: 50%; transform: rotateX(64deg); }.phoneRings i { position: absolute; inset: 20%; border: 1px solid rgba(65, 177, 220, 0.16); border-radius: 50%; }.phoneRings i:nth-child(2) { inset: 37%; }.phoneRings i:nth-child(3) { inset: 53%; background: rgba(86, 204, 210, 0.14); }
 
 .inboxPreview { align-content: center; gap: 0.55rem; }.inboxRow { position: relative; z-index: 1; width: 100%; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 0.55rem; align-items: center; padding: 0.6rem 0.72rem; border: 1px solid rgba(137, 209, 242, 0.2); color: #dff7ff; background: linear-gradient(100deg, rgba(5, 53, 98, 0.86), rgba(38, 100, 145, 0.78)); box-shadow: inset 0 1px rgba(255, 255, 255, 0.09); }.inboxRow i { width: 1.65rem; height: 1.65rem; display: grid; place-items: center; border-radius: 0.5rem; color: #aeeaff; background: rgba(139, 218, 255, 0.16); }.inboxRow i svg { width: 0.78rem; height: 0.78rem; }.inboxRow p { min-width: 0; margin: 0; }.inboxRow small,.inboxRow span { color: rgba(205, 240, 255, 0.66); font-family: var(--font-mono); font-size: 0.42rem; letter-spacing: 0.07em; text-transform: uppercase; }.inboxRow strong { display: block; min-width: 0; margin-top: 0.12rem; overflow: hidden; font-size: 0.68rem; font-weight: 570; letter-spacing: -0.025em; text-overflow: ellipsis; white-space: nowrap; }
+
+/* The communication layer uses the same physical deck language as the
+   identity study, with product-specific state rather than ornamental cards. */
+.communicationGrid {
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(19.7rem, auto)) minmax(22rem, auto);
+}
+
+.communicationCard {
+  border-radius: 1.82rem;
+  box-shadow:
+    inset 0 1px rgba(255, 255, 255, 0.94),
+    inset 0 -1px rgba(28, 103, 149, 0.07),
+    0 1.4rem 3.2rem rgba(20, 84, 128, 0.13);
+}
+
+.communicationComputer { grid-column: span 7; grid-row: span 2; }
+.communicationPhone,
+.communicationInbox { grid-column: span 5; }
+.communicationConnections,
+.communicationWallet { grid-column: span 6; min-height: 22rem; }
+
+.connectionsPreview,
+.walletPreview {
+  min-height: 10.6rem;
+  padding: 0.82rem;
+}
+
+.connectionsPreview {
+  display: grid;
+  align-content: center;
+  gap: 0.65rem;
+  background:
+    radial-gradient(circle at 88% 18%, rgba(86, 224, 218, 0.3), transparent 25%),
+    linear-gradient(135deg, #082f58, #0d5d87 61%, #127979);
+}
+
+.connectorHeading {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 0.55rem;
+  align-items: center;
+  color: #dff8ff;
+}
+.connectorHeading > span { width: 1.85rem; height: 1.85rem; display: grid; place-items: center; border: 1px solid rgba(197,244,255,0.38); border-radius: 0.62rem; color: #9eeeff; background: rgba(183,245,255,0.12); }
+.connectorHeading svg { width: 0.9rem; height: 0.9rem; }.connectorHeading small { color: rgba(218,247,255,0.7); font-family: var(--font-mono); font-size: 0.45rem; letter-spacing: 0.075em; text-transform: uppercase; }.connectorHeading b { color: #b6f2d4; font-family: var(--font-mono); font-size: 0.64rem; letter-spacing: 0.04em; }
+.connectorChips { position: relative; z-index: 1; display: flex; flex-wrap: wrap; gap: 0.38rem; }.connectorChips span { padding: 0.36rem 0.52rem; border: 1px solid rgba(191,239,255,0.28); border-radius: 0.5rem; color: rgba(233,251,255,0.9); background: rgba(240,253,255,0.1); box-shadow: inset 0 1px rgba(255,255,255,0.12); font-family: var(--font-mono); font-size: 0.42rem; letter-spacing: 0.04em; }
+.connectorReady { position: relative; z-index: 1; display: inline-flex; align-items: center; gap: 0.4rem; color: rgba(214,246,255,0.64); font-family: var(--font-mono); font-size: 0.42rem; letter-spacing: 0.05em; text-transform: uppercase; }.connectorReady i { width: 0.38rem; height: 0.38rem; border-radius: 50%; background: #73ecc1; box-shadow: 0 0 0 0.18rem rgba(115,236,193,0.12); }
+
+.walletPreview {
+  display: grid;
+  align-content: center;
+  gap: 0.56rem;
+  background:
+    radial-gradient(circle at 80% 24%, rgba(243, 212, 129, 0.34), transparent 25%),
+    linear-gradient(145deg, #102d52, #123e69 55%, #154e66);
+}
+.walletCardPreview,
+.walletApprovalPreview { position: relative; z-index: 1; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 0.6rem; align-items: center; padding: 0.62rem 0.72rem; border: 1px solid rgba(197,226,243,0.22); border-radius: 0.78rem; color: #eafaff; background: rgba(4, 27, 55, 0.45); box-shadow: inset 0 1px rgba(255,255,255,0.12); }.walletCardPreview > span,.walletApprovalPreview > span { width: 1.7rem; height: 1.7rem; display: grid; place-items: center; border-radius: 0.54rem; color: #b9ebff; background: rgba(101,190,241,0.19); }.walletApprovalPreview > span { color: #ffe298; background: rgba(242,189,77,0.14); }.walletCardPreview svg,.walletApprovalPreview svg { width: 0.84rem; height: 0.84rem; }.walletCardPreview p,.walletApprovalPreview p { min-width: 0; margin: 0; }.walletCardPreview small,.walletApprovalPreview small { display: block; color: rgba(212,242,255,0.58); font-family: var(--font-mono); font-size: 0.4rem; letter-spacing: 0.07em; text-transform: uppercase; }.walletCardPreview strong,.walletApprovalPreview strong { display: block; margin-top: 0.1rem; overflow: hidden; font-size: 0.66rem; letter-spacing: -0.025em; text-overflow: ellipsis; white-space: nowrap; }.walletCardPreview > b { color: #b6f2d4; font-family: var(--font-mono); font-size: 0.55rem; }.walletApprovalPreview > b { padding: 0.3rem 0.4rem; border: 1px solid rgba(255,215,125,0.33); border-radius: 0.45rem; color: #ffe2a4; font-family: var(--font-mono); font-size: 0.4rem; letter-spacing: 0.06em; text-transform: uppercase; }
 
 @keyframes communicationSignal { 0%, 100% { transform: translateY(0) rotate(0); box-shadow: inset 0 1px rgba(255, 255, 255, 0.36), 0 0.9rem 1.8rem rgba(1, 27, 57, 0.32); } 50% { transform: translateY(-0.35rem) rotate(6deg); box-shadow: inset 0 1px rgba(255, 255, 255, 0.46), 0 1.25rem 2.2rem rgba(1, 27, 57, 0.38), 0 0 0 0.35rem rgba(87, 222, 227, 0.12); } }
 
@@ -793,6 +970,12 @@
   .communicationIntro { grid-template-columns: 1fr; gap: 1rem; }
   .communicationIntro :global(.eyebrow) { grid-column: auto; }
   .communicationIntro > p:last-child { margin: 0; }
+  .communicationGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: auto; }
+  .communicationComputer { grid-column: 1 / -1; grid-row: auto; min-height: 38rem; }
+  .communicationPhone,
+  .communicationInbox,
+  .communicationConnections,
+  .communicationWallet { grid-column: auto; min-height: 0; }
   .dropStage { grid-column: 1 / -1; }
   .capabilityCard { grid-column: auto; }
   .sequenceHeading { grid-template-columns: 1fr; }
@@ -816,9 +999,11 @@
   .communicationIntro { margin-bottom: 2rem; }
   .communicationIntro h2 { max-width: 12ch; }
   .communicationGrid { grid-template-columns: 1fr; grid-template-rows: auto; }
-  .communicationComputer { grid-row: auto; min-height: 34rem; }
+  .communicationComputer { grid-column: auto; grid-row: auto; min-height: 34rem; }
   .communicationPhone,
-  .communicationInbox { min-height: 0; }
+  .communicationInbox,
+  .communicationConnections,
+  .communicationWallet { grid-column: auto; min-height: 0; }
   .computerPreview { min-height: 21rem; }
   .systemModules { grid-template-columns: 1fr 1fr; }
   .capabilityGrid { grid-template-columns: 1fr; }

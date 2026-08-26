@@ -401,20 +401,32 @@ export function ComposableDefinition() {
               <span><i aria-hidden /> air://you</span>
               <span>persistent</span>
             </header>
-            <div className={styles.systemCore}>
-              <span className={styles.coreOrb}><LuSparkles aria-hidden /></span>
-              <div>
-                <small>One Air</small>
-                <strong>Your context stays with the computer.</strong>
+            <div className={styles.systemWorkspace}>
+              <div className={styles.systemCore}>
+                <span className={styles.coreOrb} aria-hidden><i /><LuSparkles /></span>
+                <div>
+                  <small>One Air</small>
+                  <strong>Your context stays with the computer.</strong>
+                  <span className={styles.coreStatus}><i /> ready for your review</span>
+                </div>
               </div>
-            </div>
-            <div className={styles.systemModules}>
-              <span><LuBrainCircuit aria-hidden /> Memory</span>
-              <span><LuMonitorCog aria-hidden /> Ubuntu</span>
-              <span><LuLayers3 aria-hidden /> Connections</span>
-              <span><LuAppWindow aria-hidden /> Mini Apps</span>
-              <span><LuShieldCheck aria-hidden /> Approval</span>
-              <span><LuWorkflow aria-hidden /> Skills</span>
+              <div className={styles.systemTaskRow} aria-hidden="true">
+                <span><LuWorkflow /> context → tools → computer</span>
+                <b>Composed</b>
+              </div>
+              <div className={styles.systemModules}>
+                <span><LuBrainCircuit aria-hidden /> Memory</span>
+                <span><LuMonitorCog aria-hidden /> Ubuntu</span>
+                <span><LuLayers3 aria-hidden /> Connections</span>
+                <span><LuAppWindow aria-hidden /> Mini Apps</span>
+                <span><LuShieldCheck aria-hidden /> Approval</span>
+                <span><LuWorkflow aria-hidden /> Skills</span>
+              </div>
+              <div className={styles.systemApproval} aria-hidden="true">
+                <LuShieldCheck />
+                <span><small>Needs you</small><strong>Approve connections or payment</strong></span>
+                <b>Review</b>
+              </div>
             </div>
             <figcaption>Private-beta operating surface · availability varies by module</figcaption>
           </figure>
@@ -666,7 +678,7 @@ export function PrivacyFirst() {
           <ProfileCard
             className={styles.privacyProfile}
             name="Onairos"
-            title="Koi identity studies"
+            title="iMessage as an Identity Layer"
             handle="onairos-identity"
             status="Private identity active"
             showUserInfo={true}
@@ -781,6 +793,43 @@ export function CommunicationLayer() {
             </div>
             <h3>Email and inbox</h3>
             <p>Air can draft, organize, follow up, and keep the details moving while you stay in iMessage.</p>
+          </article>
+
+          <article className={`${styles.communicationCard} ${styles.communicationConnections}`} data-reveal style={{ "--delay": "240ms" } as CSSProperties}>
+            <header>
+              <span>04</span>
+              <span><LuNetwork aria-hidden /><small>Catalog</small></span>
+            </header>
+            <div className={`${styles.communicationPreview} ${styles.connectionsPreview}`} aria-hidden="true">
+              <div className={styles.connectorHeading}><span><LuNetwork /></span><small>Approved app connections</small><b>1,000+</b></div>
+              <div className={styles.connectorChips}>
+                {['Browser', 'Calendar', 'Inbox', 'Files', 'Store', 'Analytics'].map((connection) => <span key={connection}>{connection}</span>)}
+              </div>
+              <div className={styles.connectorReady}><i /> availability shown before a connection runs</div>
+            </div>
+            <h3>Connect to all your apps</h3>
+            <p>Bring approved app connections into the same working context. Availability and permissions are always shown before a connection runs.</p>
+          </article>
+
+          <article className={`${styles.communicationCard} ${styles.communicationWallet}`} data-reveal style={{ "--delay": "300ms" } as CSSProperties}>
+            <header>
+              <span>05</span>
+              <span><LuCircleDollarSign aria-hidden /><small>Private beta</small></span>
+            </header>
+            <div className={`${styles.communicationPreview} ${styles.walletPreview}`} aria-hidden="true">
+              <div className={styles.walletCardPreview}>
+                <span><LuCircleDollarSign /></span>
+                <p><small>Agent Wallet</small><strong>Payment queued</strong></p>
+                <b>$420.00</b>
+              </div>
+              <div className={styles.walletApprovalPreview}>
+                <span><LuShieldCheck /></span>
+                <p><small>Needs you</small><strong>Approve payment</strong></p>
+                <b>Review</b>
+              </div>
+            </div>
+            <h3>Agent Wallet &amp; Bank</h3>
+            <p>Agent Wallet is in private beta. Payment and bank actions remain queued for your review—Air never moves funds without your approval.</p>
           </article>
         </ChromaGrid>
       </div>

@@ -28,7 +28,7 @@ export default function OpenGraphImage() {
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
           <div style={{ display: "flex", flexDirection: "column", fontSize: 92, lineHeight: 0.93, letterSpacing: "-0.06em" }}>
-            <div>Your personal, creative</div>
+            <div>Your personal,</div>
             <div>composable computer.</div>
           </div>
           <div style={{ fontSize: 24, opacity: 0.78, letterSpacing: "0.01em" }}>
