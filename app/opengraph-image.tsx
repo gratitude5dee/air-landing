@@ -29,7 +29,7 @@ export default function OpenGraphImage() {
         <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
           <div style={{ display: "flex", flexDirection: "column", fontSize: 92, lineHeight: 0.93, letterSpacing: "-0.06em" }}>
             <div>Your personal assistant</div>
-            <div>for the daily work</div>
+            <div>for your work</div>
           </div>
           <div style={{ fontSize: 24, opacity: 0.78, letterSpacing: "0.01em" }}>
             {AIR_PRODUCT_DESCRIPTION}

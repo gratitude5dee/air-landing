@@ -47,7 +47,11 @@ import {
   getDirection,
   type DirectionSpec,
 } from "@/content/directions";
-import { AIR_PRODUCT_DESCRIPTION, AIR_TAGLINE } from "@/lib/air-copy";
+import {
+  AIR_PRODUCT_DESCRIPTION,
+  AIR_TAGLINE,
+  AIR_TAGLINE_LINES,
+} from "@/lib/air-copy";
 import { resolveHeroTimeline } from "@/lib/hero-timeline";
 import { ShinyText } from "@/components/ShinyText";
 import { PlasmaButton } from "@/components/PlasmaButton";
@@ -615,13 +619,24 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
               tabIndex={-1}
             >
               <ShinyText
-                className="hero-shiny-line"
+                className="hero-shiny-line hero-title-line"
                 color="#03234d"
                 shineColor="#3d7faa"
                 speed={13.2}
                 spread={112}
               >
-                {AIR_TAGLINE}
+                {AIR_TAGLINE_LINES[0]}
+              </ShinyText>
+              {" "}
+              <ShinyText
+                className="hero-shiny-line hero-title-line hero-title-line--signal"
+                color="#045991"
+                shineColor="#4b8fc1"
+                speed={13.2}
+                delay={0.42}
+                spread={112}
+              >
+                {AIR_TAGLINE_LINES[1]}
               </ShinyText>
             </h1>
             <p>{AIR_PRODUCT_DESCRIPTION}</p>

@@ -691,10 +691,20 @@ html[data-air-hydrated="timeout"] .hero-content {
 
 .hero-copy h1 {
   color: #03234d;
-  font-size: clamp(3.3rem, 4.55vw, 5rem);
+  font-size: clamp(2.85rem, 3.42vw, 4.05rem);
   /* Keep the promise decisively legible on the pearl sky. The shimmer is an
      * overlay, not the fill: no white edge can turn the title into chrome. */
   text-shadow: 0 0.7rem 2.6rem rgba(13, 66, 119, 0.13);
+}
+
+.hero-copy h1 .hero-title-line,
+.hero-copy h1 .hero-title-line span {
+  display: block;
+  white-space: nowrap;
+}
+
+.hero-copy h1 .hero-title-line--signal {
+  color: #045991;
 }
 
 /* The heading is only focused programmatically after an Escape/Skip handoff
@@ -1650,7 +1660,7 @@ html[data-air-hydrated="timeout"] .hero-content {
   }
 
   .hero-copy h1 {
-    font-size: clamp(3.1rem, 4.6vw, 4.2rem);
+    font-size: clamp(2.85rem, 3.55vw, 3.35rem);
   }
 
   .phone-stage {
@@ -1762,7 +1772,7 @@ html[data-air-hydrated="timeout"] .hero-content {
   }
 
   .hero-copy h1 {
-    font-size: clamp(3rem, 14.4vw, 4.5rem);
+    font-size: clamp(1.85rem, 8.25vw, 2.3rem);
   }
 
   .hero-copy h1 span,
