@@ -26,7 +26,7 @@ The check runs the unit suite, strict TypeScript, versioned-media verification, 
 - `POST /api/preorder` bounds the body, validates consent/contact fields, rate-limits with an atomic ten-minute bucket, deduplicates the identity, and stores name, email, and iMessage number before booking is revealed.
 - Production and Vercel Preview fail closed without a dedicated `DATABASE_URL`, a matching `AIR_DATABASE_ENV`, and a strong `AIR_ID_HASH_SECRET`.
 - `GET /api/internal/prune-preorders` is Vercel-Cron bearer protected. It removes preorder records after 12 months and rate-limit records after 30 days in bounded batches.
-- `AIR_CINEMATIC` and `AIR_MEMORY_ECHO` are server-only build flags. Both default to `false`; invalid values fail the build.
+- `AIR_CINEMATIC` and `AIR_MEMORY_ECHO` are server-only build flags. The cinematic handoff defaults to `true`; memory echo defaults to `false`. Invalid values fail the build.
 - Runtime media lives under content-versioned paths. New bytes require a new path version because those URLs are cached as immutable.
 
 The database contract is versioned in [`db/schema.sql`](db/schema.sql).

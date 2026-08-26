@@ -8,6 +8,7 @@ import {
   IMessageDrop,
   MiniAppStore,
   Pricing,
+  PrivacyFirst,
   ProductSequence,
   Roadmap,
 } from "@/components/ComposableSections";
@@ -49,6 +50,7 @@ const structuredData = [
       "Mini Apps",
       "Supported app-toolkit catalog",
       "Human approval controls",
+      "Zero-data-retention privacy policy",
     ],
     releaseNotes: "Private beta. Omarchy and macOS environments are coming soon.",
   },
@@ -75,6 +77,7 @@ export default function Home() {
       <main id="main">
         <div id="top" />
         <Hero>
+          <PrivacyFirst />
           <IMessageDrop />
           <IMessageControlPlane />
           <MiniAppStore />

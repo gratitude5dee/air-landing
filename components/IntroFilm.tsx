@@ -104,10 +104,13 @@ export function IntroFilm() {
     document.documentElement.dataset.airIntro = "complete";
     document.documentElement.dataset.airHydrated = "ready";
     window.dispatchEvent(new CustomEvent("air:intro-statechange", { detail: { state: "complete" } }));
-    window.dispatchEvent(new CustomEvent("air:intro-complete"));
     setEligible(false);
 
     requestAnimationFrame(() => {
+      // Closing the modal and then broadcasting the handoff guarantees that
+      // the hero measures the page it is about to reveal, not the covered
+      // opening behind the video.
+      window.dispatchEvent(new CustomEvent("air:intro-complete"));
       if (focusHeroRef.current) {
         document.getElementById("hero-title")?.focus({ preventScroll: true });
       }
@@ -128,11 +131,19 @@ export function IntroFilm() {
     const bootState = root.dataset.airIntro;
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const forcedColors = window.matchMedia("(forced-colors: active)").matches;
+    const compactViewport = window.matchMedia("(max-width: 900px)").matches;
+    const finePointer = window.matchMedia("(pointer: fine)").matches;
 
     // The beforeInteractive prepaint bootstrap is the only authority for
     // fresh/seen/reduced/Save-Data eligibility. If it is missing or fails,
     // fail open to the complete page instead of flashing or trapping an intro.
-    if (bootState !== "eligible" || reducedMotion || forcedColors) {
+    if (
+      bootState !== "eligible" ||
+      reducedMotion ||
+      forcedColors ||
+      compactViewport ||
+      !finePointer
+    ) {
       root.dataset.airIntro = "skip";
       root.dataset.airHydrated = "ready";
       window.dispatchEvent(new CustomEvent("air:intro-statechange", { detail: { state: "bypassed" } }));
@@ -209,8 +220,15 @@ export function IntroFilm() {
 
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     const forcedColors = window.matchMedia("(forced-colors: active)");
+    const compactViewport = window.matchMedia("(max-width: 900px)");
+    const finePointer = window.matchMedia("(pointer: fine)");
     const honorMotionPreference = () => {
-      if (!reducedMotion.matches && !forcedColors.matches) return;
+      if (
+        !reducedMotion.matches &&
+        !forcedColors.matches &&
+        !compactViewport.matches &&
+        finePointer.matches
+      ) return;
       if (finishingRef.current) {
         complete();
         return;
@@ -221,9 +239,13 @@ export function IntroFilm() {
     honorMotionPreference();
     reducedMotion.addEventListener("change", honorMotionPreference);
     forcedColors.addEventListener("change", honorMotionPreference);
+    compactViewport.addEventListener("change", honorMotionPreference);
+    finePointer.addEventListener("change", honorMotionPreference);
     return () => {
       reducedMotion.removeEventListener("change", honorMotionPreference);
       forcedColors.removeEventListener("change", honorMotionPreference);
+      compactViewport.removeEventListener("change", honorMotionPreference);
+      finePointer.removeEventListener("change", honorMotionPreference);
     };
   }, [complete, eligible, finish]);
 

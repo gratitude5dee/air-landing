@@ -30,10 +30,10 @@ import { SiHermes, SiOpencode } from "react-icons/si";
 import { PreorderButton } from "@/components/Preorder";
 import { MiniAppGallery } from "@/components/MiniAppGallery";
 import { PixelCard } from "@/components/PixelCard";
-import { ProfileCard } from "@/components/ProfileCard";
 import { ShinyText } from "@/components/ShinyText";
 import { AIR_MINI_APPS } from "@/lib/mini-apps";
 
+import ProfileCard from "./ProfileCard";
 import styles from "./ComposableSections.module.css";
 
 const capabilityCards = [
@@ -282,6 +282,11 @@ export const AIR_FAQ_ITEMS = [
     question: "Can I use Air through iMessage?",
     answer:
       "Yes. Air is designed to keep useful context continuous across iMessage and the web, so a request can begin in one surface and continue in the other.",
+  },
+  {
+    question: "What does zero data retention mean for Air?",
+    answer:
+      "Air processes the messages, files, and task content you send to complete the work you request. That content is not retained afterward or used for model training or marketing.",
   },
   {
     question: "Can I create and monetize Mini Apps?",
@@ -562,6 +567,72 @@ export function MiniAppStore() {
   );
 }
 
+export function PrivacyFirst() {
+  return (
+    <section
+      className={`section ${styles.privacySection}`}
+      id="privacy"
+      data-air-scene="ink"
+      data-air-cloud-progress="0.7"
+      data-air-cloud-rays="0.1"
+      data-air-cloud-opacity="0.14"
+      aria-labelledby="privacy-title"
+    >
+      <div className="shell">
+        <div className="section-rail">
+          <span>Private by default</span>
+          <span>Zero data retention</span>
+        </div>
+        <div className={styles.privacyGrid}>
+          <div className={styles.privacyCopy} data-reveal>
+            <p className="eyebrow">A hard boundary around your work</p>
+            <h2 id="privacy-title">Private context. Zero data retention.</h2>
+            <p>
+              Air processes the messages, files, and task content you send only to complete the work you request.
+              It does not retain that content after processing or reuse it outside your work.
+            </p>
+            <ul>
+              <li><LuShieldCheck aria-hidden /> Your messages and files stay out of training and marketing datasets.</li>
+              <li><LuLockKeyhole aria-hidden /> Private context is scoped to the work and permissions you approve.</li>
+              <li><LuCheck aria-hidden /> You decide when an agent gets access and when that access ends.</li>
+            </ul>
+          </div>
+
+          <aside className={styles.privacyPolicy} data-reveal aria-label="Zero-data-retention privacy policy">
+            <header>
+              <span><i /> Air privacy policy</span>
+              <LuLockKeyhole aria-hidden />
+            </header>
+            <div className={styles.retentionMark} aria-hidden="true">
+              <strong>0</strong>
+              <span>days<br />retained</span>
+            </div>
+            <dl>
+              <div><dt>Messages &amp; files</dt><dd>Processed for the requested task, then not retained.</dd></div>
+              <div><dt>Model training</dt><dd>Not used to train or improve models.</dd></div>
+              <div><dt>Agent permissions</dt><dd>Explicit, reviewable, and revocable by you.</dd></div>
+            </dl>
+            <p>Zero-data-retention policy · Private beta</p>
+          </aside>
+
+          <ProfileCard
+            className={styles.privacyProfile}
+            name="Air private channel"
+            title="iMessage as an Identity Layer"
+            handle="private-context"
+            status="Zero data retention"
+            showUserInfo={true}
+            enableTilt={true}
+            enableMobileTilt={false}
+            behindGlowEnabled
+            innerGradient="linear-gradient(145deg, rgba(51, 119, 173, 0.72) 0%, rgba(5, 28, 55, 0.98) 52%, rgba(26, 142, 133, 0.68) 100%)"
+          />
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export function IMessageDrop() {
   return (
     <section
@@ -580,13 +651,6 @@ export function IMessageDrop() {
         </div>
         <div className={styles.dropPanel}>
           <div className={styles.dropGrid}>
-            <ProfileCard
-              className={styles.dropIdentity}
-              name="Air identity"
-              title="iMessage as an Identity Layer"
-              handle="air"
-              status="Private beta"
-            />
             <div className={styles.dropCopy} data-reveal>
             <p className="eyebrow">Drop in a thought</p>
             <h2 id="drop-title">Get back something you can use.</h2>

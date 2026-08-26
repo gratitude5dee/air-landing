@@ -73,6 +73,8 @@ type AirExperienceProps = {
 
 type HeroVariables = CSSProperties & {
   "--cloud-progress": number;
+  "--cloud-veil-progress": number;
+  "--cloud-prompt-progress": number;
   "--hero-progress": number;
   "--poster-exit-progress": number;
   "--reveal-progress": number;
@@ -235,6 +237,13 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
       }
 
       const timeline = resolveHeroTimeline(progress);
+      // Keep the poster completely clean during its hold. The cloud curtain
+      // enters only as the poster begins to dissolve, then clears on its own
+      // track so the title can feel like it rises from the atmosphere.
+      const cloudVeilProgress =
+        timeline.posterExitProgress * (1 - timeline.revealProgress);
+      const cloudPromptProgress =
+        timeline.posterExitProgress * Math.max(0, 1 - timeline.revealProgress * 3);
       latestRevealProgress = timeline.revealProgress;
       if (cinematicActiveRef.current !== cinematicEligible) {
         cinematicActiveRef.current = cinematicEligible;
@@ -264,6 +273,8 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
       // Legacy custom properties retain the existing non-cinematic fallback
       // rules while the named timeline tracks drive the cloudborne sequence.
       section.style.setProperty("--cloud-progress", String(timeline.revealProgress));
+      section.style.setProperty("--cloud-veil-progress", String(cloudVeilProgress));
+      section.style.setProperty("--cloud-prompt-progress", String(cloudPromptProgress));
       section.style.setProperty("--hero-progress", String(timeline.handoffProgress));
       document.documentElement.dataset.airHeroHeader =
         timeline.headerRevealed ? "revealed" : "covered";
@@ -310,6 +321,14 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
     update();
     window.addEventListener("scroll", scheduleUpdate, { passive: true });
     window.addEventListener("resize", scheduleUpdate);
+    // The intro is mounted alongside this experience. Give its final frame a
+    // paint to leave the modal before recalculating the poster-first scene;
+    // this prevents a stale pre-intro value from leaving the scroll sequence
+    // hidden after a natural video completion.
+    const handleIntroComplete = () => {
+      window.requestAnimationFrame(scheduleUpdate);
+    };
+    window.addEventListener("air:intro-complete", handleIntroComplete);
     section.addEventListener("focusin", handleFocusIn);
     section.addEventListener("focusout", handleFocusOut);
     document.addEventListener("focusin", handleDocumentFocusIn);
@@ -335,6 +354,7 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
       if (animationFrame) cancelAnimationFrame(animationFrame);
       window.removeEventListener("scroll", scheduleUpdate);
       window.removeEventListener("resize", scheduleUpdate);
+      window.removeEventListener("air:intro-complete", handleIntroComplete);
       section.removeEventListener("focusin", handleFocusIn);
       section.removeEventListener("focusout", handleFocusOut);
       document.removeEventListener("focusin", handleDocumentFocusIn);
@@ -351,6 +371,8 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
   const heroStyle: HeroVariables = cinematicEnabled
     ? {
       "--cloud-progress": 0,
+      "--cloud-veil-progress": 0,
+      "--cloud-prompt-progress": 0,
       "--hero-progress": 0,
       "--poster-exit-progress": 0,
       "--reveal-progress": 0,
@@ -365,6 +387,8 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
       }
     : {
       "--cloud-progress": 1,
+      "--cloud-veil-progress": 0,
+      "--cloud-prompt-progress": 0,
       "--hero-progress": 1,
       "--poster-exit-progress": 1,
       "--reveal-progress": 1,

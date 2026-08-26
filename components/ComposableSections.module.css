@@ -294,6 +294,7 @@
 
 .sequenceSection,
 .dropSection,
+.privacySection,
 .pricingSection {
   --rule: rgba(191, 226, 248, 0.26);
   --ink-55: rgba(224, 242, 253, 0.58);
@@ -302,6 +303,74 @@
     radial-gradient(circle at 78% 22%, rgba(18, 90, 151, 0.32), transparent 24rem),
     linear-gradient(145deg, #02070d, #071a31 52%, #03101f);
 }
+
+.privacySection {
+  background:
+    radial-gradient(circle at 83% 72%, rgba(29, 186, 166, 0.18), transparent 27rem),
+    radial-gradient(circle at 12% 19%, rgba(38, 122, 190, 0.28), transparent 25rem),
+    linear-gradient(145deg, #02070d, #071a31 52%, #03101f);
+}
+
+.privacyGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(19rem, 0.74fr) minmax(16rem, 0.52fr);
+  gap: clamp(1.2rem, 3vw, 3.35rem);
+  align-items: stretch;
+}
+
+.privacyCopy { min-width: 0; align-self: center; }
+.privacyCopy h2 {
+  max-width: 10ch;
+  margin: 0;
+  color: #f7fbfd;
+  font-size: clamp(3rem, 5.1vw, 5.65rem);
+  font-weight: 390;
+  letter-spacing: -0.068em;
+  line-height: 0.91;
+  text-wrap: balance;
+  background-image: none !important;
+  -webkit-text-fill-color: #f7fbfd !important;
+}
+.privacyCopy > p:not(.eyebrow) {
+  max-width: 42rem;
+  margin: 1.45rem 0 0;
+  color: rgba(235, 249, 255, 0.9);
+  font-size: clamp(1.02rem, 1.35vw, 1.2rem);
+  line-height: 1.62;
+}
+.privacyCopy ul { display: grid; gap: 0.8rem; margin: 2rem 0 0; padding: 0; list-style: none; }
+.privacyCopy li { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 0.7rem; max-width: 40rem; color: rgba(235, 249, 255, 0.88); line-height: 1.48; }
+.privacyCopy li svg { margin-top: 0.15rem; color: #8ddcff; }
+
+.privacyPolicy {
+  position: relative;
+  min-height: 31rem;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid rgba(203, 241, 255, 0.28);
+  border-radius: 1.85rem;
+  color: #ecfaff;
+  background:
+    radial-gradient(circle at 75% 42%, rgba(111, 239, 224, 0.22), transparent 29%),
+    linear-gradient(155deg, rgba(94, 180, 224, 0.24), rgba(5, 34, 64, 0.86) 48%, rgba(5, 81, 91, 0.5));
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.18), 0 1.3rem 3rem rgba(0, 5, 19, 0.22);
+}
+.privacyPolicy::before { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0.25; background-image: radial-gradient(rgba(222, 248, 255, 0.8) 0.55px, transparent 0.55px); background-size: 5px 5px; mask-image: linear-gradient(145deg, #000, transparent 68%); }
+.privacyPolicy > * { position: relative; z-index: 1; }
+.privacyPolicy > header { min-height: 3.15rem; display: flex; align-items: center; justify-content: space-between; gap: 0.7rem; padding: 0 0.95rem; border-bottom: 1px solid rgba(210, 244, 255, 0.2); color: rgba(230, 249, 255, 0.7); font-family: var(--font-mono); font-size: 0.52rem; letter-spacing: 0.085em; text-transform: uppercase; }
+.privacyPolicy > header span { display: inline-flex; align-items: center; gap: 0.45rem; }
+.privacyPolicy > header i { width: 0.45rem; height: 0.45rem; border-radius: 50%; background: #5bf0b4; box-shadow: 0 0 0 0.22rem rgba(91, 240, 180, 0.13); }
+.retentionMark { min-height: 9.1rem; display: flex; align-items: center; gap: 0.8rem; margin: 1.2rem 1.15rem 0; padding: 1.1rem; border: 1px solid rgba(218, 248, 255, 0.28); border-radius: 1.25rem; background: rgba(2, 20, 42, 0.25); box-shadow: inset 0 1px rgba(255, 255, 255, 0.14); }
+.retentionMark strong { color: #e9fbff; font-size: clamp(4.3rem, 7vw, 6.3rem); font-weight: 360; letter-spacing: -0.1em; line-height: 0.7; }
+.retentionMark span { color: #bceeff; font-family: var(--font-mono); font-size: 0.58rem; font-weight: 650; letter-spacing: 0.09em; line-height: 1.55; text-transform: uppercase; }
+.privacyPolicy dl { display: grid; gap: 0.7rem; margin: 1.25rem 1.15rem; }
+.privacyPolicy dl div { padding-bottom: 0.7rem; border-bottom: 1px solid rgba(218, 248, 255, 0.14); }
+.privacyPolicy dt { color: #f1fcff; font-size: 0.87rem; font-weight: 650; letter-spacing: -0.02em; }
+.privacyPolicy dd { margin: 0.3rem 0 0; color: rgba(230, 248, 255, 0.84); font-size: 0.76rem; line-height: 1.43; }
+.privacyPolicy > p { margin: auto 1.15rem 1.05rem; color: #bceeff; font-family: var(--font-mono); font-size: 0.5rem; letter-spacing: 0.06em; text-transform: uppercase; }
+
+.privacyProfile { min-width: 0; }
 
 .sequenceHeading {
   display: grid;
@@ -558,8 +627,7 @@
 
 .dropPanel { position: relative; overflow: hidden; padding: clamp(1rem, 2.5vw, 1.6rem); border: 1px solid rgba(193, 233, 255, 0.24); border-radius: 2rem; background: linear-gradient(145deg, rgba(229, 250, 255, 0.09), rgba(11, 49, 82, 0.14)), rgba(2, 12, 25, 0.54); box-shadow: inset 0 1px rgba(255, 255, 255, 0.12), 0 1.4rem 3.3rem rgba(0, 0, 0, 0.18); }
 .dropPanel::before { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0.2; background-image: radial-gradient(rgba(196, 233, 253, 0.78) 0.5px, transparent 0.5px); background-size: 5px 5px; mask-image: linear-gradient(145deg, #000, transparent 70%); }
-.dropGrid { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(12.5rem, 0.43fr) minmax(20rem, 0.68fr) minmax(30rem, 1.18fr); gap: clamp(1rem, 2.4vw, 2.2rem); align-items: center; }
-.dropIdentity { min-width: 0; }
+.dropGrid { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(20rem, 0.76fr) minmax(30rem, 1.24fr); gap: clamp(1.4rem, 4vw, 4rem); align-items: center; }
 .dropCopy { min-width: 0; }
 .dropCopy h2 { max-inline-size: 9.5ch; overflow-wrap: anywhere; hyphens: auto; font-size: clamp(2.45rem, 3.65vw, 4.4rem); }
 .dropCopy > p:not(.eyebrow) { margin-top: 1.35rem; }
@@ -669,6 +737,8 @@
 @media (max-width: 1000px) {
   .definitionGrid,
   .dropGrid { grid-template-columns: minmax(14rem, 0.55fr) minmax(0, 1fr); }
+  .privacyGrid { grid-template-columns: minmax(0, 1fr) minmax(19rem, 0.72fr); }
+  .privacyProfile { grid-column: 1 / -1; width: min(100%, 25rem); }
   .dropStage { grid-column: 1 / -1; }
   .capabilityCard { grid-column: auto; }
   .sequenceHeading { grid-template-columns: 1fr; }
@@ -684,6 +754,9 @@
   .dropGrid { gap: 2rem; }
   .dropGrid { grid-template-columns: 1fr; }
   .dropStage { grid-column: auto; }
+  .privacyGrid { grid-template-columns: 1fr; gap: 1.4rem; }
+  .privacyPolicy { min-height: 29rem; }
+  .privacyProfile { grid-column: auto; width: 100%; }
   .systemModules { grid-template-columns: 1fr 1fr; }
   .capabilityGrid { grid-template-columns: 1fr; }
   .capabilityCard { grid-column: auto; min-height: 27rem; }
