@@ -28,11 +28,13 @@ import {
   LuStore,
   LuWorkflow,
 } from "react-icons/lu";
+import { SiApple, SiArchlinux, SiUbuntu } from "react-icons/si";
 import { PreorderButton } from "@/components/Preorder";
 import { MiniAppGallery } from "@/components/MiniAppGallery";
 import { ChromaGrid } from "@/components/ChromaGrid";
 import { PixelCard } from "@/components/PixelCard";
 import { ShinyText } from "@/components/ShinyText";
+import { IMessageWorkflowDemo } from "@/components/IMessageWorkflowDemo";
 import { AIR_AGENT_MARKS } from "@/lib/agent-marks";
 import { AIR_MINI_APPS } from "@/lib/mini-apps";
 
@@ -103,9 +105,9 @@ function CapabilityVisual({ icon, visual }: { icon: ReactNode; visual: Capabilit
     <div className={styles.capabilityVisual} data-visual={visual} aria-hidden="true">
       {visual === "workspace" ? (
         <div className={styles.visualWorkspace}>
-          <header><i /><i /><i /><span>air://computer</span></header>
-          <div><span /><span /><span /><b>browser</b></div>
-          <aside><span>brief.md</span><span>sources</span><span>terminal</span></aside>
+          <header><i /><i /><i /><span>air://computer</span><b>live</b></header>
+          <div className={styles.workspaceMain}><small>Research / Air</small><strong>Launch brief</strong><span /><span /><span /><b>Sources mapped · review ready</b></div>
+          <aside><small>Attached context</small><span>brief.md</span><span>sources</span><span>terminal</span></aside>
         </div>
       ) : null}
       {visual === "memory" ? (
@@ -113,34 +115,36 @@ function CapabilityVisual({ icon, visual }: { icon: ReactNode; visual: Capabilit
           <span className={styles.memoryCore}>A</span>
           <i /><i /><i /><i /><i />
           <p>context retained<br />for this Air</p>
+          <div className={styles.memoryLedger}><span>taste</span><span>files</span><span>skills</span></div>
         </div>
       ) : null}
       {visual === "conversation" ? (
         <div className={styles.visualConversation}>
-          <span>Plan the launch from this deck.</span>
-          <span>On it. I’ll bring back what needs approval.</span>
-          <span>Launch room ready <b>Open</b></span>
+          <p>Reply to the launch email and hold a review.</p>
+          <p>On it. I’ll bring back the choices for you.</p>
+          <span className={styles.visualTapback}>👍 <b>approved direction</b></span>
+          <span className={styles.visualConversationResult}>Inbox + Calendar Mini Apps <b>Open</b></span>
         </div>
       ) : null}
       {visual === "catalog" ? (
         <div className={styles.visualCatalog}>
-          <span>IG</span><span>N</span><span>S</span><span>O</span>
-          <span>M</span><span>F</span><span>C</span><span>+</span>
+          <span>Browser</span><span>Inbox</span><span>Calendar</span><span>Files</span>
+          <span>Store</span><span>Analytics</span><span>Design</span><span>+</span>
         </div>
       ) : null}
       {visual === "mini-app" ? (
         <div className={styles.visualMiniApp}>
-          <header><span>chatbot</span><i>•••</i></header>
-          <p><span>Memory</span><span>Browser</span><span>Private beta</span></p>
+          <header><span>launch room</span><i>•••</i></header>
+          <p><span>Memory</span><span>Browser</span><span>Approval</span></p>
           <div><i /><i /><i /><i /><i /><i /><i /><i /><i /><i /><i /><i /></div>
-          <small><b /> running</small>
+          <small><b /> ready to review</small>
         </div>
       ) : null}
       {visual === "approval" ? (
         <div className={styles.visualApproval}>
-          <p>Ready to publish this Mini App?</p>
+          <p>Ready to send this follow-up?</p>
           <span>Review first</span>
-          <span>Approve</span>
+          <span>Approve when ready</span>
         </div>
       ) : null}
       <div className={styles.capabilityIcon}>{icon}</div>
@@ -172,41 +176,46 @@ const miniAppActions = [
   },
 ] as const;
 
-const roadmapItems = [
+const runtimeCards = [
   {
     status: "Available now",
     title: "Ubuntu",
-    Icon: LuCloud,
+    Icon: SiUbuntu,
     body: "Spin up a persistent Ubuntu computer with browser, files, terminal, memory, and skills.",
     tone: "live",
   },
   {
     status: "Coming soon",
     title: "Omarchy",
-    Icon: LuPanelTop,
+    Icon: SiArchlinux,
     body: "Run the same agent stack inside an Arch and Hyprland desktop environment.",
     tone: "soon",
   },
   {
     status: "Coming soon",
     title: "macOS",
-    Icon: LuCpu,
+    Icon: SiApple,
     body: "Use an Apple-silicon environment for Mac-only applications and workflows.",
     tone: "soon",
   },
+];
+
+const futureRoadmapCards = [
   {
-    status: "Rolling out",
-    title: "Mini App Store",
+    status: "Coming soon",
+    title: "Publish Mini Apps",
     Icon: LuStore,
-    body: "Create, publish, share, and monetize Mini Apps from the same agent and workspace.",
-    tone: "rolling",
+    body: "Create, publish, share, and monetize focused Mini Apps from the same agent and workspace.",
+    signal: ["Create", "Publish", "Earn"],
+    tone: "publish",
   },
   {
-    status: "Exploring",
-    title: "Agent mesh + private networks",
+    status: "Coming soon",
+    title: "Agent Mesh + Local Inference + Private Networks",
     Icon: LuNetwork,
-    body: "Coordinate specialized agents across private mesh networks, including future Tailscale support.",
-    tone: "research",
+    body: "Coordinate specialized agents with future local inference, private mesh networks, and Tailscale support.",
+    signal: ["Mesh", "Local", "Private"],
+    tone: "mesh",
   },
 ] as const;
 
@@ -524,38 +533,16 @@ export function ProductSequence() {
         </div>
 
         <figure className={styles.sequenceFigure} data-reveal>
-          <div className={styles.sequenceStage} aria-hidden="true">
-            <div className={styles.sequenceTopbar}>
-              <span><i /> Air / launch-room</span>
-              <span>Persistent computer · Ubuntu</span>
+          <IMessageWorkflowDemo />
+          <noscript>
+            <style>{`.message-workflow-demo { display: none; }`}</style>
+            <div className={styles.workflowFallback}>
+              <strong>Illustrative iMessage workflow</strong>
+              <p>Air can prepare an email follow-up and a calendar review hold, then return both for your approval. Nothing is sent or scheduled automatically.</p>
             </div>
-            <div className={styles.sequenceRequest}>
-              <small>iMessage · 9:41</small>
-              <p>Plan the launch from this deck. Build the room and bring back what needs approval.</p>
-            </div>
-            <div className={styles.sequenceComputer}>
-              <header><span>air://computer</span><span>composing…</span></header>
-              <div className={styles.sequenceWorkspace}>
-                <span><LuBrainCircuit /> Memory</span>
-                <span><LuGlobe /> Browser</span>
-                <span><LuLayers3 /> Files</span>
-                <span><LuWorkflow /> Calendar</span>
-              </div>
-              <div className={styles.sequenceApproval}>
-                <LuLockKeyhole />
-                <span><small>Needs you</small>Approve publish</span>
-                <b>Review</b>
-              </div>
-            </div>
-            <div className={styles.sequenceResult}>
-              <span className={styles.resultIcon}><LuRocket /></span>
-              <div><small>Mini App ready</small><strong>Launch room</strong></div>
-              <LuMousePointer2 />
-            </div>
-            <div className={styles.sequenceProgress}><span /></div>
-          </div>
+          </noscript>
           <figcaption>
-            Illustrative product sequence. Connections, publishing, sending, and spending remain approval required.
+            Illustrative product sequence. Connections, sending, scheduling, publishing, and spending remain approval required.
           </figcaption>
         </figure>
       </div>
@@ -929,15 +916,42 @@ export function Roadmap() {
           <p className="eyebrow">One agent. More ways to run it.</p>
           <h2 id="roadmap-title">Spin up your composable computer where the work belongs.</h2>
         </div>
-        <ol className={styles.roadmapList}>
-          {roadmapItems.map(({ status, title, Icon, body, tone }, index) => (
-            <li data-reveal style={{ "--delay": `${index * 70}ms` } as CSSProperties} key={title}>
-              <span className={styles.roadmapNumber}>{String(index + 1).padStart(2, "0")}</span>
-              <span className={`${styles.roadmapIcon} ${styles[tone]}`}><Icon aria-hidden /></span>
-              <div><small className={`${styles.roadmapStatus} ${styles[tone]}`}>{status}</small><h3>{title}</h3><p>{body}</p></div>
-            </li>
+        <ChromaGrid className={styles.runtimeGrid} radius={430} damping={0.34} fadeOut={0.44}>
+          {runtimeCards.map(({ status, title, Icon, body, tone }, index) => (
+            <div data-reveal style={{ "--delay": `${index * 70}ms` } as CSSProperties} key={title}>
+              <PixelCard
+                className={styles.runtimePixelCard}
+                colors={tone === "live" ? ["#d9fff1", "#8ee8c5", "#54be9c"] : ["#fff8db", "#f6d58a", "#daac50"]}
+                gap={7}
+                noFocus
+              >
+                <article className={`${styles.runtimeCard} ${styles[tone]}`}>
+                  <header><span>{String(index + 1).padStart(2, "0")}</span><small>{status}</small></header>
+                  <div className={styles.runtimeMark} aria-hidden="true"><Icon /><span>air / runtime</span></div>
+                  <h3>{title}</h3>
+                  <p>{body}</p>
+                  <footer><span>{tone === "live" ? "Private beta" : "Availability labeled"}</span><LuArrowUpRight aria-hidden="true" /></footer>
+                </article>
+              </PixelCard>
+            </div>
           ))}
-        </ol>
+        </ChromaGrid>
+
+        <div className={styles.futureRoadmapGrid}>
+          {futureRoadmapCards.map(({ status, title, Icon, body, signal, tone }, index) => (
+            <article
+              className={`${styles.futureRoadmapCard} ${styles[tone]}`}
+              data-reveal
+              style={{ "--delay": `${(index + runtimeCards.length) * 70}ms` } as CSSProperties}
+              key={title}
+            >
+              <header><span>{String(index + runtimeCards.length + 1).padStart(2, "0")}</span><small>{status}</small></header>
+              <div className={styles.futureRoadmapVisual} aria-hidden="true"><span><Icon /></span><i /><i /><i /></div>
+              <div className={styles.futureRoadmapCopy}><h3>{title}</h3><p>{body}</p></div>
+              <footer>{signal.map((item) => <span key={item}>{item}</span>)}</footer>
+            </article>
+          ))}
+        </div>
       </div>
     </section>
   );

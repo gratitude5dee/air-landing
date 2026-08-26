@@ -302,6 +302,40 @@ html:has(.site-header:focus-within) .hero-frame {
   display: none;
 }
 
+/* A logo click is an intentional return to the complete home composition.
+   Apply this before React hydrates so direct navigation never flashes the
+   video poster or the cloud sequence. */
+html[data-air-direct-home="true"] .hero-scroll {
+  height: auto !important;
+}
+
+html[data-air-direct-home="true"] .hero-sticky {
+  position: relative !important;
+}
+
+html[data-air-direct-home="true"] .hero-opening,
+html[data-air-direct-home="true"] .hero-shader,
+html[data-air-direct-home="true"] .hero-dither-lens,
+html[data-air-direct-home="true"] .cloud-curtain,
+html[data-air-direct-home="true"] .hero-cloud-title,
+html[data-air-direct-home="true"] .hero-scroll-prompt {
+  display: none !important;
+}
+
+html[data-air-direct-home="true"] .hero-content,
+html[data-air-direct-home="true"] .hero-frame {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+html[data-air-direct-home="true"] .site-header {
+  z-index: 80;
+  opacity: 1;
+  pointer-events: auto;
+  filter: none;
+  transform: none;
+}
+
 /* `wz-sky` reports this one-way state after any WebGL failure. Do not leave a
    partially veiled page behind: settle into the same complete composition that
    save-data and reduced-motion visitors receive. */

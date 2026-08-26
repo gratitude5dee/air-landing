@@ -406,7 +406,39 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
       if (introMeasureTimer) window.clearTimeout(introMeasureTimer);
       introMeasureTimer = window.setTimeout(scheduleUpdate, 140);
     };
+    const showCompleteHomeHero = () => {
+      setCinematicBypassed(true);
+      setIntroReady(true);
+      document.documentElement.dataset.airDirectHome = "true";
+      document.documentElement.dataset.airIntro = "skip";
+      document.documentElement.dataset.airHeroHeader = "revealed";
+
+      window.requestAnimationFrame(() => {
+        // The site defaults to smooth anchor navigation. Suppress that just
+        // for this deliberate return so the finished home hero is present at
+        // once instead of slowly travelling through the page from the logo.
+        const documentRoot = document.documentElement;
+        const previousScrollBehavior = documentRoot.style.scrollBehavior;
+        documentRoot.style.scrollBehavior = "auto";
+        const returnToHero = () => {
+          // Chromium supports `instant`, which explicitly overrides the
+          // document's global smooth-scroll preference. Other browsers fall
+          // back to the temporary inline `auto` rule above.
+          window.scrollTo({ top: 0, left: 0, behavior: "instant" as ScrollBehavior });
+        };
+        returnToHero();
+
+        window.requestAnimationFrame(() => {
+          returnToHero();
+          window.setTimeout(() => {
+            documentRoot.style.scrollBehavior = previousScrollBehavior;
+            document.getElementById("hero-title")?.focus({ preventScroll: true });
+          }, 120);
+        });
+      });
+    };
     window.addEventListener("air:intro-complete", handleIntroComplete);
+    window.addEventListener("air:show-home-hero", showCompleteHomeHero);
     section.addEventListener("focusin", handleFocusIn);
     section.addEventListener("focusout", handleFocusOut);
     document.addEventListener("focusin", handleDocumentFocusIn);
@@ -429,7 +461,9 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
 
     // The event can fire before this component has attached its listener on
     // a warm navigation. In that case the intro state is the source of truth.
-    if (document.documentElement.dataset.airIntro === "complete") {
+    if (document.documentElement.dataset.airDirectHome === "true") {
+      showCompleteHomeHero();
+    } else if (document.documentElement.dataset.airIntro === "complete") {
       handleIntroComplete(new CustomEvent("air:intro-complete"));
     } else if (document.documentElement.dataset.airIntro === "skip") {
       setIntroReady(true);
@@ -442,6 +476,7 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
       window.removeEventListener("scroll", scheduleUpdate);
       window.removeEventListener("resize", scheduleUpdate);
       window.removeEventListener("air:intro-complete", handleIntroComplete);
+      window.removeEventListener("air:show-home-hero", showCompleteHomeHero);
       section.removeEventListener("focusin", handleFocusIn);
       section.removeEventListener("focusout", handleFocusOut);
       document.removeEventListener("focusin", handleDocumentFocusIn);

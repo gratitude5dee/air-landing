@@ -1,17 +1,14 @@
-import Image from "next/image";
 import Link from "next/link";
 import { LuArrowUpRight, LuCircle, LuSparkles } from "react-icons/lu";
 
+import { HomeHeroLink } from "@/components/HomeHeroLink";
 import { PlasmaButton } from "@/components/PlasmaButton";
 import { AIR_TAGLINE } from "@/lib/air-copy";
 
 export function Header() {
   return (
     <header className="site-header">
-      <Link className="brand" href="/" aria-label="Air by WZRD.tech home">
-        <span>air by</span>
-        <Image src="/images/wzrd-wordmark.png" alt="WZRD.tech" width={1600} height={396} priority />
-      </Link>
+      <HomeHeroLink className="brand" />
       <nav aria-label="Primary navigation">
         <Link href="/how-it-works">how it works</Link>
         <Link className="nav-optional" href="/composable-computer">composable computer</Link>
@@ -32,10 +29,7 @@ export function Footer() {
     <footer className="site-footer">
       <div className="shell footer-grid">
         <div className="footer-lead">
-          <Link className="brand footer-brand" href="/" aria-label="Air by WZRD.tech home">
-            <span>air by</span>
-            <Image src="/images/wzrd-wordmark.png" alt="WZRD.tech" width={1600} height={396} />
-          </Link>
+          <HomeHeroLink className="brand footer-brand" />
           <p>{AIR_TAGLINE}</p>
           <a className="footer-checkout" href="https://buy.stripe.com/bJe5kF8Pg49RaPw9M6a3u02">
             <LuSparkles aria-hidden /> Start Air at $50 / month <LuArrowUpRight aria-hidden />
