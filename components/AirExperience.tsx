@@ -125,6 +125,68 @@ const visuallyHidden: CSSProperties = {
   border: 0,
 };
 
+function HeroPhoneStage({ phoneDemo, mobile = false }: { phoneDemo: ReactNode; mobile?: boolean }) {
+  return (
+    <div
+      className={`phone-stage ${mobile ? "hero-phone-mobile" : "hero-phone-desktop"}`}
+      role="region"
+      aria-label="Air in iMessage"
+    >
+      <div className="app-orbit" aria-hidden="true">
+        <div className="app-orbit-motion">
+          <svg
+            className="orbit-map"
+            viewBox="0 0 720 820"
+            preserveAspectRatio="none"
+            focusable="false"
+          >
+            <path d="M42 238C168 58 431 26 666 190" />
+            <path d="M25 583C171 778 474 812 692 632" />
+            {[145, 268, 392, 518, 631].map((cx, index) => (
+              <circle
+                key={cx}
+                cx={cx}
+                cy={[174, 106, 92, 116, 174][index]}
+                r="3.25"
+              />
+            ))}
+            {[96, 206, 520, 650].map((cx, index) => (
+              <circle
+                key={cx}
+                cx={cx}
+                cy={[526, 700, 752, 654][index]}
+                r="3.25"
+              />
+            ))}
+          </svg>
+          {appIcons.map(
+            ({ Icon, name, color, x, y, size, rotate }, index) => (
+              <span
+                key={name}
+                className="app-icon"
+                style={
+                  {
+                    "--app-x": x,
+                    "--app-y": y,
+                    "--app-color": color,
+                    "--app-size": size,
+                    "--app-rotate": rotate,
+                    "--app-delay": `${index * -0.42}s`,
+                  } as CSSProperties
+                }
+                title={name}
+              >
+                <span className="app-icon-face"><Icon /></span>
+              </span>
+            ),
+          )}
+        </div>
+      </div>
+      {phoneDemo}
+    </div>
+  );
+}
+
 export function useAirExperience(): AirExperienceValue {
   const experience = useContext(AirExperienceContext);
   if (!experience) {
@@ -487,6 +549,7 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
               <span className="pulse-dot" aria-hidden /> air by WZRD.tech
               <span>Private beta</span>
             </div>
+            <HeroPhoneStage phoneDemo={phoneDemo} mobile />
             <h1
               id="hero-title"
               tabIndex={-1}
@@ -545,59 +608,7 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
             </ul>
           </div>
 
-          <div className="phone-stage" role="region" aria-label="Air in iMessage">
-            <div className="app-orbit" aria-hidden="true">
-              <div className="app-orbit-motion">
-                <svg
-                  className="orbit-map"
-                  viewBox="0 0 720 820"
-                  preserveAspectRatio="none"
-                  focusable="false"
-                >
-                  <path d="M42 238C168 58 431 26 666 190" />
-                  <path d="M25 583C171 778 474 812 692 632" />
-                  {[145, 268, 392, 518, 631].map((cx, index) => (
-                    <circle
-                      key={cx}
-                      cx={cx}
-                      cy={[174, 106, 92, 116, 174][index]}
-                      r="3.25"
-                    />
-                  ))}
-                  {[96, 206, 520, 650].map((cx, index) => (
-                    <circle
-                      key={cx}
-                      cx={cx}
-                      cy={[526, 700, 752, 654][index]}
-                      r="3.25"
-                    />
-                  ))}
-                </svg>
-                {appIcons.map(
-                  ({ Icon, name, color, x, y, size, rotate }, index) => (
-                    <span
-                      key={name}
-                      className="app-icon"
-                      style={
-                        {
-                          "--app-x": x,
-                          "--app-y": y,
-                          "--app-color": color,
-                          "--app-size": size,
-                          "--app-rotate": rotate,
-                          "--app-delay": `${index * -0.42}s`,
-                        } as CSSProperties
-                      }
-                      title={name}
-                    >
-                      <span className="app-icon-face"><Icon /></span>
-                    </span>
-                  ),
-                )}
-              </div>
-            </div>
-            {phoneDemo}
-          </div>
+          <HeroPhoneStage phoneDemo={phoneDemo} />
         </div>
 
         <p

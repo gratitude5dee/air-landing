@@ -30,6 +30,7 @@ import {
 } from "react-icons/lu";
 import { PreorderButton } from "@/components/Preorder";
 import { MiniAppGallery } from "@/components/MiniAppGallery";
+import { ChromaGrid } from "@/components/ChromaGrid";
 import { PixelCard } from "@/components/PixelCard";
 import { ShinyText } from "@/components/ShinyText";
 import { AIR_AGENT_MARKS } from "@/lib/agent-marks";
@@ -448,7 +449,12 @@ export function ComposableCapabilities() {
           </p>
         </div>
 
-        <div className={styles.capabilityGrid}>
+        <ChromaGrid
+          className={`${styles.capabilityGrid} ${styles.capabilityChromaGrid}`}
+          radius={390}
+          damping={0.3}
+          fadeOut={0.44}
+        >
           {capabilityCards.map(({ Icon, number, title, status, body, signal, visual }, index) => (
             <div data-reveal style={{ "--delay": `${index * 70}ms` } as CSSProperties} key={title}>
               <PixelCard
@@ -472,7 +478,7 @@ export function ComposableCapabilities() {
               </PixelCard>
             </div>
           ))}
-        </div>
+        </ChromaGrid>
       </div>
     </section>
   );
@@ -710,7 +716,12 @@ export function CommunicationLayer() {
           </p>
         </div>
 
-        <div className={styles.communicationGrid}>
+        <ChromaGrid
+          className={`${styles.communicationGrid} ${styles.communicationChromaGrid}`}
+          radius={440}
+          damping={0.32}
+          fadeOut={0.46}
+        >
           <article className={`${styles.communicationCard} ${styles.communicationComputer}`} data-reveal>
             <header>
               <span>01</span>
@@ -771,7 +782,7 @@ export function CommunicationLayer() {
             <h3>Email and inbox</h3>
             <p>Air can draft, organize, follow up, and keep the details moving while you stay in iMessage.</p>
           </article>
-        </div>
+        </ChromaGrid>
       </div>
     </section>
   );

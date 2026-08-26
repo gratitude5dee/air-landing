@@ -1,4 +1,5 @@
 import { Header, Footer } from "@/components/Chrome";
+import { GradualBlur } from "@/components/GradualBlur";
 import {
   AIR_FAQ_ITEMS,
   CommunicationLayer,
@@ -75,6 +76,8 @@ export default function Home() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData).replace(/</g, "\\u003c") }}
       />
       <Header />
+      <GradualBlur target="page" position="top" height="4.5rem" strength={0.72} divCount={5} zIndex={60} />
+      <GradualBlur target="page" position="bottom" height="5.25rem" strength={1.05} divCount={6} zIndex={60} />
       <main id="main">
         <div id="top" />
         <Hero>
