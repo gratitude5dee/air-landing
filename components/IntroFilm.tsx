@@ -11,6 +11,7 @@ const SESSION_KEY = "air-intro-seen-v1";
 const INTRO_HANDOFF_MS = 820;
 
 type FinishOptions = {
+  bypassCinematic?: boolean;
   immediate?: boolean;
   focusHero?: boolean;
 };
@@ -21,6 +22,7 @@ export function IntroFilm() {
   const skipRef = useRef<HTMLButtonElement>(null);
   const finishingRef = useRef(false);
   const focusHeroRef = useRef(false);
+  const bypassCinematicRef = useRef(false);
   const exitTimerRef = useRef<number | null>(null);
   const audioFadeFrameRef = useRef<number | null>(null);
   const [eligible, setEligible] = useState(false);
@@ -110,7 +112,9 @@ export function IntroFilm() {
       // Closing the modal and then broadcasting the handoff guarantees that
       // the hero measures the page it is about to reveal, not the covered
       // opening behind the video.
-      window.dispatchEvent(new CustomEvent("air:intro-complete"));
+    window.dispatchEvent(new CustomEvent("air:intro-complete", {
+      detail: { bypassCinematic: bypassCinematicRef.current },
+    }));
       if (focusHeroRef.current) {
         document.getElementById("hero-title")?.focus({ preventScroll: true });
       }
@@ -187,6 +191,7 @@ export function IntroFilm() {
     if (finishingRef.current) return;
     finishingRef.current = true;
     focusHeroRef.current = Boolean(options.focusHero);
+    bypassCinematicRef.current = Boolean(options.bypassCinematic);
 
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const forcedColors = window.matchMedia("(forced-colors: active)").matches;
@@ -212,7 +217,7 @@ export function IntroFilm() {
   // release straight into the fully usable hero instead of leaving a poster
   // and disabled controls over the page.
   useEffect(() => {
-    if (eligible && mediaState === "error") finish({ immediate: true });
+    if (eligible && mediaState === "error") finish({ immediate: true, bypassCinematic: true });
   }, [eligible, finish, mediaState]);
 
   useEffect(() => {
@@ -233,7 +238,7 @@ export function IntroFilm() {
         complete();
         return;
       }
-      finish({ immediate: true });
+      finish({ immediate: true, bypassCinematic: true });
     };
 
     honorMotionPreference();
@@ -277,7 +282,7 @@ export function IntroFilm() {
           data-air-intro-dialog
           onCancel={(event) => {
             event.preventDefault();
-            if (!isHandingOff) finish({ focusHero: true });
+            if (!isHandingOff) finish({ focusHero: true, bypassCinematic: true });
           }}
           style={{ width: "100vw", maxWidth: "none", height: "100svh", maxHeight: "none", margin: 0, padding: 0, border: 0 }}
         >
@@ -323,7 +328,7 @@ export function IntroFilm() {
                 {muted ? "sound on" : "mute"}
               </ShinyText>
             </button>
-            <button ref={skipRef} type="button" autoFocus disabled={isHandingOff} onClick={() => finish({ focusHero: true })}>
+            <button ref={skipRef} type="button" autoFocus disabled={isHandingOff} onClick={() => finish({ focusHero: true, bypassCinematic: true })}>
               <ShinyText disabled={isHandingOff} color="#e8f5ff" shineColor="#ffffff" speed={4.2} delay={0.3} spread={112}>
                 skip intro
               </ShinyText>

@@ -30,7 +30,6 @@ import {
   SiYoutube,
 } from "react-icons/si";
 import {
-  LuArrowUpRight,
   LuCheck,
   LuChevronDown,
   LuMessagesSquare,
@@ -51,6 +50,7 @@ import {
 import { AIR_TAGLINE } from "@/lib/air-copy";
 import { resolveHeroTimeline } from "@/lib/hero-timeline";
 import { ShinyText } from "@/components/ShinyText";
+import { PlasmaButton } from "@/components/PlasmaButton";
 
 export type { AirDemoAction, AirDemoState } from "@/components/air-demo-state";
 
@@ -89,6 +89,7 @@ type HeroVariables = CSSProperties & {
 };
 
 type SkyElement = HTMLElement & { progress: number; skyStatus?: string };
+type IntroCompleteEvent = Event & { detail?: { bypassCinematic?: boolean } };
 
 const AirExperienceContext = createContext<AirExperienceValue | null>(null);
 
@@ -180,6 +181,8 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
   const skyRef = useRef<HTMLElement>(null);
   const cinematicActiveRef = useRef(false);
   const [cinematicActive, setCinematicActive] = useState(false);
+  const [cinematicBypassed, setCinematicBypassed] = useState(false);
+  const useCinematicPresentation = cinematicEnabled && !cinematicBypassed;
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -221,7 +224,7 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
     const update = () => {
       animationFrame = 0;
       const cinematicEligible =
-        cinematicEnabled &&
+        useCinematicPresentation &&
         !reducedMotion.matches &&
         !compactViewport.matches &&
         finePointer.matches &&
@@ -325,7 +328,10 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
     // paint to leave the modal before recalculating the poster-first scene;
     // this prevents a stale pre-intro value from leaving the scroll sequence
     // hidden after a natural video completion.
-    const handleIntroComplete = () => {
+    const handleIntroComplete = (event: Event) => {
+      if ((event as IntroCompleteEvent).detail?.bypassCinematic) {
+        setCinematicBypassed(true);
+      }
       window.requestAnimationFrame(scheduleUpdate);
     };
     window.addEventListener("air:intro-complete", handleIntroComplete);
@@ -345,7 +351,7 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
     finePointer.addEventListener("change", scheduleUpdate);
     forcedColors.addEventListener("change", scheduleUpdate);
 
-    if (cinematicEnabled) {
+    if (useCinematicPresentation) {
       customElements.whenDefined("wz-sky").then(setSkyProgress);
     }
 
@@ -366,9 +372,9 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
       forcedColors.removeEventListener("change", scheduleUpdate);
       delete document.documentElement.dataset.airHeroHeader;
     };
-  }, [cinematicEnabled]);
+  }, [useCinematicPresentation]);
 
-  const heroStyle: HeroVariables = cinematicEnabled
+  const heroStyle: HeroVariables = useCinematicPresentation
     ? {
       "--cloud-progress": 0,
       "--cloud-veil-progress": 0,
@@ -408,12 +414,12 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
       ref={sectionRef}
       className="hero-scroll"
       style={heroStyle}
-      data-air-presentation={cinematicEnabled ? "cinematic-pending" : "static"}
+      data-air-presentation={useCinematicPresentation ? "cinematic-pending" : "static"}
       aria-labelledby="hero-title"
     >
       <div
         className="hero-sticky"
-        style={cinematicEnabled ? undefined : { position: "relative" }}
+        style={useCinematicPresentation ? undefined : { position: "relative" }}
       >
         <div className="hero-sky" aria-hidden />
         <div className="sun-haze" aria-hidden />
@@ -444,13 +450,13 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
             bloom: "low",
             fade: "",
           })}
-        {cinematicEnabled &&
+        {useCinematicPresentation &&
           createElement("wz-sky", {
             ref: skyRef,
             "aria-hidden": "true",
             className: "hero-shader",
           })}
-        {cinematicEnabled && (
+        {useCinematicPresentation && (
           <div className="cloud-curtain" aria-hidden>
             <div className="cloud-bank bank-one" />
             <div className="cloud-bank bank-two" />
@@ -526,9 +532,10 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
             </p>
 
             <div className="hero-actions">
-              <a className="button button-primary" href="https://buy.stripe.com/bJe5kF8Pg49RaPw9M6a3u02">
-                Start Air at $50 / month <LuArrowUpRight aria-hidden />
-              </a>
+              <PlasmaButton
+                className="hero-plasma-button"
+                href="https://buy.stripe.com/bJe5kF8Pg49RaPw9M6a3u02"
+              />
               <a className="text-link" href="#what-is-air">Explore the computer <span aria-hidden>↓</span></a>
             </div>
             <ul className="hero-proof" aria-label="Air preview status">
