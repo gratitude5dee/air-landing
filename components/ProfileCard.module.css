@@ -1,0 +1,580 @@
+.card {
+  --profile-x: 50%;
+  --profile-y: 50%;
+  --profile-rotate-x: 0deg;
+  --profile-rotate-y: 0deg;
+  --profile-inner-gradient: linear-gradient(145deg, rgba(66, 172, 223, 0.34) 0%, rgba(7, 35, 66, 0.96) 51%, rgba(25, 140, 137, 0.6) 100%);
+  position: relative;
+  min-height: 31rem;
+  perspective: 56rem;
+  transform-style: preserve-3d;
+}
+
+.behindGlow {
+  position: absolute;
+  inset: 7% 3%;
+  z-index: 0;
+  border-radius: 2rem;
+  pointer-events: none;
+  opacity: 0.7;
+  background: radial-gradient(circle at var(--profile-x) var(--profile-y), rgba(68, 218, 224, 0.55), transparent 44%);
+  filter: blur(2rem);
+}
+
+.shell {
+  position: relative;
+  z-index: 1;
+  min-height: inherit;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid rgba(215, 247, 255, 0.38);
+  border-radius: 1.85rem;
+  color: #edfaff;
+  background:
+    radial-gradient(circle at var(--profile-x) var(--profile-y), rgba(179, 246, 255, 0.25), transparent 31%),
+    var(--profile-inner-gradient);
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.34), 0 1.45rem 3.6rem rgba(0, 8, 25, 0.32);
+  transform: rotateX(var(--profile-rotate-x)) rotateY(var(--profile-rotate-y));
+  transition: transform 320ms var(--settle), box-shadow 320ms ease;
+}
+
+.card:hover .shell {
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.5), 0 1.8rem 4rem rgba(0, 8, 25, 0.44), 0 0 0 0.2rem rgba(131, 231, 255, 0.1);
+}
+
+.glare {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.78;
+  background:
+    linear-gradient(118deg, rgba(255, 255, 255, 0.34), transparent 23% 65%, rgba(152, 255, 237, 0.18)),
+    radial-gradient(circle at var(--profile-x) var(--profile-y), rgba(255, 255, 255, 0.4), transparent 22%);
+  mix-blend-mode: screen;
+}
+
+.shell::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.23;
+  background-image: radial-gradient(rgba(225, 250, 255, 0.85) 0.55px, transparent 0.55px);
+  background-size: 5px 5px;
+  mask-image: linear-gradient(145deg, #000, transparent 72%);
+}
+
+.cardHeader,
+.identityField,
+.details,
+.statusRow,
+.cardFooter { position: relative; z-index: 1; }
+
+.cardHeader {
+  min-height: 3.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  padding: 0 1rem;
+  border-bottom: 1px solid rgba(217, 247, 255, 0.2);
+  color: rgba(228, 249, 255, 0.72);
+  font-family: var(--font-mono);
+  font-size: 0.51rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.cardHeader span,
+.statusRow span,
+.cardFooter span,
+.cardFooter button { display: inline-flex; align-items: center; gap: 0.42rem; }
+.cardHeader i,
+.statusRow > span i { width: 0.45rem; height: 0.45rem; border-radius: 50%; background: #5af0b3; box-shadow: 0 0 0 0.22rem rgba(90, 240, 179, 0.14); }
+
+.identityField {
+  min-height: 15.6rem;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.identityField::before,
+.identityField::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.identityField::before { width: 15rem; height: 15rem; z-index: -1; border: 1px solid rgba(210, 247, 255, 0.2); transform: translateY(-6%) rotateX(62deg); }
+.identityField::after { width: 10.75rem; height: 10.75rem; background: radial-gradient(circle, rgba(159, 241, 250, 0.28), transparent 66%); filter: blur(0.65rem); }
+.identityField::after { z-index: -1; }
+.identityGrid { position: absolute; z-index: -1; width: 8.4rem; height: 8.4rem; opacity: 0.32; background-image: linear-gradient(rgba(221, 250, 255, 0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(221, 250, 255, 0.4) 1px, transparent 1px); background-size: 0.7rem 0.7rem; transform: rotate(45deg) scale(0.8); }
+
+.studyControl {
+  --study-drag-x: 0px;
+  --study-drag-y: 0px;
+  --study-tilt-x: 0deg;
+  --study-tilt-y: 0deg;
+  position: relative;
+  z-index: 1;
+  width: min(15rem, calc(100% - 2rem));
+  height: 11.3rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 1.25rem;
+  color: inherit;
+  background: none;
+  cursor: grab;
+  outline: none;
+  perspective: 52rem;
+  transform-style: preserve-3d;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.studyControl:active,
+.studyDragging { cursor: grabbing; }
+.studyControl:focus-visible { outline: 3px solid #d9f9ff; outline-offset: 0.38rem; }
+
+.studyCard {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-rows: auto 1fr;
+  gap: 0.5rem 0.75rem;
+  overflow: hidden;
+  padding: 0.82rem;
+  border: 1px solid rgba(222, 251, 255, 0.48);
+  border-radius: 1.25rem;
+  color: #eafaff;
+  background:
+    radial-gradient(circle at 18% 9%, rgba(193, 249, 255, 0.4), transparent 28%),
+    linear-gradient(142deg, rgba(65, 155, 205, 0.72), rgba(4, 31, 67, 0.94) 58%, rgba(12, 111, 113, 0.7));
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.5), 0 1rem 1.7rem rgba(0, 12, 40, 0.3);
+  transform-style: preserve-3d;
+  transition: transform 360ms var(--settle), filter 260ms ease, opacity 260ms ease;
+}
+
+.studyCard::before,
+.studyCard::after { content: ""; position: absolute; pointer-events: none; }
+.studyCard::before { inset: 0; opacity: 0.3; background-image: radial-gradient(rgba(227, 252, 255, 0.94) 0.55px, transparent 0.55px); background-size: 4px 4px; mask-image: linear-gradient(142deg, #000, transparent 72%); }
+.studyCard::after { width: 11rem; height: 11rem; right: -4.5rem; bottom: -5.5rem; border: 1px solid rgba(205, 246, 255, 0.32); border-radius: 50%; transform: rotateX(64deg) rotateZ(-20deg); }
+
+.studyCard[data-order="0"] {
+  z-index: 3;
+  transform: translate3d(var(--study-drag-x), var(--study-drag-y), 2rem) rotateX(var(--study-tilt-x)) rotateY(var(--study-tilt-y)) rotateZ(-1.5deg);
+}
+.studyCard[data-order="1"] { z-index: 2; filter: saturate(0.8) brightness(0.82); transform: translate3d(-0.5rem, 0.78rem, 0.75rem) rotateZ(-5deg) scale(0.955); }
+.studyCard[data-order="2"] { z-index: 1; opacity: 0.82; filter: saturate(0.6) brightness(0.68); transform: translate3d(0.45rem, 1.35rem, 0) rotateZ(4deg) scale(0.91); }
+.studyDragging .studyCard { transition: none; }
+
+.studyTopline,
+.studyGlyph,
+.studyCopy,
+.studySeal { position: relative; z-index: 1; }
+.studyTopline { grid-column: 1 / -1; color: rgba(219, 248, 255, 0.65); font-family: var(--font-mono); font-size: 0.47rem; letter-spacing: 0.11em; text-align: left; text-transform: uppercase; }
+.studyGlyph { width: 3.55rem; height: 3.55rem; display: grid; place-items: center; overflow: hidden; border: 1px solid rgba(233, 253, 255, 0.63); border-radius: 1rem; color: #e9fcff; background: rgba(1, 31, 67, 0.42); box-shadow: inset 0 1px rgba(255, 255, 255, 0.34), 0 0.65rem 1.25rem rgba(0, 15, 46, 0.24); }
+.studyGlyph > svg { width: 1.55rem; height: 1.55rem; }
+.studyGlyph .koiFish { width: 132%; height: 132%; max-width: none; max-height: none; transform: rotate(-8deg) translateX(0.12rem); filter: drop-shadow(0 0.35rem 0.45rem rgba(2, 24, 58, 0.34)); }
+.studyGlyph img { width: 100%; height: 100%; object-fit: cover; }
+.studyAvatarDither { position: absolute !important; inset: -13%; width: 126% !important; height: 126% !important; opacity: 0.78; mix-blend-mode: screen; animation: onairosAvatarDrift 6.4s ease-in-out infinite; }
+.studyAvatarMark { position: relative; display: grid; place-items: center; width: 1.7rem; height: 1.7rem; border: 1px solid rgba(238, 254, 255, 0.76); border-radius: 0.52rem; color: #f5feff; background: rgba(3, 24, 53, 0.55); font-family: var(--font-mono); font-size: 0.76rem; font-weight: 700; }
+.studyCopy { align-self: center; min-width: 0; text-align: left; }
+.studyCopy strong,
+.studyCopy small { display: block; }
+.studyCopy strong { max-width: 10ch; font-size: 0.94rem; letter-spacing: -0.04em; line-height: 1.02; }
+.studyCopy small { max-width: 19ch; margin-top: 0.38rem; color: rgba(224, 247, 255, 0.7); font-size: 0.6rem; line-height: 1.35; }
+.studySeal { align-self: end; width: 1.58rem; height: 1.58rem; display: grid; place-items: center; border-radius: 50%; color: #063b5c; background: #a9f3d3; box-shadow: 0 0 0 0.16rem rgba(4, 34, 63, 0.7); }
+.studySeal svg { width: 0.88rem; height: 0.88rem; }
+
+/* Koi studies: an Air-specific tactile deck, rather than a generic profile
+   card. The scene keeps the physical paper, ink, and depth language while
+   the keyboard and drag controls above continue to move between studies. */
+.card {
+  min-height: 36rem;
+  isolation: isolate;
+}
+
+.behindGlow {
+  inset: 8% 6%;
+  opacity: 0.52;
+  background:
+    radial-gradient(circle at 42% 36%, rgba(232, 166, 73, 0.36), transparent 28%),
+    radial-gradient(circle at 68% 80%, rgba(58, 183, 192, 0.32), transparent 32%);
+  filter: blur(2.8rem);
+}
+
+.shell {
+  min-height: inherit;
+  border-color: rgba(244, 222, 177, 0.28);
+  border-radius: 1.55rem;
+  background:
+    radial-gradient(circle at var(--profile-x) var(--profile-y), rgba(255, 224, 163, 0.12), transparent 27%),
+    linear-gradient(150deg, #201b14 0%, #0e1212 57%, #072d33 100%);
+  box-shadow:
+    inset 0 1px rgba(255, 244, 219, 0.22),
+    inset 0 -1px rgba(0, 0, 0, 0.68),
+    0 1.75rem 3.8rem rgba(2, 7, 13, 0.42);
+}
+
+.card:hover .shell {
+  box-shadow:
+    inset 0 1px rgba(255, 244, 219, 0.34),
+    inset 0 -1px rgba(0, 0, 0, 0.7),
+    0 2.2rem 4.4rem rgba(2, 7, 13, 0.55),
+    0 0 0 0.16rem rgba(239, 204, 137, 0.09);
+}
+
+.glare {
+  opacity: 0.44;
+  background:
+    linear-gradient(124deg, rgba(255, 238, 202, 0.19), transparent 23% 72%, rgba(68, 191, 194, 0.12)),
+    radial-gradient(circle at var(--profile-x) var(--profile-y), rgba(255, 248, 229, 0.2), transparent 23%);
+}
+
+.shell::after {
+  opacity: 0.2;
+  background-image: radial-gradient(rgba(241, 222, 184, 0.62) 0.55px, transparent 0.55px);
+  background-size: 4px 4px;
+  mask-image: linear-gradient(142deg, #000, transparent 58%);
+}
+
+.cardHeader {
+  position: absolute;
+  z-index: 6;
+  top: 0;
+  right: 0;
+  left: 0;
+  min-height: 3.05rem;
+  padding: 0 1rem;
+  border-bottom-color: rgba(244, 226, 189, 0.15);
+  color: rgba(245, 227, 193, 0.64);
+}
+
+.cardHeader i { background: #df9b3d; box-shadow: 0 0 0 0.22rem rgba(223, 155, 61, 0.14); }
+.cardHeader svg { color: rgba(244, 222, 178, 0.72); }
+
+.identityField {
+  min-height: 36rem;
+  height: 100%;
+  padding: 2.4rem 0 1rem;
+  background:
+    radial-gradient(ellipse at 50% 88%, rgba(18, 122, 128, 0.28), transparent 43%),
+    radial-gradient(circle at 50% 40%, rgba(241, 176, 70, 0.12), transparent 28%);
+}
+
+.identityField::before {
+  width: 23rem;
+  height: 23rem;
+  border-color: rgba(226, 189, 125, 0.13);
+  transform: translateY(16%) rotateX(64deg);
+}
+
+.identityField::after {
+  width: 13rem;
+  height: 13rem;
+  background: radial-gradient(circle, rgba(243, 172, 67, 0.28), transparent 67%);
+  filter: blur(1rem);
+}
+
+.identityGrid {
+  width: 21rem;
+  height: 21rem;
+  opacity: 0.15;
+  background-image:
+    linear-gradient(rgba(238, 213, 167, 0.46) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(238, 213, 167, 0.46) 1px, transparent 1px);
+  background-size: 0.6rem 0.6rem;
+  transform: rotate(45deg) scale(1.12);
+}
+
+.studyControl {
+  width: min(21.85rem, calc(100% - 2.25rem));
+  height: 28.7rem;
+  perspective: 78rem;
+}
+
+.studyCard {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: minmax(0, 1.56fr) minmax(8.7rem, 0.7fr);
+  gap: 0;
+  padding: 0;
+  border-color: rgba(238, 218, 179, 0.34);
+  border-radius: 1.6rem;
+  color: #f7ead5;
+  background: #292219;
+  box-shadow:
+    inset 0 1px rgba(255, 246, 221, 0.44),
+    inset 0 -1px rgba(0, 0, 0, 0.44),
+    0 1.5rem 2.4rem rgba(0, 0, 0, 0.46);
+}
+
+.studyCard::before {
+  z-index: 3;
+  opacity: 0.26;
+  background-image: linear-gradient(90deg, rgba(66, 52, 34, 0.15) 1px, transparent 1px), linear-gradient(rgba(66, 52, 34, 0.15) 1px, transparent 1px);
+  background-size: 0.5rem 0.5rem;
+  mask-image: none;
+}
+
+.studyCard::after {
+  z-index: 4;
+  right: 10%;
+  bottom: 6%;
+  width: 1.65rem;
+  height: 1.65rem;
+  border-color: rgba(208, 78, 45, 0.94);
+  border-radius: 0.15rem;
+  transform: rotate(4deg);
+}
+
+.studyCard[data-order="0"] {
+  transform: translate3d(var(--study-drag-x), var(--study-drag-y), 2rem) rotateX(var(--study-tilt-x)) rotateY(var(--study-tilt-y)) rotateZ(-1.2deg);
+}
+
+.studyCard[data-order="1"] {
+  filter: saturate(0.62) brightness(0.58);
+  transform: translate3d(-0.72rem, 1.05rem, 0.75rem) rotateZ(-5deg) scale(0.965);
+}
+
+.studyCard[data-order="2"] {
+  opacity: 0.88;
+  filter: saturate(0.45) brightness(0.45);
+  transform: translate3d(0.7rem, 1.85rem, 0) rotateZ(4deg) scale(0.93);
+}
+
+.studyArtwork {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  min-height: 0;
+  background:
+    radial-gradient(circle at 70% 27%, rgba(48, 42, 30, 0.16) 0 3%, transparent 4%),
+    radial-gradient(circle at 20% 82%, rgba(46, 38, 27, 0.26) 0 2%, transparent 3%),
+    linear-gradient(145deg, rgba(238, 226, 192, 0.98), rgba(209, 193, 153, 0.98));
+}
+
+.studyArtwork::before,
+.studyArtwork::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+}
+
+.studyArtwork::before {
+  inset: 0;
+  opacity: 0.64;
+  background:
+    radial-gradient(ellipse at 22% 75%, rgba(39, 56, 55, 0.52), transparent 27%),
+    radial-gradient(ellipse at 71% 17%, rgba(41, 49, 44, 0.25), transparent 23%),
+    linear-gradient(125deg, transparent 0 39%, rgba(54, 50, 39, 0.12) 40% 41%, transparent 42% 100%);
+  mix-blend-mode: multiply;
+}
+
+.studyArtwork::after {
+  inset: 0;
+  opacity: 0.26;
+  background-image: linear-gradient(rgba(61, 51, 34, 0.42) 0.45px, transparent 0.45px), linear-gradient(90deg, rgba(61, 51, 34, 0.42) 0.45px, transparent 0.45px);
+  background-size: 0.43rem 0.43rem;
+}
+
+.studyCard[data-study="boundary"] .studyArtwork {
+  background: linear-gradient(145deg, #dfe2d4, #829fa0 90%);
+}
+
+.studyCard[data-study="context"] .studyArtwork {
+  background: linear-gradient(145deg, #d6dfcf, #a3b6a5 58%, #627f7b);
+}
+
+.studyGlyph {
+  position: relative;
+  z-index: 2;
+  width: min(17.8rem, 86%);
+  height: min(15.4rem, 92%);
+  display: grid;
+  place-items: center;
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  color: #293a34;
+  background: none;
+  box-shadow: none;
+}
+
+.studyGlyph > svg:not(.koiFish) {
+  width: 4.75rem;
+  height: 4.75rem;
+  padding: 1rem;
+  border: 1px solid rgba(47, 57, 51, 0.35);
+  border-radius: 50%;
+  background: rgba(244, 237, 211, 0.44);
+  box-shadow: 0 1rem 1.4rem rgba(34, 39, 32, 0.2);
+}
+
+.studyGlyph .koiFish {
+  width: 128%;
+  height: 128%;
+  transform: rotate(-39deg) translate(0.42rem, -0.15rem);
+  filter: drop-shadow(0 0.8rem 0.55rem rgba(49, 39, 22, 0.34));
+}
+
+.studyWaterRings {
+  position: absolute;
+  z-index: 1;
+  top: 58%;
+  left: 52%;
+  width: 9rem;
+  height: 4.2rem;
+  transform: translate(-50%, -50%) rotate(-12deg);
+}
+
+.studyWaterRings i {
+  position: absolute;
+  inset: 0;
+  display: block;
+  border: 1px solid rgba(48, 61, 58, 0.38);
+  border-radius: 50%;
+}
+.studyWaterRings i:nth-child(2) { inset: 16%; }
+.studyWaterRings i:nth-child(3) { inset: 32%; }
+
+.studyReeds {
+  position: absolute;
+  z-index: 2;
+  bottom: -1.1rem;
+  left: 6%;
+  width: 6.5rem;
+  height: 9rem;
+  transform: rotate(-8deg);
+}
+.studyReeds i { position: absolute; bottom: 0; display: block; width: 0.16rem; height: 100%; border-radius: 99px; background: linear-gradient(#172d2b, #5b6552); transform-origin: bottom; }
+.studyReeds i:nth-child(1) { left: 1.2rem; height: 85%; transform: rotate(26deg); }.studyReeds i:nth-child(2) { left: 3.4rem; transform: rotate(8deg); }.studyReeds i:nth-child(3) { left: 5rem; height: 72%; transform: rotate(-19deg); }
+
+.studyCaption {
+  position: relative;
+  z-index: 5;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-rows: auto 1fr;
+  gap: 0.55rem 0.8rem;
+  padding: 1rem 1.1rem 1.08rem;
+  overflow: hidden;
+  color: #f7ebd8;
+  background: linear-gradient(140deg, #342b1f, #1e1b16 72%, #1a302f);
+}
+
+.studyCaption::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.22;
+  background-image: radial-gradient(rgba(246, 225, 182, 0.56) 0.5px, transparent 0.5px);
+  background-size: 4px 4px;
+}
+
+.studyTopline,
+.studyCopy,
+.studySeal { z-index: 1; }
+.studyTopline { grid-column: 1 / -1; color: rgba(247, 225, 183, 0.66); font-size: 0.45rem; }
+.studyCopy { align-self: end; }
+.studyCopy strong { max-width: 13ch; color: #f8ecd7; font-family: Georgia, "Times New Roman", serif; font-size: clamp(1.25rem, 2.2vw, 1.68rem); font-weight: 500; letter-spacing: -0.06em; line-height: 0.9; }
+.studyCopy small { max-width: 22ch; margin-top: 0.38rem; color: rgba(241, 222, 188, 0.62); font-family: var(--font-mono); font-size: 0.48rem; line-height: 1.42; }
+.studySeal { align-self: end; width: 1.7rem; height: 1.7rem; border: 1px solid rgba(242, 214, 157, 0.46); color: #3a281a; background: #e5b45d; box-shadow: 0 0 0 0.14rem rgba(47, 37, 23, 0.72); }
+
+.details,
+.statusRow,
+.cardFooter {
+  display: none;
+}
+
+.avatar {
+  position: relative;
+  z-index: 1;
+  width: 6.65rem;
+  height: 6.65rem;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid rgba(241, 254, 255, 0.74);
+  border-radius: 2rem;
+  color: #e7fbff;
+  background: radial-gradient(circle at 50% 40%, rgba(123, 235, 255, 0.72), transparent 28%), linear-gradient(145deg, #0b406d, #071c43 58%, #0e766e);
+  box-shadow: inset 0 1px #fff, 0 1rem 2.3rem rgba(0, 12, 40, 0.32);
+  transform: translateZ(2rem) rotate(-4deg);
+}
+.avatar svg { width: 2.8rem; height: 2.8rem; }
+.avatar img { width: 100%; height: 100%; object-fit: cover; }
+.avatarDither { position: absolute !important; inset: -12%; width: 124% !important; height: 124% !important; opacity: 0.76; pointer-events: none; filter: saturate(1.4) contrast(1.08); mix-blend-mode: screen; animation: onairosAvatarDrift 6.4s ease-in-out infinite; }
+.avatarMark { position: relative; z-index: 1; display: grid; place-items: center; width: 2.35rem; height: 2.35rem; border: 1px solid rgba(236, 254, 255, 0.7); border-radius: 0.76rem; color: #effdff; background: rgba(3, 24, 53, 0.5); box-shadow: inset 0 1px rgba(255, 255, 255, 0.24), 0 0.45rem 1rem rgba(0, 16, 42, 0.34); font-family: var(--font-mono); font-size: 1.05rem; font-weight: 700; }
+.avatarOrbit { position: absolute; inset: 12%; border: 1px solid rgba(193, 249, 255, 0.42); border-radius: 50%; transform: rotateX(68deg) rotateZ(24deg); animation: onairosOrbit 5.2s linear infinite; }
+.verified { position: absolute; z-index: 2; right: calc(50% - 4.2rem); bottom: 1.65rem; width: 2.05rem; height: 2.05rem; display: grid; place-items: center; border: 2px solid #0a3158; border-radius: 50%; color: #073d61; background: #abf4d3; }
+.verified svg { width: 1.1rem; height: 1.1rem; }
+.cornerIcon { position: absolute; top: 1rem; right: 1rem; width: 1.5rem; height: 1.5rem; object-fit: contain; opacity: 0.8; }
+
+.details { padding: 0 1.15rem; }
+.name { margin: 0; color: rgba(227, 247, 255, 0.66); font-family: var(--font-mono); font-size: 0.56rem; letter-spacing: 0.09em; text-transform: uppercase; }
+.details h3 { max-width: 13ch; margin: 0.62rem 0 0; color: #f5fcff; font-size: clamp(1.6rem, 2.25vw, 2.3rem); letter-spacing: -0.06em; line-height: 0.96; }
+.handle { margin: 0.75rem 0 0; color: #aee9ff; font-family: var(--font-mono); font-size: 0.66rem; letter-spacing: 0.05em; }
+
+.statusRow { display: flex; align-items: center; justify-content: space-between; gap: 0.7rem; margin: 1.25rem 1.15rem 0; padding: 0.55rem 0.62rem 0.55rem 0.78rem; border: 1px solid rgba(213, 246, 255, 0.24); border-radius: 0.9rem; color: rgba(237, 252, 255, 0.9); background: rgba(235, 252, 255, 0.1); font-family: var(--font-mono); font-size: 0.54rem; letter-spacing: 0.045em; text-transform: uppercase; }
+.skeuomorphicToggle { display: inline-flex; align-items: center; gap: 0.42rem; padding: 0.22rem 0.25rem 0.22rem 0.5rem; border: 1px solid rgba(211, 246, 255, 0.35); border-radius: 999px; color: #d5f5ff; background: linear-gradient(180deg, rgba(1, 25, 52, 0.68), rgba(67, 143, 174, 0.24)); box-shadow: inset 0 1px rgba(255, 255, 255, 0.16), inset 0 -1px rgba(0, 9, 29, 0.46); font: inherit; letter-spacing: inherit; text-transform: inherit; cursor: pointer; }
+.skeuomorphicToggle > span { min-width: 3.55rem; text-align: center; font-size: 0.45rem; }
+.skeuomorphicToggle > i { position: relative; width: 1.8rem; height: 1.12rem; display: block; flex: none; border: 1px solid rgba(208, 245, 255, 0.5); border-radius: 999px; background: rgba(0, 13, 37, 0.72); box-shadow: inset 0 1px 3px rgba(0, 4, 18, 0.75), 0 1px rgba(255, 255, 255, 0.13); }
+.skeuomorphicToggle > i b { position: absolute; top: 0.1rem; left: 0.12rem; width: 0.75rem; height: 0.75rem; display: block; border-radius: 50%; background: linear-gradient(145deg, #f4fdff, #7dd4ed 60%, #3493bd); box-shadow: inset 0 1px rgba(255, 255, 255, 0.9), 0 0.15rem 0.34rem rgba(0, 4, 20, 0.55); transition: transform 220ms var(--spring), background 220ms ease; }
+.skeuomorphicToggle[aria-pressed="true"] > i { background: linear-gradient(180deg, #0d7e9b, #075070); }
+.skeuomorphicToggle[aria-pressed="true"] > i b { transform: translateX(0.62rem); background: linear-gradient(145deg, #e9fff6, #80edcb 62%, #22a672); }
+.skeuomorphicToggle:hover { border-color: rgba(232, 254, 255, 0.78); }
+.skeuomorphicToggle:focus-visible { outline: 2px solid #d8f5ff; outline-offset: 3px; }
+
+.cardFooter { min-height: 4.15rem; display: flex; align-items: center; justify-content: space-between; gap: 0.65rem; margin-top: auto; padding: 0.85rem 1.15rem; border-top: 1px solid rgba(213, 246, 255, 0.18); color: rgba(225, 248, 255, 0.7); font-family: var(--font-mono); font-size: 0.5rem; letter-spacing: 0.05em; text-transform: uppercase; }
+.cardFooter svg { color: #b4edff; }
+.cardFooter small { color: #b5f4db; font: inherit; }
+.cardFooter button { min-height: 2.25rem; padding: 0.45rem 0.6rem; border: 1px solid rgba(212, 246, 255, 0.27); border-radius: 0.65rem; color: #d8f6ff; background: rgba(2, 25, 48, 0.28); font: inherit; letter-spacing: inherit; text-transform: inherit; cursor: pointer; transition: background 180ms ease, border-color 180ms ease; }
+.cardFooter button:hover { border-color: rgba(226, 252, 255, 0.62); background: rgba(229, 250, 255, 0.16); }
+.cardFooter button:focus-visible { outline: 2px solid #d8f5ff; outline-offset: 3px; }
+
+/* The study caption carries the identity metadata inside the physical card.
+   Keeping this outer chrome out of view prevents the deck from reading as a
+   settings panel below the artwork. */
+.details,
+.statusRow,
+.cardFooter {
+  display: none;
+}
+
+@keyframes onairosAvatarDrift {
+  0%, 100% { transform: scale(1.03) rotate(-4deg); filter: saturate(1.22) contrast(1.03); }
+  50% { transform: scale(1.1) rotate(4deg); filter: saturate(1.55) contrast(1.14); }
+}
+
+@keyframes onairosOrbit { to { transform: rotateX(68deg) rotateZ(384deg); } }
+
+@media (prefers-reduced-motion: reduce), (forced-colors: active) {
+  .shell { transform: none !important; transition: none; }
+  .behindGlow, .glare { display: none; }
+  .avatarDither, .avatarOrbit, .studyAvatarDither { animation: none; }
+  .studyCard, .skeuomorphicToggle > i b { transition: none; }
+}
+
+:global(html[data-air-save-data="true"]) .avatarDither,
+:global(html[data-air-save-data="true"]) .avatarOrbit { animation: none; }
+:global(html[data-air-save-data="true"]) .studyAvatarDither { animation: none; }
+
+@media (max-width: 720px) {
+  .card { min-height: 31.5rem; }
+  .identityField { min-height: 31.5rem; padding-top: 2.2rem; }
+  .studyControl { width: min(18.3rem, calc(100% - 2rem)); height: 25rem; }
+  .studyCopy strong { font-size: 1.28rem; }
+  .studyArtwork::after { background-size: 0.36rem 0.36rem; }
+}

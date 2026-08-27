@@ -5,11 +5,11 @@ import { resolveAirFeatureFlags } from "@/lib/feature-flags";
 afterEach(() => vi.unstubAllEnvs());
 
 describe("Air feature flags", () => {
-  it("defaults both server-only features off", () => {
+  it("defaults the cinematic handoff on and memory echo off", () => {
     vi.stubEnv("AIR_CINEMATIC", "");
     vi.stubEnv("AIR_MEMORY_ECHO", "");
     expect(resolveAirFeatureFlags()).toEqual({
-      cinematicEnabled: false,
+      cinematicEnabled: true,
       memoryEchoEnabled: false,
     });
   });

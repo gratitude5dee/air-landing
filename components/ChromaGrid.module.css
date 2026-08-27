@@ -1,0 +1,10 @@
+.grid {
+  --chroma-x: 50%;
+  --chroma-y: 50%;
+  --chroma-opacity: 0;
+  --chroma-radius: 22rem;
+}
+
+@media (forced-colors: active) {
+  .grid { --chroma-opacity: 0 !important; }
+}

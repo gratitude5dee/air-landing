@@ -1,0 +1,64 @@
+.threadBody { gap: 0.25rem; overflow: hidden; }
+.reactionBadge {
+  position: absolute;
+  right: 0.15rem;
+  bottom: -0.6rem;
+  z-index: 2;
+  min-width: 1.7rem;
+  min-height: 1.35rem;
+  display: grid;
+  place-items: center;
+  border: 2px solid #07111f;
+  border-radius: 999px;
+  color: #0a84ff;
+  background: #eef1f5;
+  font-size: 0.7rem;
+}
+.computerCard {
+  min-height: 12rem;
+  margin-top: 0.1rem;
+  padding: 0.65rem;
+  color: #0b2742;
+  background: linear-gradient(145deg, #ffffff, #eaf5fb);
+}
+.cardHeader {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 0.55rem;
+  align-items: center;
+}
+.cardHeader strong,
+.cardHeader small { display: block; }
+.cardHeader strong { font-size: 0.72rem; }
+.cardHeader small { margin-top: 0.12rem; color: #71869a; font-size: 0.5rem; }
+.cardHeader > svg { color: #087748; }
+.airOrb { width: 1.85rem; height: 1.85rem; display: grid; place-items: center; border-radius: 50%; color: #fff; background: #0b3154; }
+.computerStatus { display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem; margin-top: 0.65rem; }
+.computerStatus > span { min-height: 3.7rem; display: flex; flex-direction: column; padding: 0.5rem; border: 1px solid #d4e3ec; background: rgba(255, 255, 255, 0.72); }
+.computerStatus svg { margin-bottom: auto; color: #0a6aac; }
+.computerStatus b,
+.computerStatus small { display: block; }
+.computerStatus b { margin-top: 0.5rem; font-size: 0.59rem; }
+.computerStatus small { margin-top: 0.1rem; color: #71869a; font-size: 0.46rem; }
+.needsYou { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 0.5rem; align-items: center; margin-top: 0.45rem; padding: 0.5rem; border: 1px solid #efd7a7; color: #5a3d08; background: #fff8e9; }
+.needsYou small,
+.needsYou b { display: block; }
+.needsYou small { color: #94794b; font-size: 0.45rem; text-transform: uppercase; }
+.needsYou b { margin-top: 0.12rem; font-size: 0.55rem; }
+.needsYou em { padding: 0.3rem 0.4rem; border: 1px solid #ddc38f; font-size: 0.46rem; font-style: normal; }
+.threadNote { margin: 0.15rem 0 0; color: #8ba0b3; font-size: 0.47rem; text-align: center; }
+
+@media (min-width: 901px) and (max-height: 900px) {
+  .threadBody :global(.thread-time) { margin: 0.1rem 0 0.25rem; }
+  .threadBody :global(.phone-message-row) { margin: 0.12rem 0 0.25rem; }
+  .threadBody :global(.phone-bubble) { min-height: 2rem; padding: 0.38rem 0.55rem; font-size: 0.66rem; line-height: 1.2; }
+  .computerCard { min-height: 9.5rem; padding: 0.5rem; }
+  .computerStatus { margin-top: 0.4rem; }
+  .computerStatus > span { min-height: 3.1rem; padding: 0.4rem; }
+  .computerStatus b { margin-top: 0.25rem; }
+  .needsYou { margin-top: 0.35rem; padding: 0.38rem; }
+}
+
+@media (min-width: 901px) and (max-height: 800px) {
+  .threadNote { display: none; }
+}

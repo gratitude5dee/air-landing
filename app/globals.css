@@ -79,6 +79,9 @@ button { color: inherit; }
 .skip-link:focus { transform: none; }
 
 .button {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   min-height: 3.4rem;
   display: inline-flex;
   align-items: center;
@@ -97,7 +100,23 @@ button { color: inherit; }
   transition: transform 180ms var(--spring), box-shadow 180ms ease, background 180ms ease;
 }
 
-.button svg { font-size: 1rem; transition: transform 180ms var(--spring); }
+/* Air's small, contained take on a specular button: the sheen is brief,
+   pointer-safe, and never required to understand or operate the control. */
+.button::after {
+  content: "";
+  position: absolute;
+  inset: -80% -35%;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(108deg, transparent 42%, rgba(255, 255, 255, 0.76) 50%, transparent 58%);
+  mix-blend-mode: soft-light;
+  transform: translateX(-48%) rotate(10deg);
+  transition: transform 620ms var(--settle), opacity 180ms ease;
+}
+.button:hover::after { opacity: 0.9; transform: translateX(48%) rotate(10deg); }
+
+.button svg { position: relative; z-index: 1; font-size: 1rem; transition: transform 180ms var(--spring); }
 .button:hover { transform: translateY(-3px); }
 .button:hover svg { transform: translate(3px, -3px); }
 .button:focus-visible { outline: 2px solid var(--cream-bright); outline-offset: 3px; }
@@ -129,6 +148,7 @@ button { color: inherit; }
 
 .section {
   position: relative;
+  scroll-margin-top: 7rem;
   padding: clamp(5.8rem, 10vw, 9rem) 0;
   overflow: hidden;
 }
@@ -256,6 +276,21 @@ html[data-air-hero-header="covered"] .site-header:focus-within {
   background: rgba(219,237,255,0.18);
 }
 .site-header nav .button { order: 2; }
+.site-header nav .header-plasma-button {
+  order: 2;
+  min-height: 2.8rem;
+  flex: none;
+  padding: 0.65rem 1.08rem;
+  color: #f5fdff;
+  font-size: 0.57rem;
+  letter-spacing: 0.085em;
+  box-shadow:
+    inset 0 1px rgba(255, 255, 255, 0.6),
+    inset 0 -0.15rem 0 rgba(0, 10, 50, 0.26),
+    0 0.45rem 1.25rem rgba(12, 72, 159, 0.26),
+    0 0 0 1px rgba(13, 58, 124, 0.28);
+}
+.site-header nav .header-plasma-button > svg { width: 0.8rem; height: 0.8rem; }
 .site-header nav > a {
   min-height: 2.75rem;
   display: inline-flex;
@@ -340,7 +375,13 @@ html[data-air-hero-header="covered"] .site-header:focus-within {
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
-.intro-brand small { color: rgba(255,255,255,0.68); }
+.intro-brand small {
+  display: block;
+  max-width: 29rem;
+  margin-top: 0.75rem;
+  color: rgba(255,255,255,0.76);
+  line-height: 1.5;
+}
 .intro-controls {
   position: absolute;
   right: clamp(1.2rem, 4vw, 3rem);
@@ -591,7 +632,8 @@ html[data-air-hero-header="covered"] .site-header:focus-within {
   text-shadow: 0 2px 12px rgba(2,8,20,0.55);
 }
 .hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.35rem; margin-top: 2rem; }
-.hero-actions .button { min-width: 20.5rem; min-height: 4rem; padding-inline: 1.75rem; }
+.hero-actions .button,
+.hero-actions .hero-plasma-button { min-width: 20.5rem; min-height: 4rem; padding-inline: 1.75rem; }
 .text-link {
   min-height: 3rem;
   display: inline-flex;
@@ -630,6 +672,7 @@ html[data-air-hero-header="covered"] .site-header:focus-within {
   margin-inline: auto;
   padding: 0.45rem 1rem 0 3rem;
 }
+.hero-phone-mobile { display: none; }
 .app-orbit { position: absolute; inset: 0; z-index: 0; }
 .orbit-map { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
 .orbit-map path { fill: none; stroke: rgba(140,200,255,0.3); stroke-width: 1; stroke-dasharray: 2 8; vector-effect: non-scaling-stroke; }
@@ -1105,6 +1148,8 @@ html[data-air-hero-header="covered"] .site-header:focus-within {
   .hero-content.shell { width: min(100% - 3rem, 56rem); }
   .hero-content { grid-template-columns: 1fr; gap: 4.5rem; min-height: 0; opacity: 1; transform: none; }
   .hero-copy { grid-column: auto; max-width: 43rem; }
+  .hero-phone-desktop { display: none; }
+  .hero-phone-mobile { display: grid; margin: 1.25rem 0 3.25rem; }
   .phone-stage { grid-column: auto; width: min(100%, 52rem); min-height: 62rem; padding: 1rem 1.5rem; }
   .iphone-shell { width: min(28rem, calc(100vw - 6rem)); max-width: none; }
   .cloud-curtain { display: none; }
@@ -1125,12 +1170,12 @@ html[data-air-hero-header="covered"] .site-header:focus-within {
 
 @media (max-width: 720px) {
   .shell { width:min(100% - 2rem,78rem) }
-  .site-header { inset:.75rem .75rem auto;min-height:4.25rem;padding:.5rem .65rem .5rem .85rem;border-radius:1rem;gap:.7rem }.brand img{width:5.55rem}.brand span{font-size:.86rem}.site-header nav{gap:.65rem}.site-header nav::before,.site-header nav>a{display:none}.button-compact{min-height:2.75rem;padding-inline:.78rem;font-size:.5rem}
+  .site-header { inset:.75rem .75rem auto;min-height:4.25rem;padding:.5rem .65rem .5rem .85rem;border-radius:1rem;gap:.7rem }.brand img{width:5.55rem}.brand span{font-size:.86rem}.site-header nav{gap:.65rem}.site-header nav::before,.site-header nav>a:not(.header-plasma-button){display:none}.site-header nav .header-plasma-button{min-height:2.75rem;padding-inline:.78rem;font-size:.5rem}.button-compact{min-height:2.75rem;padding-inline:.78rem;font-size:.5rem}
   .hero-sticky { padding:6.3rem 0 4.5rem; }
   .hero-content.shell { width:min(100% - 2.5rem,56rem) }
   .hero-content { gap:3.5rem;align-items:start }
-  .hero-copy { text-align:left }.hero-copy h1{font-size:clamp(3.05rem,14.8vw,4.6rem);line-height:.88}.hero-copy h1 span,.hero-copy h1 em{white-space:normal}.hero-copy>p{margin-inline:0}.hero-kicker,.hero-actions,.hero-proof{justify-content:flex-start}.hero-actions{width:100%}.hero-actions .button{width:100%;min-width:0}
-  .phone-stage{width:100%;min-height:48rem;padding:1rem .25rem}.iphone-shell{width:min(20.75rem,calc(100vw - 3rem))}.app-icon{width:min(var(--app-size),2.35rem);height:min(var(--app-size),2.35rem);border-radius:.65rem}.app-icon svg{width:1rem;height:1rem}.orbit-map{opacity:.64}
+  .hero-copy { text-align:left }.hero-copy h1{font-size:clamp(3.05rem,14.8vw,4.6rem);line-height:.88}.hero-copy h1 span,.hero-copy h1 em{white-space:normal}.hero-copy>p{margin-inline:0}.hero-kicker,.hero-actions,.hero-proof{justify-content:flex-start}.hero-actions{width:100%}.hero-actions .button,.hero-actions .hero-plasma-button{width:100%;min-width:0}
+  .phone-stage{width:100%;min-height:48rem;padding:1rem .25rem}.hero-phone-mobile{margin:1rem 0 3rem}.iphone-shell{width:min(20.75rem,calc(100vw - 3rem))}.app-icon{width:min(var(--app-size),2.35rem);height:min(var(--app-size),2.35rem);border-radius:.65rem}.app-icon svg{width:1rem;height:1rem}.orbit-map{opacity:.64}
   .hero-frame span:last-child{display:none}
   .section-rail{align-items:flex-start;font-size:.5rem}.section-heading h2,.proof-copy h2{font-size:clamp(2.5rem,12vw,4rem)}
   .feature-grid{grid-template-columns:1fr}.feature-card:nth-child(n){grid-column:auto;min-height:23rem}.feature-card:nth-child(6){min-height:25rem}.feature-copy h3{font-size:2rem}.wallet-visual{align-items:stretch}
@@ -1150,7 +1195,7 @@ html[data-air-hero-header="covered"] .site-header:focus-within {
 }
 
 @media (max-width: 340px) {
-  .site-header { padding-left:.65rem }.site-header .brand img{width:4.65rem}.button-compact{padding-inline:.55rem;font-size:.46rem;letter-spacing:.06em}
+  .site-header { padding-left:.65rem }.site-header .brand img{width:4.65rem}.site-header nav .header-plasma-button{padding-inline:.62rem;font-size:.46rem;letter-spacing:.06em}.button-compact{padding-inline:.55rem;font-size:.46rem;letter-spacing:.06em}
   .iphone-screen{aspect-ratio:9 / 23}
   .tapback-menu{width:10.5rem;flex-wrap:wrap;justify-content:center;top:-6.55rem;border-radius:1.2rem}
   .mini-app{min-height:17.5rem;padding:.5rem}.mini-app-head small{font-size:.46rem}.mini-app li{min-height:1.2rem;font-size:.49rem}.mini-progress{margin:.45rem 0 .35rem}

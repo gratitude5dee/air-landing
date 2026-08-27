@@ -1,8 +1,8 @@
 # Air by WZRD — landing page
 
-Native Next.js landing page for [air.wzrd.tech](https://air.wzrd.tech): a private creative-assistant preview built around iMessage.
+Native Next.js landing page for [air.wzrd.tech](https://air.wzrd.tech): a private-beta personal, creative, composable computer built around one persistent agent and continuous context across iMessage and web.
 
-The public product story is deliberately bounded: one text becomes a curated first visual, Tapbacks direct a deterministic interface preview, and the matching Golden Gate study continues to a storyboard and eight-second first cut. Storyboard-only directions are labeled as such; the page does not imply live browser generation or a guaranteed latency.
+The public product story is deliberately bounded: Ubuntu compute and persistent per-user context are private-beta capabilities; Omarchy and macOS are coming soon; Mini App monetization is rolling out; and agent mesh/Tailscale support is roadmap. The page does not imply 1,000+ selectable models, unlimited usage, guaranteed latency, or guaranteed hardware SKUs.
 
 ## Local development
 
@@ -11,7 +11,7 @@ npm install
 npm run dev
 ```
 
-The preorder form uses an in-memory store only in local development when `DATABASE_URL` is absent. It never unlocks booking until the server returns a durable-success contract with `stored: true` and a receipt.
+The waitlist uses an in-memory store only in local development when `DATABASE_URL` is absent. It never sends a visitor to Stripe until the server returns a durable-success contract with `stored: true` and a receipt.
 
 ## Required checks
 
@@ -23,13 +23,26 @@ The check runs the unit suite, strict TypeScript, versioned-media verification, 
 
 ## Runtime contracts
 
-- `POST /api/preorder` bounds the body, validates consent/contact fields, rate-limits with an atomic ten-minute bucket, deduplicates the identity, and stores name, email, and iMessage number before booking is revealed.
+- `POST /api/preorder` bounds the body, validates consent/contact fields, rate-limits with an atomic ten-minute bucket, deduplicates identity, stores the waitlist entry, and returns only aggregate position/referral data.
+- `GET /api/preorder/status` exposes the aggregate waitlist count and referral-link status without contact information. `POST /api/preorder/checkout-intent` validates the durable waitlist receipt before returning the Stripe Payment Link.
 - Production and Vercel Preview fail closed without a dedicated `DATABASE_URL`, a matching `AIR_DATABASE_ENV`, and a strong `AIR_ID_HASH_SECRET`.
 - `GET /api/internal/prune-preorders` is Vercel-Cron bearer protected. It removes preorder records after 12 months and rate-limit records after 30 days in bounded batches.
-- `AIR_CINEMATIC` and `AIR_MEMORY_ECHO` are server-only build flags. Both default to `false`; invalid values fail the build.
+- `AIR_CINEMATIC` and `AIR_MEMORY_ECHO` are server-only build flags. The cinematic handoff defaults to `true`; memory echo defaults to `false`. Invalid values fail the build.
 - Runtime media lives under content-versioned paths. New bytes require a new path version because those URLs are cached as immutable.
 
 The database contract is versioned in [`db/schema.sql`](db/schema.sql).
+
+## Stripe Payment Link return
+
+Set `NEXT_PUBLIC_STRIPE_PAYMENT_LINK` in every Vercel environment. In the Stripe Payment Link
+Dashboard, set **After payment → Redirect** to:
+
+```
+https://cal.com/5deestudios/air-onboarding
+```
+
+Stripe returns directly to Cal.com; Air receives no payment signal. Do not use waitlist rank to
+enforce paid-only access unless a future signed Stripe webhook establishes verified payment state.
 
 ## Backend parity preview
 

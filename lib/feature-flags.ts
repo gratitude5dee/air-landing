@@ -9,8 +9,9 @@ export type AirFeatureFlags = Readonly<{
 function parseServerFlag(
   name: "AIR_CINEMATIC" | "AIR_MEMORY_ECHO",
   value: string | undefined,
+  fallback: boolean,
 ): boolean {
-  if (value === undefined || value === "") return false;
+  if (value === undefined || value === "") return fallback;
   if (value === "true") return true;
   if (value === "false") return false;
 
@@ -24,10 +25,12 @@ export function resolveAirFeatureFlags(): AirFeatureFlags {
     cinematicEnabled: parseServerFlag(
       "AIR_CINEMATIC",
       process.env.AIR_CINEMATIC,
+      true,
     ),
     memoryEchoEnabled: parseServerFlag(
       "AIR_MEMORY_ECHO",
       process.env.AIR_MEMORY_ECHO,
+      false,
     ),
   });
 }

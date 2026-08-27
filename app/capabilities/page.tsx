@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import {
+  LuBrainCircuit,
   LuInbox,
   LuKeyRound,
   LuLaptop,
   LuLink,
-  LuPhone,
   LuWalletCards,
 } from "react-icons/lu";
 
@@ -14,12 +14,12 @@ import styles from "@/components/DetailPageShell.module.css";
 export const metadata: Metadata = {
   title: "What sits behind the thread | Air by WZRD",
   description:
-    "A labeled view of the private-beta workspace, phone line, inbox, scoped secrets, connector catalog, wallet, and AgentCard behind Air.",
+    "A labeled view of Air's persistent computer, memory, iMessage access, scoped secrets, app-toolkit catalog, Mini Apps, and approvals.",
   alternates: { canonical: "/capabilities" },
   openGraph: {
     title: "What sits behind the thread | Air by WZRD",
     description:
-      "The labeled private-beta operating surface that supports Air's creative thread.",
+      "The labeled private-beta operating surface behind Air's personal composable computer.",
     url: "/capabilities",
   },
 };
@@ -34,20 +34,20 @@ const capabilities = [
     body: "A private workspace that can browse, build, render, and finish the task—not just describe it.",
   },
   {
-    Icon: LuPhone,
+    Icon: LuBrainCircuit,
     kind: "Phone",
     number: "02",
-    title: "Phone number",
+    title: "Persistent memory",
     status: "Private beta",
-    body: "A real number for calls, texts, confirmations, and conversations that stay attached to the work.",
+    body: "Files, preferences, skills, and useful context stay with the same agent across iMessage and web.",
   },
   {
     Icon: LuInbox,
     kind: "Inbox",
     number: "03",
-    title: "Email and inbox",
+    title: "iMessage, web, and inbox",
     status: "Private beta",
-    body: "Air can draft, organize, follow up, and keep the details moving while you stay in iMessage.",
+    body: "Start in iMessage, continue on the web, and keep communication attached to the same working context.",
   },
   {
     Icon: LuKeyRound,
@@ -61,7 +61,7 @@ const capabilities = [
     Icon: LuLink,
     kind: "Connections",
     number: "05",
-    title: "1,000+ available app connections",
+    title: "1,000+ app toolkits",
     status: "Connector catalog",
     body: "Browse Instagram, Meta Ads, Notion, Gmail, Shopify, Slack, and more. Availability does not mean every account is already configured.",
   },
@@ -69,9 +69,9 @@ const capabilities = [
     Icon: LuWalletCards,
     kind: "Wallet",
     number: "06",
-    title: "Wallet & AgentCard",
-    status: "Wallet · Private beta / AgentCard · Coming soon",
-    body: "Payments and other consequential actions remain yours to approve.",
+    title: "Mini Apps & approval",
+    status: "Mini Apps · Private beta / monetization · Rolling out",
+    body: "Focused interfaces turn work into usable software, while consequential actions remain yours to approve.",
   },
 ] as const;
 
@@ -80,8 +80,8 @@ export default function CapabilitiesPage() {
     <DetailPageShell
       current="capabilities"
       eyebrow="THE OPERATING SURFACE · AVAILABILITY LABELED"
-      title="The tools behind the creative thread."
-      description="Air’s creative thread is designed to be supported by a workspace, phone line, inbox, scoped secrets, and a connector catalog. Each item is labeled by its current availability."
+      title="The systems inside your composable computer."
+      description="Air combines one persistent workspace, memory, communication surfaces, scoped secrets, supported connections, Mini Apps, and approval controls. Each item is labeled by current availability."
     >
       <section
         className={`${styles.chapter} ${styles.capabilityChapter}`}
@@ -98,8 +98,8 @@ export default function CapabilitiesPage() {
             <span>06 labeled capabilities</span>
           </div>
           <div className={styles.chapterHeading}>
-            <h2 id="support-title">Support the idea without losing the thread.</h2>
-            <p>These are the grounded systems that let a creative conversation turn into finished, reviewable work.</p>
+            <h2 id="support-title">Change the stack without losing the context.</h2>
+            <p>These are the grounded systems that let one request turn into finished, reviewable work.</p>
           </div>
 
           <div className={styles.capabilitySurface} aria-label="Air operating surface">

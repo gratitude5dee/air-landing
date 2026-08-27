@@ -1,10 +1,36 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
   <defs>
-    <linearGradient id="sky" x1="0" x2="0" y1="0" y2="1">
-      <stop stop-color="#8cc8ff"/><stop offset="1" stop-color="#0a2b65"/>
+    <linearGradient id="sky" x1="8" y1="4" x2="56" y2="60" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#eaf9ff"/>
+      <stop offset=".46" stop-color="#8ed5f4"/>
+      <stop offset="1" stop-color="#297fbc"/>
     </linearGradient>
+    <radialGradient id="orb" cx="35%" cy="28%" r="72%">
+      <stop stop-color="#f7feff"/>
+      <stop offset=".18" stop-color="#c5f5ff"/>
+      <stop offset=".48" stop-color="#62c7ed"/>
+      <stop offset=".77" stop-color="#1776b2"/>
+      <stop offset="1" stop-color="#063c78"/>
+    </radialGradient>
+    <linearGradient id="flow" x1="17" y1="20" x2="47" y2="46" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ffffff" stop-opacity=".95"/>
+      <stop offset=".48" stop-color="#baf3ff" stop-opacity=".58"/>
+      <stop offset="1" stop-color="#4fc7eb" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2.3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <clipPath id="orbClip"><circle cx="32" cy="32" r="21.5"/></clipPath>
   </defs>
-  <rect width="64" height="64" rx="16" fill="url(#sky)"/>
-  <path d="M15 40c0-5 4-9 9-9 2-7 8-11 15-9 5 1 9 5 10 10 4 1 7 4 7 8H15Z" fill="#f8f5ec" fill-opacity=".94"/>
-  <text x="32" y="43" text-anchor="middle" font-family="Georgia,serif" font-size="24" fill="#071124">a</text>
+  <rect width="64" height="64" rx="17" fill="url(#sky)"/>
+  <rect x="1" y="1" width="62" height="62" rx="16" fill="none" stroke="#fff" stroke-opacity=".8"/>
+  <circle cx="32" cy="32" r="23" fill="#e9fbff" fill-opacity=".34" filter="url(#glow)"/>
+  <circle cx="32" cy="32" r="21.5" fill="url(#orb)"/>
+  <g clip-path="url(#orbClip)">
+    <path d="M8 30c8-9 17-11 29-6 7 3 13 2 20-2" fill="none" stroke="url(#flow)" stroke-linecap="round" stroke-width="5.8"/>
+    <path d="M9 42c10-7 19-8 27-4 7 3 13 2 20-3" fill="none" stroke="#d8fbff" stroke-linecap="round" stroke-opacity=".52" stroke-width="3.2"/>
+    <ellipse cx="25" cy="20" rx="8" ry="4.2" fill="#fff" fill-opacity=".68" transform="rotate(-24 25 20)"/>
+  </g>
+  <circle cx="32" cy="32" r="21.5" fill="none" stroke="#effdff" stroke-opacity=".78"/>
 </svg>

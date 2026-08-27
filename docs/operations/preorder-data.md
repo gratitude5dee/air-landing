@@ -1,8 +1,12 @@
 # Preorder data operations
 
 This runbook covers the personal data collected by `POST /api/preorder`: name,
-email address, iMessage number, consent state, and an opaque UUID receipt. It also
-covers the HMAC-derived identity and rate-limit records used to protect the form.
+email address, phone/iMessage number, consent state, and an opaque UUID receipt. It also
+covers an unguessable referral code, referral counts, and the
+HMAC-derived identity and rate-limit records used to protect the form.
+
+Referral links reveal only aggregate position and referral-count data. They must never expose
+names, email addresses, phone numbers, receipts, or whether a particular person has paid.
 
 ## Environment and access boundaries
 
@@ -25,6 +29,11 @@ covers the HMAC-derived identity and rate-limit records used to protect the form
 - Limit Vercel environment-variable access to the smallest operating group,
   rotate credentials after suspected exposure, and keep contact fields out of
   command output, tickets, analytics, and application logs.
+- `client_reference_id` sent to Stripe is an opaque record locator. Do not put an email address,
+  phone number, referral code, or secret in the Payment Link query string.
+- Stripe redirects straight to Cal.com after payment, so Air receives no payment confirmation.
+  Do not use waitlist rank to grant paid-only product access; use a signed Stripe webhook before
+  that policy is needed.
 
 Example grants for an existing role, run by the database owner after replacing
 the role and schema names:

@@ -21,6 +21,10 @@ const schema = z.object({
     }, "Add a valid iMessage number."),
   consent: z.literal(true, { error: "Confirm that we may contact you about Air." }),
   company: z.string().max(256).optional(),
+  referralCode: z.string().trim().max(64).optional(),
+  interest: z
+    .enum(["General", "Personal", "Adaptive", "Creator OS", "Dedicated Mac", "Enterprise"])
+    .default("General"),
 });
 
 type FailureCode = "invalid_request" | "rate_limited" | "storage_unavailable";
@@ -142,10 +146,19 @@ export async function POST(request: Request) {
       imessage: parsed.data.imessage.trim(),
       consent: parsed.data.consent,
       createdAt: new Date().toISOString(),
-      source: "air-landing",
-    });
+      source: `air-landing:${parsed.data.interest.toLowerCase().replace(/\s+/g, "-")}`,
+    }, parsed.data.referralCode);
     return NextResponse.json(
-      { ok: true, stored: true, receipt: stored.receipt },
+      {
+        ok: true,
+        stored: true,
+        receipt: stored.receipt,
+        totalWaiting: stored.totalWaiting,
+        position: stored.position,
+        referralCode: stored.referralCode,
+        referralCount: stored.referralCount,
+        referralCredited: stored.referralCredited,
+      },
       {
         headers: {
           "cache-control": "private, no-store",

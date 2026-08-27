@@ -8,10 +8,15 @@ const configPath = fileURLToPath(new URL("../microfrontends.json", import.meta.u
 describe("microfrontends route boundary", () => {
   it("keeps Air landing as the default and backend paths explicitly allowlisted", () => {
     const config = JSON.parse(readFileSync(configPath, "utf8")) as {
-      applications: Record<string, { routing?: Array<{ paths: string[] }> }>;
+      applications: Record<string, {
+        development?: { fallback: string };
+        routing?: Array<{ paths: string[] }>;
+      }>;
     };
 
-    expect(config.applications["air-landing"]).toEqual({});
+    expect(config.applications["air-landing"]).toEqual({
+      development: { fallback: "https://air.wzrd.tech" },
+    });
     expect(config.applications.air?.routing).toEqual([
       {
         paths: [

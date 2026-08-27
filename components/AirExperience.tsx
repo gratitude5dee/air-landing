@@ -42,14 +42,19 @@ import {
   type AirDemoAction,
   type AirDemoState,
 } from "@/components/air-demo-state";
-import { PreorderButton } from "@/components/Preorder";
 import {
   DIRECTIONS,
   getDirection,
   type DirectionSpec,
 } from "@/content/directions";
+import {
+  AIR_PRODUCT_DESCRIPTION,
+  AIR_TAGLINE,
+  AIR_TAGLINE_LINES,
+} from "@/lib/air-copy";
 import { resolveHeroTimeline } from "@/lib/hero-timeline";
 import { ShinyText } from "@/components/ShinyText";
+import { PreorderPlasmaButton } from "@/components/Preorder";
 
 export type { AirDemoAction, AirDemoState } from "@/components/air-demo-state";
 
@@ -72,8 +77,15 @@ type AirExperienceProps = {
 
 type HeroVariables = CSSProperties & {
   "--cloud-progress": number;
+  "--cloud-veil-progress": number;
+  "--cloud-prompt-progress": number;
   "--hero-progress": number;
+  "--poster-exit-progress": number;
   "--reveal-progress": number;
+  "--title-reveal-progress": number;
+  "--title-exit-progress": number;
+  "--title-progress": number;
+  "--title-sheen-position": string;
   "--handoff-progress": number;
   "--orbit-progress": number;
   "--orbit-angle": string;
@@ -81,6 +93,7 @@ type HeroVariables = CSSProperties & {
 };
 
 type SkyElement = HTMLElement & { progress: number; skyStatus?: string };
+type IntroCompleteEvent = Event & { detail?: { bypassCinematic?: boolean } };
 
 const AirExperienceContext = createContext<AirExperienceValue | null>(null);
 
@@ -115,6 +128,68 @@ const visuallyHidden: CSSProperties = {
   whiteSpace: "nowrap",
   border: 0,
 };
+
+function HeroPhoneStage({ phoneDemo, mobile = false }: { phoneDemo: ReactNode; mobile?: boolean }) {
+  return (
+    <div
+      className={`phone-stage ${mobile ? "hero-phone-mobile" : "hero-phone-desktop"}`}
+      role="region"
+      aria-label="Air in iMessage"
+    >
+      <div className="app-orbit" aria-hidden="true">
+        <div className="app-orbit-motion">
+          <svg
+            className="orbit-map"
+            viewBox="0 0 720 820"
+            preserveAspectRatio="none"
+            focusable="false"
+          >
+            <path d="M42 238C168 58 431 26 666 190" />
+            <path d="M25 583C171 778 474 812 692 632" />
+            {[145, 268, 392, 518, 631].map((cx, index) => (
+              <circle
+                key={cx}
+                cx={cx}
+                cy={[174, 106, 92, 116, 174][index]}
+                r="3.25"
+              />
+            ))}
+            {[96, 206, 520, 650].map((cx, index) => (
+              <circle
+                key={cx}
+                cx={cx}
+                cy={[526, 700, 752, 654][index]}
+                r="3.25"
+              />
+            ))}
+          </svg>
+          {appIcons.map(
+            ({ Icon, name, color, x, y, size, rotate }, index) => (
+              <span
+                key={name}
+                className="app-icon"
+                style={
+                  {
+                    "--app-x": x,
+                    "--app-y": y,
+                    "--app-color": color,
+                    "--app-size": size,
+                    "--app-rotate": rotate,
+                    "--app-delay": `${index * -0.42}s`,
+                  } as CSSProperties
+                }
+                title={name}
+              >
+                <span className="app-icon-face"><Icon /></span>
+              </span>
+            ),
+          )}
+        </div>
+      </div>
+      {phoneDemo}
+    </div>
+  );
+}
 
 export function useAirExperience(): AirExperienceValue {
   const experience = useContext(AirExperienceContext);
@@ -167,11 +242,14 @@ export function AirExperience({
 }
 
 function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
-  const { state, directions, dispatch, cinematicEnabled } = useAirExperience();
+  const { state, cinematicEnabled } = useAirExperience();
   const sectionRef = useRef<HTMLElement>(null);
   const skyRef = useRef<HTMLElement>(null);
   const cinematicActiveRef = useRef(false);
   const [cinematicActive, setCinematicActive] = useState(false);
+  const [cinematicBypassed, setCinematicBypassed] = useState(false);
+  const [introReady, setIntroReady] = useState(false);
+  const useCinematicPresentation = cinematicEnabled && !cinematicBypassed;
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -189,6 +267,7 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
     let headerFocusActive = false;
     let latestRevealProgress = 1;
     let cancelled = false;
+    let introMeasureTimer = 0;
     let shaderStatus: "pending" | "ready" | "fallback" = "pending";
 
     const setSkyProgress = () => {
@@ -213,7 +292,7 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
     const update = () => {
       animationFrame = 0;
       const cinematicEligible =
-        cinematicEnabled &&
+        useCinematicPresentation &&
         !reducedMotion.matches &&
         !compactViewport.matches &&
         finePointer.matches &&
@@ -229,6 +308,13 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
       }
 
       const timeline = resolveHeroTimeline(progress);
+      // Keep the poster completely clean during its hold. The cloud curtain
+      // enters only as the poster begins to dissolve, then clears on its own
+      // track so the title can feel like it rises from the atmosphere.
+      const cloudVeilProgress =
+        timeline.posterExitProgress * (1 - timeline.revealProgress);
+      const cloudPromptProgress =
+        timeline.posterExitProgress * Math.max(0, 1 - timeline.revealProgress * 3);
       latestRevealProgress = timeline.revealProgress;
       if (cinematicActiveRef.current !== cinematicEligible) {
         cinematicActiveRef.current = cinematicEligible;
@@ -238,7 +324,19 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
         ? "cinematic"
         : "static";
       section.dataset.airShader = cinematicEligible ? shaderStatus : "off";
+      section.dataset.airPoster =
+        timeline.posterExitProgress >= 0.995 ? "hidden" : "visible";
       section.style.setProperty("--reveal-progress", String(timeline.revealProgress));
+      section.style.setProperty("--poster-exit-progress", String(timeline.posterExitProgress));
+      section.style.setProperty("--title-reveal-progress", String(timeline.titleRevealProgress));
+      section.style.setProperty("--title-exit-progress", String(timeline.titleExitProgress));
+      section.style.setProperty("--title-progress", String(timeline.titleProgress));
+      // The highlight is tied to the title track instead of a free-running
+      // loop: it enters with the words, settles while the promise holds, and
+      // leaves with the handoff to the product hero.
+      const titleSheenPosition =
+        150 - timeline.titleRevealProgress * 160 - timeline.titleExitProgress * 110;
+      section.style.setProperty("--title-sheen-position", `${titleSheenPosition}%`);
       section.style.setProperty("--handoff-progress", String(timeline.handoffProgress));
       section.style.setProperty("--orbit-progress", String(timeline.orbitProgress));
       section.style.setProperty("--orbit-angle", `${timeline.orbitProgress * 25}deg`);
@@ -246,6 +344,8 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
       // Legacy custom properties retain the existing non-cinematic fallback
       // rules while the named timeline tracks drive the cloudborne sequence.
       section.style.setProperty("--cloud-progress", String(timeline.revealProgress));
+      section.style.setProperty("--cloud-veil-progress", String(cloudVeilProgress));
+      section.style.setProperty("--cloud-prompt-progress", String(cloudPromptProgress));
       section.style.setProperty("--hero-progress", String(timeline.handoffProgress));
       document.documentElement.dataset.airHeroHeader =
         timeline.headerRevealed ? "revealed" : "covered";
@@ -257,18 +357,9 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
     };
     const handleFocusIn = (event: FocusEvent) => {
       const target = event.target;
-      // Intro dismissal lands on the opening's named region, not an action.
-      // Keep the first scroll position intact there; a tab into a real hero
-      // control still invokes the accessibility escape hatch below.
-      if (
-        target instanceof Element &&
-        target.closest("[data-air-opening-focus]")
-      ) {
-        focusFloorActive = false;
-        scheduleUpdate();
-        return;
-      }
-      focusFloorActive = true;
+      // Keyboard focus must never land on an obscured product control. The
+      // atmospheric sequence is visual-only once someone starts navigating.
+      focusFloorActive = target instanceof Element;
       scheduleUpdate();
     };
     const handleFocusOut = (event: FocusEvent) => {
@@ -301,6 +392,57 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
     update();
     window.addEventListener("scroll", scheduleUpdate, { passive: true });
     window.addEventListener("resize", scheduleUpdate);
+    // The intro is mounted alongside this experience. Give its final frame a
+    // paint to leave the modal before recalculating the poster-first scene;
+    // this prevents a stale pre-intro value from leaving the scroll sequence
+    // hidden after a natural video completion.
+    const handleIntroComplete = (event: Event) => {
+      if ((event as IntroCompleteEvent).detail?.bypassCinematic) {
+        setCinematicBypassed(true);
+      }
+      setIntroReady(true);
+      // The dialog is removed on this same handoff frame. Measure after two
+      // paints, then once more after its exit transition, so a fast video
+      // completion cannot leave the poster or cloud timeline at a stale size.
+      window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(scheduleUpdate);
+      });
+      if (introMeasureTimer) window.clearTimeout(introMeasureTimer);
+      introMeasureTimer = window.setTimeout(scheduleUpdate, 140);
+    };
+    const showCompleteHomeHero = () => {
+      setCinematicBypassed(true);
+      setIntroReady(true);
+      document.documentElement.dataset.airDirectHome = "true";
+      document.documentElement.dataset.airIntro = "skip";
+      document.documentElement.dataset.airHeroHeader = "revealed";
+
+      window.requestAnimationFrame(() => {
+        // The site defaults to smooth anchor navigation. Suppress that just
+        // for this deliberate return so the finished home hero is present at
+        // once instead of slowly travelling through the page from the logo.
+        const documentRoot = document.documentElement;
+        const previousScrollBehavior = documentRoot.style.scrollBehavior;
+        documentRoot.style.scrollBehavior = "auto";
+        const returnToHero = () => {
+          // Chromium supports `instant`, which explicitly overrides the
+          // document's global smooth-scroll preference. Other browsers fall
+          // back to the temporary inline `auto` rule above.
+          window.scrollTo({ top: 0, left: 0, behavior: "instant" as ScrollBehavior });
+        };
+        returnToHero();
+
+        window.requestAnimationFrame(() => {
+          returnToHero();
+          window.setTimeout(() => {
+            documentRoot.style.scrollBehavior = previousScrollBehavior;
+            document.getElementById("hero-title")?.focus({ preventScroll: true });
+          }, 120);
+        });
+      });
+    };
+    window.addEventListener("air:intro-complete", handleIntroComplete);
+    window.addEventListener("air:show-home-hero", showCompleteHomeHero);
     section.addEventListener("focusin", handleFocusIn);
     section.addEventListener("focusout", handleFocusOut);
     document.addEventListener("focusin", handleDocumentFocusIn);
@@ -317,15 +459,28 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
     finePointer.addEventListener("change", scheduleUpdate);
     forcedColors.addEventListener("change", scheduleUpdate);
 
-    if (cinematicEnabled) {
+    if (useCinematicPresentation) {
       customElements.whenDefined("wz-sky").then(setSkyProgress);
+    }
+
+    // The event can fire before this component has attached its listener on
+    // a warm navigation. In that case the intro state is the source of truth.
+    if (document.documentElement.dataset.airDirectHome === "true") {
+      showCompleteHomeHero();
+    } else if (document.documentElement.dataset.airIntro === "complete") {
+      handleIntroComplete(new CustomEvent("air:intro-complete"));
+    } else if (document.documentElement.dataset.airIntro === "skip") {
+      setIntroReady(true);
     }
 
     return () => {
       cancelled = true;
       if (animationFrame) cancelAnimationFrame(animationFrame);
+      if (introMeasureTimer) window.clearTimeout(introMeasureTimer);
       window.removeEventListener("scroll", scheduleUpdate);
       window.removeEventListener("resize", scheduleUpdate);
+      window.removeEventListener("air:intro-complete", handleIntroComplete);
+      window.removeEventListener("air:show-home-hero", showCompleteHomeHero);
       section.removeEventListener("focusin", handleFocusIn);
       section.removeEventListener("focusout", handleFocusOut);
       document.removeEventListener("focusin", handleDocumentFocusIn);
@@ -337,23 +492,37 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
       forcedColors.removeEventListener("change", scheduleUpdate);
       delete document.documentElement.dataset.airHeroHeader;
     };
-  }, [cinematicEnabled]);
+  }, [useCinematicPresentation]);
 
-  const heroStyle: HeroVariables = cinematicEnabled
+  const heroStyle: HeroVariables = useCinematicPresentation
     ? {
-        "--cloud-progress": 0,
-        "--hero-progress": 0,
-        "--reveal-progress": 0,
-        "--handoff-progress": 0,
+      "--cloud-progress": 0,
+      "--cloud-veil-progress": 0,
+      "--cloud-prompt-progress": 0,
+      "--hero-progress": 0,
+      "--poster-exit-progress": 0,
+      "--reveal-progress": 0,
+      "--title-reveal-progress": 0,
+      "--title-exit-progress": 0,
+      "--title-progress": 0,
+      "--title-sheen-position": "150%",
+      "--handoff-progress": 0,
         "--orbit-progress": 0,
         "--orbit-angle": "0deg",
         "--counter-orbit-angle": "0deg",
       }
     : {
-        "--cloud-progress": 1,
-        "--hero-progress": 1,
-        "--reveal-progress": 1,
-        "--handoff-progress": 1,
+      "--cloud-progress": 1,
+      "--cloud-veil-progress": 0,
+      "--cloud-prompt-progress": 0,
+      "--hero-progress": 1,
+      "--poster-exit-progress": 1,
+      "--reveal-progress": 1,
+      "--title-reveal-progress": 0,
+      "--title-exit-progress": 1,
+      "--title-progress": 0,
+      "--title-sheen-position": "150%",
+      "--handoff-progress": 1,
         "--orbit-progress": 1,
         "--orbit-angle": "25deg",
         "--counter-orbit-angle": "-25deg",
@@ -365,12 +534,13 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
       ref={sectionRef}
       className="hero-scroll"
       style={heroStyle}
-      data-air-presentation={cinematicEnabled ? "cinematic-pending" : "static"}
+      data-air-presentation={useCinematicPresentation ? "cinematic-pending" : "static"}
+      data-air-intro-ready={introReady ? "true" : "false"}
       aria-labelledby="hero-title"
     >
       <div
         className="hero-sticky"
-        style={cinematicEnabled ? undefined : { position: "relative" }}
+        style={useCinematicPresentation ? undefined : { position: "relative" }}
       >
         <div className="hero-sky" aria-hidden />
         <div className="sun-haze" aria-hidden />
@@ -378,15 +548,12 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
         <div
           id="air-opening"
           className="hero-opening"
-          role="region"
-          aria-label="Air opening"
-          tabIndex={-1}
-          data-air-opening-focus
+          aria-hidden="true"
         >
           <img
             className="hero-opening-image"
             src="/images/opening/v2026-08-19-a/finframe.webp"
-            alt="Air by WZRD.tech in an open blue sky above clouds."
+            alt=""
             width={1920}
             height={1080}
             fetchPriority="high"
@@ -404,24 +571,40 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
             bloom: "low",
             fade: "",
           })}
-        {cinematicEnabled &&
+        {useCinematicPresentation &&
           createElement("wz-sky", {
             ref: skyRef,
             "aria-hidden": "true",
             className: "hero-shader",
           })}
-        {cinematicEnabled && (
+        {useCinematicPresentation && (
           <div className="cloud-curtain" aria-hidden>
             <div className="cloud-bank bank-one" />
             <div className="cloud-bank bank-two" />
-            <p>scroll to clear the clouds <LuChevronDown /></p>
           </div>
         )}
+        {useCinematicPresentation && (
+          <p className="hero-scroll-prompt" aria-hidden>
+            <span>Scroll to clear clouds</span>
+            <LuChevronDown />
+          </p>
+        )}
+        <p className="hero-cloud-title" aria-hidden="true">
+          <ShinyText
+            className="hero-cloud-shiny"
+            color="#eaf8ff"
+            shineColor="#ffffff"
+            spread={102}
+            disabled={!cinematicActive}
+          >
+            {AIR_TAGLINE}
+          </ShinyText>
+        </p>
         <div className="hero-grain" aria-hidden />
 
         <div className="hero-frame" aria-hidden>
           <span>air.wzrd.tech</span>
-          <span>creative intelligence / iMessage</span>
+          <span>personal compute / iMessage</span>
         </div>
 
         <div className="hero-content shell">
@@ -430,140 +613,51 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
               <span className="pulse-dot" aria-hidden /> air by WZRD.tech
               <span>Private beta</span>
             </div>
+            <HeroPhoneStage phoneDemo={phoneDemo} mobile />
             <h1
               id="hero-title"
-              aria-label="Your personal creative assistant in your iMessages."
+              tabIndex={-1}
             >
               <ShinyText
-                className="hero-shiny-line"
+                className="hero-shiny-line hero-title-line"
                 color="#03234d"
                 shineColor="#3d7faa"
                 speed={13.2}
                 spread={112}
               >
-                Your personal creative
+                {AIR_TAGLINE_LINES[0]}
               </ShinyText>
+              {" "}
               <ShinyText
-                className="hero-shiny-line"
-                color="#03234d"
-                shineColor="#3d7faa"
+                className="hero-shiny-line hero-title-line hero-title-line--signal"
+                color="#045991"
+                shineColor="#4b8fc1"
                 speed={13.2}
                 delay={0.42}
                 spread={112}
               >
-                assistant in your
-              </ShinyText>
-              <ShinyText
-                className="hero-shiny-line hero-shiny-line--signal"
-                color="#045991"
-                shineColor="#4b8fc1"
-                speed={13.2}
-                delay={0.84}
-                spread={112}
-              >
-                iMessages.
+                {AIR_TAGLINE_LINES[1]}
               </ShinyText>
             </h1>
-            <p>
-              Text a thought, a reference, or a rough brief. Air helps shape the
-              next creative move and brings it back to the thread—without another
-              dashboard.
-            </p>
+            <p>{AIR_PRODUCT_DESCRIPTION}</p>
             <p className="hero-status">
-              Interface preview · one private thread · approval stays in the loop.
+              Ubuntu private beta · 1,000+ app-toolkit catalog · human approval built in.
             </p>
-
-            <div
-              className="direction-cues"
-              role="group"
-              aria-label="Choose a creative cue · Interface preview"
-            >
-              {directions.map((direction) => {
-                const selected = state.directionId === direction.id;
-                return (
-                  <button
-                    key={direction.id}
-                    type="button"
-                    className={`direction-chip${selected ? " is-selected" : ""}`}
-                    aria-pressed={selected}
-                    aria-current={selected ? "true" : undefined}
-                    style={{ minHeight: 44 }}
-                    onClick={() =>
-                      dispatch({
-                        type: "select-direction",
-                        directionId: direction.id,
-                      })
-                    }
-                  >
-                    {direction.cueLabel}
-                  </button>
-                );
-              })}
-            </div>
 
             <div className="hero-actions">
-              <PreorderButton />
+              <PreorderPlasmaButton
+                className="hero-plasma-button"
+              />
+              <a className="text-link" href="#what-is-air">Explore the computer <span aria-hidden>↓</span></a>
             </div>
             <ul className="hero-proof" aria-label="Air preview status">
-              <li><LuCheck aria-hidden /> private beta</li>
-              <li><LuCheck aria-hidden /> storyboard · approval required</li>
-              <li><LuCheck aria-hidden /> connector catalog · expanding</li>
+              <li><LuCheck aria-hidden /> one person · one persistent agent</li>
+              <li><LuCheck aria-hidden /> iMessage + web continuity</li>
+              <li><LuCheck aria-hidden /> approval required</li>
             </ul>
           </div>
 
-          <div className="phone-stage" role="region" aria-label="Air in iMessage">
-            <div className="app-orbit" aria-hidden="true">
-              <div className="app-orbit-motion">
-                <svg
-                  className="orbit-map"
-                  viewBox="0 0 720 820"
-                  preserveAspectRatio="none"
-                  focusable="false"
-                >
-                  <path d="M42 238C168 58 431 26 666 190" />
-                  <path d="M25 583C171 778 474 812 692 632" />
-                  {[145, 268, 392, 518, 631].map((cx, index) => (
-                    <circle
-                      key={cx}
-                      cx={cx}
-                      cy={[174, 106, 92, 116, 174][index]}
-                      r="3.25"
-                    />
-                  ))}
-                  {[96, 206, 520, 650].map((cx, index) => (
-                    <circle
-                      key={cx}
-                      cx={cx}
-                      cy={[526, 700, 752, 654][index]}
-                      r="3.25"
-                    />
-                  ))}
-                </svg>
-                {appIcons.map(
-                  ({ Icon, name, color, x, y, size, rotate }, index) => (
-                    <span
-                      key={name}
-                      className="app-icon"
-                      style={
-                        {
-                          "--app-x": x,
-                          "--app-y": y,
-                          "--app-color": color,
-                          "--app-size": size,
-                          "--app-rotate": rotate,
-                          "--app-delay": `${index * -0.42}s`,
-                        } as CSSProperties
-                      }
-                      title={name}
-                    >
-                      <span className="app-icon-face"><Icon /></span>
-                    </span>
-                  ),
-                )}
-              </div>
-            </div>
-            {phoneDemo}
-          </div>
+          <HeroPhoneStage phoneDemo={phoneDemo} />
         </div>
 
         <p

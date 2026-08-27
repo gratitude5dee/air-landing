@@ -7,6 +7,7 @@ import { AmbientCursor } from "@/components/AmbientCursor";
 import { PageAtmosphere } from "@/components/PageAtmosphere";
 import { PreorderProvider } from "@/components/Preorder";
 import { resolveAirFeatureFlags } from "@/lib/feature-flags";
+import { AIR_PRODUCT_DESCRIPTION, AIR_TAGLINE } from "@/lib/air-copy";
 import "@fontsource-variable/azeret-mono";
 import "@fontsource-variable/inter";
 import "./globals.css";
@@ -15,29 +16,39 @@ import "./typography.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://air.wzrd.tech"),
-  title: "Air by WZRD — Your personal creative assistant in your iMessages",
+  title: "Air by WZRD | Personal Assistant for Daily Work",
   description:
-    "Text a thought, a reference, or a rough brief. Air helps shape the next creative move and brings it back to your thread—without another dashboard.",
+    `Air is ${AIR_TAGLINE.toLowerCase()} ${AIR_PRODUCT_DESCRIPTION}`,
   applicationName: "Air by WZRD.tech",
-  keywords: ["creative assistant", "iMessage assistant", "AI agent", "WZRD.tech"],
+  keywords: [
+    "personal AI computer",
+    "AI agent with its own computer",
+    "iMessage AI assistant",
+    "persistent AI memory",
+    "composable AI agent",
+    "AI Mini App Store",
+    "WZRD.tech",
+  ],
+  alternates: { canonical: "/" },
   openGraph: {
     type: "website",
     siteName: "Air by WZRD.tech",
-    title: "Your personal creative assistant in your iMessages.",
-    description: "Text a thought, a reference, or a rough brief. Air brings the next creative move back to the thread.",
+    title: `Air — ${AIR_TAGLINE}`,
+    description: AIR_PRODUCT_DESCRIPTION,
     url: "https://air.wzrd.tech",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Air by WZRD — Your personal creative assistant in your iMessages",
-    description: "Text a thought. Air brings the next creative move back to the thread.",
+    title: "Air by WZRD | Personal Composable AI Computer",
+    description: AIR_PRODUCT_DESCRIPTION,
+    images: ["/opengraph-image"],
   },
   robots: { index: true, follow: true },
 };
 
 export const viewport: Viewport = {
   colorScheme: "light",
-  themeColor: "#c5e6f8",
+  themeColor: "#d9edf7",
   width: "device-width",
   initialScale: 1,
 };
@@ -46,7 +57,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   const { cinematicEnabled } = resolveAirFeatureFlags();
 
   return (
-    <html lang="en" data-air-hero-header="covered">
+    <html lang="en" data-air-hero-header="covered" suppressHydrationWarning>
       <body>
         <a className="skip-link" href="#main">Skip to content</a>
         <AmbientCursor />
@@ -54,7 +65,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <noscript>
           <style>{`
             html[data-air-hero-header="covered"] .site-header{z-index:80;opacity:1;pointer-events:auto;filter:none;transform:none}
-            .hero-scroll{height:auto!important}.hero-sticky{position:relative!important}.hero-opening,.hero-shader,.cloud-curtain{display:none!important}.hero-content{opacity:1!important;transform:none!important}
+            .hero-scroll{height:auto!important}.hero-sticky{position:relative!important}.hero-opening,.hero-shader,.cloud-curtain,.hero-cloud-title{display:none!important}.hero-content{opacity:1!important;transform:none!important}
           `}</style>
         </noscript>
         <PreorderProvider>{children}</PreorderProvider>

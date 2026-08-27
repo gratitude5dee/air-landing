@@ -1,7 +1,11 @@
 {
   "$schema": "https://openapi.vercel.sh/microfrontends.json",
   "applications": {
-    "air-landing": {},
+    "air-landing": {
+      "development": {
+        "fallback": "https://air.wzrd.tech"
+      }
+    },
     "air": {
       "routing": [
         {

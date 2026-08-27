@@ -11,7 +11,9 @@ const SESSION_KEY = "air-intro-seen-v1";
 const INTRO_HANDOFF_MS = 820;
 
 type FinishOptions = {
+  bypassCinematic?: boolean;
   immediate?: boolean;
+  focusHero?: boolean;
 };
 
 export function IntroFilm() {
@@ -19,6 +21,8 @@ export function IntroFilm() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const skipRef = useRef<HTMLButtonElement>(null);
   const finishingRef = useRef(false);
+  const focusHeroRef = useRef(false);
+  const bypassCinematicRef = useRef(false);
   const exitTimerRef = useRef<number | null>(null);
   const audioFadeFrameRef = useRef<number | null>(null);
   const [eligible, setEligible] = useState(false);
@@ -102,15 +106,18 @@ export function IntroFilm() {
     document.documentElement.dataset.airIntro = "complete";
     document.documentElement.dataset.airHydrated = "ready";
     window.dispatchEvent(new CustomEvent("air:intro-statechange", { detail: { state: "complete" } }));
-    window.dispatchEvent(new CustomEvent("air:intro-complete"));
     setEligible(false);
 
-    // The focus receiver deliberately keeps the cinematic timeline at its
-    // opening state. Tabbing to a real hero control still resolves the full,
-    // readable composition immediately.
     requestAnimationFrame(() => {
-      const opening = document.getElementById("air-opening");
-      opening?.focus({ preventScroll: true });
+      // Closing the modal and then broadcasting the handoff guarantees that
+      // the hero measures the page it is about to reveal, not the covered
+      // opening behind the video.
+    window.dispatchEvent(new CustomEvent("air:intro-complete", {
+      detail: { bypassCinematic: bypassCinematicRef.current },
+    }));
+      if (focusHeroRef.current) {
+        document.getElementById("hero-title")?.focus({ preventScroll: true });
+      }
       setAnnouncement("Intro complete. Air experience ready.");
     });
 
@@ -128,11 +135,19 @@ export function IntroFilm() {
     const bootState = root.dataset.airIntro;
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const forcedColors = window.matchMedia("(forced-colors: active)").matches;
+    const compactViewport = window.matchMedia("(max-width: 900px)").matches;
+    const finePointer = window.matchMedia("(pointer: fine)").matches;
 
     // The beforeInteractive prepaint bootstrap is the only authority for
     // fresh/seen/reduced/Save-Data eligibility. If it is missing or fails,
     // fail open to the complete page instead of flashing or trapping an intro.
-    if (bootState !== "eligible" || reducedMotion || forcedColors) {
+    if (
+      bootState !== "eligible" ||
+      reducedMotion ||
+      forcedColors ||
+      compactViewport ||
+      !finePointer
+    ) {
       root.dataset.airIntro = "skip";
       root.dataset.airHydrated = "ready";
       window.dispatchEvent(new CustomEvent("air:intro-statechange", { detail: { state: "bypassed" } }));
@@ -175,6 +190,8 @@ export function IntroFilm() {
   const finish = useCallback((options: FinishOptions = {}) => {
     if (finishingRef.current) return;
     finishingRef.current = true;
+    focusHeroRef.current = Boolean(options.focusHero);
+    bypassCinematicRef.current = Boolean(options.bypassCinematic);
 
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const forcedColors = window.matchMedia("(forced-colors: active)").matches;
@@ -195,26 +212,45 @@ export function IntroFilm() {
     exitTimerRef.current = window.setTimeout(complete, INTRO_HANDOFF_MS);
   }, [complete, stopFilm]);
 
+  // A cinematic layer must never become a dead end. Media errors include
+  // blocked codecs, a partial deploy, and an interrupted network request, so
+  // release straight into the fully usable hero instead of leaving a poster
+  // and disabled controls over the page.
+  useEffect(() => {
+    if (eligible && mediaState === "error") finish({ immediate: true, bypassCinematic: true });
+  }, [eligible, finish, mediaState]);
+
   useEffect(() => {
     if (!eligible) return;
 
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     const forcedColors = window.matchMedia("(forced-colors: active)");
+    const compactViewport = window.matchMedia("(max-width: 900px)");
+    const finePointer = window.matchMedia("(pointer: fine)");
     const honorMotionPreference = () => {
-      if (!reducedMotion.matches && !forcedColors.matches) return;
+      if (
+        !reducedMotion.matches &&
+        !forcedColors.matches &&
+        !compactViewport.matches &&
+        finePointer.matches
+      ) return;
       if (finishingRef.current) {
         complete();
         return;
       }
-      finish({ immediate: true });
+      finish({ immediate: true, bypassCinematic: true });
     };
 
     honorMotionPreference();
     reducedMotion.addEventListener("change", honorMotionPreference);
     forcedColors.addEventListener("change", honorMotionPreference);
+    compactViewport.addEventListener("change", honorMotionPreference);
+    finePointer.addEventListener("change", honorMotionPreference);
     return () => {
       reducedMotion.removeEventListener("change", honorMotionPreference);
       forcedColors.removeEventListener("change", honorMotionPreference);
+      compactViewport.removeEventListener("change", honorMotionPreference);
+      finePointer.removeEventListener("change", honorMotionPreference);
     };
   }, [complete, eligible, finish]);
 
@@ -246,7 +282,7 @@ export function IntroFilm() {
           data-air-intro-dialog
           onCancel={(event) => {
             event.preventDefault();
-            if (!isHandingOff) finish();
+            if (!isHandingOff) finish({ focusHero: true, bypassCinematic: true });
           }}
           style={{ width: "100vw", maxWidth: "none", height: "100svh", maxHeight: "none", margin: 0, padding: 0, border: 0 }}
         >
@@ -280,7 +316,7 @@ export function IntroFilm() {
           />
           <div className="intro-vignette" aria-hidden />
           <div className="intro-brand">
-            <span id="air-intro-title" className="intro-brand-title">WZRD.tech introduction</span>
+            <span id="air-intro-title" className="intro-brand-title">Air introduction</span>
             <span className="intro-logo" aria-hidden="true">
               <Image src="/images/wzrd-wordmark.png" alt="" width={1600} height={396} priority />
             </span>
@@ -292,7 +328,7 @@ export function IntroFilm() {
                 {muted ? "sound on" : "mute"}
               </ShinyText>
             </button>
-            <button ref={skipRef} type="button" autoFocus disabled={isHandingOff} onClick={() => finish()}>
+            <button ref={skipRef} type="button" autoFocus disabled={isHandingOff} onClick={() => finish({ focusHero: true, bypassCinematic: true })}>
               <ShinyText disabled={isHandingOff} color="#e8f5ff" shineColor="#ffffff" speed={4.2} delay={0.3} spread={112}>
                 skip intro
               </ShinyText>
