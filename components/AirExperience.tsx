@@ -54,7 +54,7 @@ import {
 } from "@/lib/air-copy";
 import { resolveHeroTimeline } from "@/lib/hero-timeline";
 import { ShinyText } from "@/components/ShinyText";
-import { PlasmaButton } from "@/components/PlasmaButton";
+import { PreorderPlasmaButton } from "@/components/Preorder";
 
 export type { AirDemoAction, AirDemoState } from "@/components/air-demo-state";
 
@@ -645,9 +645,8 @@ function HeroPresentation({ phoneDemo }: { phoneDemo: ReactNode }) {
             </p>
 
             <div className="hero-actions">
-              <PlasmaButton
+              <PreorderPlasmaButton
                 className="hero-plasma-button"
-                href="https://buy.stripe.com/bJe5kF8Pg49RaPw9M6a3u02"
               />
               <a className="text-link" href="#what-is-air">Explore the computer <span aria-hidden>↓</span></a>
             </div>

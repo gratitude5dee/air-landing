@@ -96,7 +96,7 @@ export function DetailPageShell({
               <p>Join the private beta, then map the first job, tools, and approval boundaries with WZRD.</p>
               <div className={styles.ctaActions}>
                 <PreorderButton label="Join the private beta" />
-                <span>No payment today</span>
+                <span>Save a place first</span>
               </div>
             </div>
             <div className={styles.ctaProof} aria-label="What preorder includes">

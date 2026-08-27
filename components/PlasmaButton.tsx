@@ -1,6 +1,6 @@
 "use client";
 
-import { type CSSProperties, useEffect, useRef, useState } from "react";
+import { type MouseEvent, useEffect, useRef, useState } from "react";
 import { LuArrowUpRight } from "react-icons/lu";
 
 import styles from "./PlasmaButton.module.css";
@@ -9,6 +9,8 @@ type PlasmaButtonProps = {
   className?: string;
   href: string;
   label?: string;
+  onClick?: (event: MouseEvent<HTMLAnchorElement>) => void;
+  "aria-haspopup"?: "dialog";
 };
 
 type ConnectionWithSaveData = EventTarget & { saveData?: boolean };
@@ -22,6 +24,8 @@ export function PlasmaButton({
   className = "",
   href,
   label = "Try Air Today",
+  onClick,
+  "aria-haspopup": ariaHasPopup,
 }: PlasmaButtonProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const linkRef = useRef<HTMLAnchorElement>(null);
@@ -155,6 +159,8 @@ export function PlasmaButton({
       ref={linkRef}
       className={[styles.button, className].filter(Boolean).join(" ")}
       href={href}
+      onClick={onClick}
+      aria-haspopup={ariaHasPopup}
     >
       <canvas ref={canvasRef} className={styles.plasma} aria-hidden="true" />
       <span className={styles.surface} aria-hidden="true" />

@@ -1,6 +1,10 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { rateLimit, savePreorder } from "@/lib/preorders";
+import {
+  getWaitlistStatusByReferralCode,
+  rateLimit,
+  savePreorder,
+} from "@/lib/preorders";
 
 const preorder = {
   name: "Air Tester",
@@ -48,5 +52,35 @@ describe("preorder storage contract", () => {
     vi.stubEnv("VERCEL_ENV", "preview");
     vi.stubEnv("AIR_DATABASE_ENV", "preview");
     await expect(savePreorder(preorder)).rejects.toThrow("database_unavailable");
+  });
+
+  it("credits a new referred identity once and ranks the inviter ahead", async () => {
+    const inviter = await savePreorder(preorder);
+    const invited = await savePreorder(
+      { ...preorder, email: "friend@example.com", imessage: "+1 415 555 0999" },
+      inviter.referralCode,
+    );
+    const duplicate = await savePreorder(
+      { ...preorder, email: "FRIEND@example.com", imessage: "+1 (415) 555-0999" },
+      inviter.referralCode,
+    );
+    const inviterStatus = await getWaitlistStatusByReferralCode(inviter.referralCode);
+
+    expect(invited.referralCredited).toBe(true);
+    expect(duplicate.referralCredited).toBe(false);
+    expect(inviterStatus).toMatchObject({ referralCount: 1, position: 1, totalWaiting: 2 });
+  });
+
+  it("ranks people by referral count and then join time", async () => {
+    const first = await savePreorder(preorder);
+    const second = await savePreorder({ ...preorder, email: "second@example.com", imessage: "+1 415 555 0333" });
+    const third = await savePreorder(
+      { ...preorder, email: "third@example.com", imessage: "+1 415 555 0444" },
+      second.referralCode,
+    );
+
+    expect((await getWaitlistStatusByReferralCode(first.referralCode))?.position).toBe(2);
+    expect((await getWaitlistStatusByReferralCode(second.referralCode))?.position).toBe(1);
+    expect(third.position).toBe(3);
   });
 });

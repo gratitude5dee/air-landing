@@ -391,7 +391,7 @@ const faqItems = [
   },
   {
     question: "What does a preorder do?",
-    answer: "A preorder saves your name, email, and iMessage number for Air onboarding. Once it is saved, you can book a short onboarding conversation. No payment is due today.",
+    answer: "A preorder saves your name, email, and iMessage number on the Air waitlist. You can then choose to continue to Stripe; after payment, Stripe takes you to Air onboarding through Cal.com.",
   },
 ] as const;
 
@@ -449,9 +449,9 @@ export function ClosingCta() {
         <div className="closing-orb"><LuSparkles aria-hidden /></div>
         <p className="eyebrow">Air is taking shape now</p>
         <h2 id="closing-title">Keep the next idea moving.</h2>
-        <p>Preorder Air to save your place, then book a short onboarding conversation with WZRD.</p>
+        <p>Preorder Air to save your place, invite collaborators, and continue to Stripe when you are ready.</p>
         <PreorderButton />
-        <small>No payment today · founding access is limited</small>
+        <small>Save a place first · payment stays with Stripe</small>
       </div>
     </section>
   );

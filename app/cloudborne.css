@@ -1925,3 +1925,147 @@ html[data-air-hydrated="timeout"] .hero-content {
     border: 1px solid CanvasText;
   }
 }
+
+/* Waitlist conversion surface. The dialog keeps the existing Air console
+   language while making referral progress readable without animation. */
+.preorder-dialog[data-preorder-stage="joined"],
+.preorder-dialog[data-preorder-stage="checking-out"] {
+  width: min(54rem, calc(100vw - 2rem));
+  overflow-x: hidden;
+}
+
+.waitlist-total {
+  display: flex;
+  align-items: center;
+  gap: 0.68rem;
+  margin-top: 1.8rem;
+  padding: 0.9rem;
+  border: 1px solid rgba(165, 219, 248, 0.26);
+  color: rgba(224, 243, 255, 0.76);
+  background: rgba(1, 11, 25, 0.35);
+  font-family: var(--font-mono);
+  font-size: 0.57rem;
+  letter-spacing: 0.06em;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+
+.waitlist-total svg { flex: none; color: #7fe1ff; }
+.waitlist-total strong { color: #fff; font-size: 1rem; }
+
+.referral-arrival,
+.referral-credit {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin: 0 0 1rem;
+  color: #a9e9ff;
+  font-size: 0.78rem;
+  line-height: 1.45;
+}
+
+.referral-credit { margin: 1rem 0 0; color: #aeeec7; }
+.referral-arrival svg,
+.referral-credit svg { flex: none; margin-top: 0.1rem; }
+
+.waitlist-stage {
+  position: relative;
+  z-index: 1;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 35rem;
+  padding: clamp(5.4rem, 8vw, 6.4rem) clamp(2rem, 5vw, 4.5rem) clamp(2rem, 5vw, 3.5rem);
+}
+
+.waitlist-stage .calendar-heading { padding-right: 3rem; }
+.waitlist-stage .calendar-heading h2 { max-width: 34rem; }
+
+.waitlist-status-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1px;
+  margin-top: 2rem;
+  border: 1px solid rgba(173, 220, 248, 0.25);
+  background: rgba(173, 220, 248, 0.17);
+}
+
+.waitlist-status-grid p {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  min-height: 6.7rem;
+  margin: 0;
+  padding: 1rem;
+  background: rgba(2, 14, 30, 0.82);
+}
+
+.waitlist-status-grid span {
+  color: rgba(207, 235, 252, 0.58);
+  font-family: var(--font-mono);
+  font-size: 0.49rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.waitlist-status-grid strong { color: #fff; font-size: clamp(1.8rem, 4vw, 2.45rem); font-weight: 460; letter-spacing: -0.06em; }
+
+.referral-card {
+  margin-top: 1.2rem;
+  padding: 1.3rem;
+  border: 1px solid rgba(163, 218, 248, 0.28);
+  background:
+    linear-gradient(120deg, rgba(80, 170, 227, 0.16), transparent 45%),
+    rgba(1, 12, 27, 0.68);
+}
+
+.referral-card h3 { max-width: 34rem; margin: 0.65rem 0 0; color: #effaff; font-size: clamp(1.15rem, 2.4vw, 1.55rem); font-weight: 460; letter-spacing: -0.045em; line-height: 1.04; }
+.referral-actions { display: flex; flex-wrap: wrap; gap: 0.7rem; margin-top: 1.1rem; }
+.referral-actions .button { min-height: 2.85rem; padding-inline: 1rem; border-radius: 0; font-size: 0.55rem; }
+.preorder-dialog .button-secondary { color: #dff6ff; border: 1px solid rgba(180, 228, 252, 0.42); background: rgba(5, 40, 80, 0.82); box-shadow: inset 0 1px rgba(255, 255, 255, 0.11); }
+.preorder-dialog .button-secondary:hover { border-color: rgba(216, 246, 255, 0.82); background: rgba(14, 72, 133, 0.92); }
+.preorder-dialog .consent-row { color: rgba(220, 241, 253, 0.78); }
+.preorder-dialog .privacy-note { position: relative; z-index: 1; color: rgba(218, 239, 252, 0.72); }
+
+.checkout-row { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(14rem, 0.75fr) minmax(0, 1fr); gap: 1.2rem; align-items: center; margin-top: 1.25rem; padding-top: 1.25rem; border-top: 1px solid rgba(169, 216, 248, 0.18); }
+.checkout-row > p { margin: 0; color: rgba(226, 244, 255, 0.82); font-size: 0.78rem; line-height: 1.5; }
+.checkout-button { width: 100%; min-height: 3.35rem; }
+
+.waitlist-confetti { position: absolute; z-index: 2; inset: 2rem 0 auto; height: 8rem; overflow: hidden; pointer-events: none; }
+.waitlist-confetti i { position: absolute; top: -1rem; width: 0.42rem; height: 0.72rem; background: #7ee4ff; animation: waitlist-confetti 1.45s cubic-bezier(0.14, 0.79, 0.22, 1) both; }
+.waitlist-confetti i:nth-child(3n) { background: #81e6bb; border-radius: 50%; }
+.waitlist-confetti i:nth-child(4n) { background: #d6efff; transform: rotate(35deg); }
+.waitlist-confetti i:nth-child(1) { left: 5%; animation-delay: 20ms; }.waitlist-confetti i:nth-child(2) { left: 12%; animation-delay: 160ms; }.waitlist-confetti i:nth-child(3) { left: 19%; animation-delay: 90ms; }.waitlist-confetti i:nth-child(4) { left: 25%; animation-delay: 240ms; }.waitlist-confetti i:nth-child(5) { left: 31%; animation-delay: 30ms; }.waitlist-confetti i:nth-child(6) { left: 38%; animation-delay: 190ms; }.waitlist-confetti i:nth-child(7) { left: 45%; animation-delay: 80ms; }.waitlist-confetti i:nth-child(8) { left: 51%; animation-delay: 250ms; }.waitlist-confetti i:nth-child(9) { left: 57%; animation-delay: 120ms; }.waitlist-confetti i:nth-child(10) { left: 63%; animation-delay: 35ms; }.waitlist-confetti i:nth-child(11) { left: 69%; animation-delay: 210ms; }.waitlist-confetti i:nth-child(12) { left: 75%; animation-delay: 75ms; }.waitlist-confetti i:nth-child(13) { left: 81%; animation-delay: 170ms; }.waitlist-confetti i:nth-child(14) { left: 87%; animation-delay: 100ms; }.waitlist-confetti i:nth-child(15) { left: 93%; animation-delay: 230ms; }.waitlist-confetti i:nth-child(16) { left: 8%; animation-delay: 280ms; }.waitlist-confetti i:nth-child(17) { left: 52%; animation-delay: 300ms; }.waitlist-confetti i:nth-child(18) { left: 78%; animation-delay: 330ms; }
+
+@keyframes waitlist-confetti {
+  from { opacity: 0; transform: translate3d(0, -1rem, 0) rotate(0deg); }
+  18% { opacity: 1; }
+  to { opacity: 0; transform: translate3d(1.5rem, 8rem, 0) rotate(240deg); }
+}
+
+.onboarding-return { display: grid; min-height: 100svh; place-items: center; padding-top: 8rem; padding-bottom: 4rem; }
+.onboarding-panel { position: relative; isolation: isolate; width: min(100%, 48rem); overflow: hidden; padding: clamp(3rem, 8vw, 6rem); border: 1px solid rgba(176, 222, 248, 0.5); color: #effaff; background: radial-gradient(circle at 78% 15%, rgba(71, 158, 225, 0.45), transparent 22rem), linear-gradient(145deg, #041226, #082c5f); box-shadow: 0 2rem 5rem rgba(0, 20, 54, 0.2); }
+.onboarding-panel::before { content: ""; position: absolute; inset: 0; z-index: -1; opacity: 0.45; background-image: radial-gradient(rgba(151, 215, 251, 0.52) 0.55px, transparent 0.55px); background-size: 4px 4px; mask-image: linear-gradient(140deg, #000, transparent 72%); }
+.onboarding-panel h1 { max-width: 38rem; margin: 1rem 0 0; color: #fff; font-size: clamp(2.8rem, 7vw, 5.5rem); font-weight: 390; letter-spacing: -0.07em; line-height: 0.88; }
+.onboarding-panel > p:not(.eyebrow):not(.privacy-note):not(.onboarding-rank) { max-width: 35rem; margin: 1.3rem 0 0; color: rgba(224, 244, 255, 0.78); font-size: 1.1rem; line-height: 1.55; }
+.onboarding-panel .success-mark { margin-top: 1rem; }
+.onboarding-orb { display: grid; width: 3rem; height: 3rem; place-items: center; border: 1px solid rgba(210, 242, 255, 0.5); border-radius: 50%; color: #c9f3ff; background: rgba(85, 176, 239, 0.28); box-shadow: 0 0 2rem rgba(133, 220, 255, 0.3); }
+.onboarding-rank { margin: 1.8rem 0 0; padding: 0.9rem 1rem; border-left: 2px solid #85dfff; color: rgba(226, 245, 255, 0.78); background: rgba(0, 10, 28, 0.28); font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.06em; text-transform: uppercase; }.onboarding-rank strong{color:#fff;font-size:1rem}
+.onboarding-cta { width: fit-content; min-height: 3.5rem; gap: 0.65rem; margin-top: 1.5rem; }
+
+@media (max-width: 720px) {
+  .preorder-dialog[data-preorder-stage="joined"], .preorder-dialog[data-preorder-stage="checking-out"] { width: calc(100vw - 1rem); }
+  .waitlist-stage { min-height: 0; padding: 4rem 1rem 1.25rem; }
+  .waitlist-stage .calendar-heading { padding-right: 2rem; }
+  .waitlist-status-grid { grid-template-columns: 1fr; }
+  .waitlist-status-grid p { min-height: 4.7rem; flex-direction: row; align-items: center; justify-content: space-between; }
+  .checkout-row { grid-template-columns: 1fr; }
+  .checkout-row > p { text-align: center; }
+  .referral-actions { display: grid; grid-template-columns: 1fr; }.referral-actions .button { width: 100%; justify-content: center; }
+  .onboarding-return { min-height: 80svh; padding-top: 6.5rem; padding-bottom: 2rem; }.onboarding-panel { padding: 2.3rem 1.4rem; }.onboarding-panel h1 { font-size: clamp(2.7rem, 14vw, 4rem); }.onboarding-cta { width: 100%; justify-content: center; }
+}
+
+@media (prefers-reduced-motion: reduce), (forced-colors: active) {
+  .waitlist-confetti { display: none; }
+}

@@ -1000,7 +1000,7 @@ export function Pricing() {
           Private-beta pricing is proposed in USD per month. Included usage is subject to safety,
           fair-use, and infrastructure limits. Model, connector, operating-system, hardware, and
           regional availability may change. Third-party fees may apply. No payment is collected by
-          the current preorder form.
+          the waitlist form; Stripe checkout opens only after a place is saved.
         </p>
       </div>
     </section>
