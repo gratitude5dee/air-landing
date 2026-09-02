@@ -14,6 +14,7 @@ export function Header() {
         <Link className="nav-optional" href="/composable-computer">composable computer</Link>
         <Link className="nav-optional" href="/#mini-apps">mini apps</Link>
         <Link className="nav-optional" href="/#pricing">pricing</Link>
+        <Link href="/docs">docs</Link>
         <PreorderPlasmaButton
           className="header-plasma-button"
           label="Try Air"
@@ -40,6 +41,7 @@ export function Footer() {
           <Link href="/how-it-works">How it works</Link>
           <Link href="/composable-computer">Composable computer</Link>
           <Link href="/capabilities">Capabilities</Link>
+          <Link href="/docs">Docs</Link>
         </nav>
         <nav className="footer-links" aria-label="Air product navigation">
           <span>Product</span>

@@ -1,0 +1,389 @@
+/* Documentation shell: the site's fixed glass header, then a two-column
+   reading surface in the same sky palette as the detail chapters. Sidebar is
+   sticky on wide viewports and collapses above the article on narrow ones. */
+
+.page {
+  position: relative;
+  padding: clamp(8.5rem, 14vw, 11rem) 0 clamp(4rem, 8vw, 7rem);
+  color: #0b2c58;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.42), transparent 14rem),
+    #eaf7fd;
+}
+
+.frame {
+  display: grid;
+  grid-template-columns: minmax(14rem, 17rem) minmax(0, 1fr);
+  gap: clamp(2.5rem, 6vw, 6rem);
+  align-items: start;
+}
+
+.eyebrow,
+.navLabel,
+.pager span,
+.articleRail {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  font-weight: 620;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* ---- Sidebar ---- */
+
+.sidebar {
+  position: sticky;
+  top: 7.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  max-height: calc(100vh - 9rem);
+  overflow-y: auto;
+  padding-right: 0.5rem;
+  scrollbar-width: thin;
+}
+
+.sidebarHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding-bottom: 1.1rem;
+  border-bottom: 1px dotted rgba(16, 86, 141, 0.48);
+}
+
+.eyebrow { color: #0d5f9f; }
+
+.sidebarTitle {
+  color: #082b60;
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  text-decoration: none;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+}
+
+.navGroup ul {
+  list-style: none;
+  margin: 0.55rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.navLabel { color: rgba(8, 50, 93, 0.6); }
+
+.nav a {
+  display: block;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid transparent;
+  border-radius: 0.65rem;
+  color: rgba(6, 47, 91, 0.78);
+  font-size: 0.94rem;
+  font-weight: 520;
+  text-decoration: none;
+  transition: background 160ms ease, color 160ms ease;
+}
+
+.nav a:hover {
+  color: #082b60;
+  background: rgba(140, 200, 255, 0.22);
+}
+
+.nav a[aria-current="page"] {
+  color: #f7fbff;
+  background: #093d76;
+  border-color: rgba(9, 87, 151, 0.32);
+}
+
+.sidebarCta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  padding: 1.1rem;
+  border: 1px solid rgba(15, 84, 137, 0.22);
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.sidebarCta p {
+  margin: 0;
+  color: rgba(8, 45, 82, 0.72);
+  font-size: 0.86rem;
+  line-height: 1.5;
+}
+
+/* ---- Article ---- */
+
+.main { min-width: 0; }
+
+.article {
+  max-width: 46rem;
+  font-size: 1.04rem;
+  line-height: 1.68;
+  color: rgba(7, 38, 74, 0.86);
+}
+
+.articleHeader {
+  margin-bottom: clamp(2rem, 4vw, 3rem);
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(15, 84, 137, 0.22);
+}
+
+.articleRail {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.1rem;
+  color: rgba(8, 59, 107, 0.64);
+}
+
+.article h1 {
+  margin: 0;
+  color: #082b60;
+  font-size: clamp(2.5rem, 4.6vw, 3.6rem);
+  line-height: 0.98;
+}
+
+.articleLead {
+  max-width: 40rem;
+  margin: 1.1rem 0 0;
+  color: rgba(5, 41, 81, 0.78);
+  font-size: clamp(1.08rem, 1.4vw, 1.25rem);
+  line-height: 1.5;
+  text-wrap: balance;
+}
+
+/* Docs headings stay still; the global shimmer belongs to the marketing pages. */
+.article :is(h2, h3) {
+  color: #082b60;
+  animation: none;
+  background-image: none;
+  -webkit-text-fill-color: currentColor;
+}
+
+.article h2 {
+  margin: 2.8rem 0 0.9rem;
+  font-size: clamp(1.55rem, 2.4vw, 1.95rem);
+  line-height: 1.15;
+  scroll-margin-top: 7.5rem;
+}
+
+.article h3 {
+  margin: 2rem 0 0.6rem;
+  font-size: 1.15rem;
+  line-height: 1.3;
+  scroll-margin-top: 7.5rem;
+}
+
+.article p,
+.article ul,
+.article ol {
+  margin: 0 0 1.1rem;
+}
+
+.article ul,
+.article ol { padding-left: 1.35rem; }
+
+.article li { margin-bottom: 0.4rem; }
+
+.article li::marker { color: #0d5f9f; }
+
+.article a {
+  color: #0b6cb4;
+  text-decoration: underline;
+  text-decoration-color: rgba(11, 108, 180, 0.4);
+  text-underline-offset: 0.16em;
+}
+
+.article a:hover { text-decoration-color: currentColor; }
+
+.article strong { color: #082b60; font-weight: 650; }
+
+.article code {
+  padding: 0.12em 0.4em;
+  border-radius: 0.4em;
+  background: rgba(9, 61, 118, 0.09);
+  color: #073d73;
+  font-family: var(--font-mono);
+  font-size: 0.86em;
+}
+
+.article pre {
+  overflow-x: auto;
+  margin: 0 0 1.25rem;
+  padding: 1rem 1.15rem;
+  border: 1px solid rgba(15, 84, 137, 0.22);
+  border-radius: 0.9rem;
+  background: #0a1830;
+  color: var(--air-pale);
+  font-size: 0.86rem;
+  line-height: 1.6;
+}
+
+.article pre code {
+  padding: 0;
+  background: none;
+  color: inherit;
+  font-size: inherit;
+}
+
+.article blockquote {
+  margin: 0 0 1.25rem;
+  padding: 0.9rem 1.15rem;
+  border-left: 3px solid #0d5f9f;
+  border-radius: 0 0.8rem 0.8rem 0;
+  background: rgba(255, 255, 255, 0.55);
+  color: rgba(7, 38, 74, 0.86);
+}
+
+.article blockquote p:last-child { margin-bottom: 0; }
+
+.article table {
+  width: 100%;
+  margin: 0 0 1.4rem;
+  border-collapse: collapse;
+  font-size: 0.93rem;
+}
+
+.article th,
+.article td {
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid rgba(15, 84, 137, 0.18);
+  text-align: left;
+  vertical-align: top;
+}
+
+.article th {
+  color: #082b60;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: 620;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.article hr {
+  margin: 2.5rem 0;
+  border: 0;
+  border-top: 1px dotted rgba(16, 86, 141, 0.48);
+}
+
+/* ---- Pager ---- */
+
+.pager {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  max-width: 46rem;
+  margin-top: clamp(3rem, 6vw, 4.5rem);
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(15, 84, 137, 0.22);
+}
+
+.pager a {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0.95rem 1.1rem;
+  border: 1px solid rgba(15, 84, 137, 0.22);
+  border-radius: 0.9rem;
+  color: #082b60;
+  font-weight: 600;
+  text-decoration: none;
+  background: rgba(255, 255, 255, 0.5);
+  transition: border-color 160ms ease, background 160ms ease;
+}
+
+.pager a:hover {
+  border-color: rgba(9, 87, 151, 0.5);
+  background: rgba(255, 255, 255, 0.85);
+}
+
+.pager span { color: rgba(8, 59, 107, 0.6); }
+
+.pagerNext { text-align: right; }
+
+/* ---- Overview cards ---- */
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: 0.9rem;
+  margin: 1.5rem 0 2rem;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding: 1.1rem 1.2rem;
+  border: 1px solid rgba(15, 84, 137, 0.22);
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.55);
+  color: #082b60;
+  text-decoration: none;
+  transition: border-color 160ms ease, transform 180ms var(--spring), background 160ms ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(9, 87, 151, 0.5);
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.card strong { font-size: 1.02rem; font-weight: 650; }
+
+.card p {
+  margin: 0;
+  color: rgba(8, 45, 82, 0.72);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* ---- Responsive ---- */
+
+@media (max-width: 56rem) {
+  .frame { grid-template-columns: 1fr; gap: 2.5rem; }
+
+  .sidebar {
+    position: static;
+    max-height: none;
+    overflow: visible;
+    padding-right: 0;
+  }
+
+  .nav { gap: 1rem; }
+
+  .navGroup ul {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+
+  .nav a {
+    padding: 0.45rem 0.8rem;
+    border-color: rgba(15, 84, 137, 0.22);
+    border-radius: 999px;
+    font-size: 0.88rem;
+  }
+
+  .sidebarCta { display: none; }
+
+  .pager { grid-template-columns: 1fr; }
+
+  .pagerNext { text-align: left; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .nav a,
+  .pager a { transition: none; }
+
+  .card:hover { transform: none; }
+}
