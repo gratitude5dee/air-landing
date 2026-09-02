@@ -14,6 +14,7 @@ export function Header() {
         <Link href="/how-it-works">how it works</Link>
         <Link className="nav-optional" href="/text-to-film">text to film</Link>
         <Link className="nav-optional" href="/capabilities">capabilities</Link>
+        <Link href="/docs">docs</Link>
         <PreorderButton compact />
       </nav>
     </header>
@@ -36,6 +37,7 @@ export function Footer() {
           <Link href="/how-it-works">How it works</Link>
           <Link href="/text-to-film">Text to film</Link>
           <Link href="/capabilities">Capabilities</Link>
+          <Link href="/docs">Docs</Link>
           <a href="https://wzrd.tech" target="_blank" rel="noreferrer">WZRD.tech ↗</a>
         </nav>
         <div className="footer-meta">
