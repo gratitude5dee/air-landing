@@ -18,7 +18,7 @@ export function DocsShell({ children }: { children: ReactNode }) {
     <>
       <a className="skip-link" href="#main">Skip to content</a>
       <Header />
-      <div className={styles.page}>
+      <div id="top" className={styles.page}>
         <div className={`shell ${styles.frame}`}>
           <aside className={styles.sidebar} aria-label="Documentation">
             <div className={styles.sidebarHeader}>
