@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+
 /**
  * The public documentation map at air.wzrd.tech/docs. Every entry is a route
  * at `app/docs/<slug>/page.tsx` that renders `content/docs/<file>.mdx`; the
@@ -90,4 +92,18 @@ export function adjacentDocPages(href: string): { previous?: DocPage; next?: Doc
   const index = docPages.findIndex((page) => page.href === href);
   if (index === -1) return {};
   return { previous: docPages[index - 1], next: docPages[index + 1] };
+}
+
+export function docMetadata(href: string, description: string): Metadata {
+  const page = findDocPage(href);
+  if (!page) throw new Error(`docMetadata: ${href} is not registered`);
+  const url = `https://air.wzrd.tech${page.href}`;
+  const title = `${page.title} — Air docs`;
+  return {
+    title: page.title,
+    description,
+    alternates: { canonical: url },
+    openGraph: { type: "article", siteName: "Air by WZRD.tech", title, description, url },
+    twitter: { card: "summary_large_image", title, description, images: ["/opengraph-image"] },
+  };
 }
