@@ -40,6 +40,18 @@ Stripe Dashboard should send signed events to `/api/stripe/webhook` with `STRIPE
 
 The database contract is versioned in [`db/schema.sql`](db/schema.sql).
 
+Apply the additive waitlist, admin, and Stripe tables before the first production
+deployment that enables these routes. Run the migration from a trusted machine
+with the production `DATABASE_URL`; the command is idempotent:
+
+```bash
+DATABASE_URL='postgres://…' npm run db:migrate
+```
+
+The migration is deliberately separate from `next build` so a build cannot alter
+production data. Verify the resulting tables before setting the production
+`AIR_ADMIN_PASSWORD_HASH` and `STRIPE_WEBHOOK_SECRET` values.
+
 ## Stripe Payment Link return
 
 Set `NEXT_PUBLIC_STRIPE_PAYMENT_LINK` in every Vercel environment. In the Stripe Payment Link

@@ -10,6 +10,7 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
+    "db:migrate": "node scripts/migrate-schema.mjs",
     "data:delete-preorder": "node scripts/delete-preorder.mjs",
     "verify:assets": "node scripts/verify-assets.mjs",
     "check": "npm run test && npm run typecheck && npm run build"
