@@ -112,7 +112,7 @@ export async function listAdminMembers(search = "", source = "all", limit = 100,
       (SELECT pay.status FROM air_stripe_payments pay WHERE pay.preorder_id = r.id ORDER BY pay.updated_at DESC LIMIT 1) AS payment_status
     FROM ranked r
     WHERE (${search} = '' OR r.name ILIKE '%' || ${search} || '%' OR r.email ILIKE '%' || ${search} || '%' OR r.imessage ILIKE '%' || ${search} || '%')
-      AND (${source} = 'all' OR r.source LIKE ${source} || ':%')
+      AND (${source} = 'all' OR r.source LIKE ${source} || ':%' OR (${source} = 'air' AND r.source = 'air-landing'))
     ORDER BY r.position ASC
     LIMIT ${safeLimit} OFFSET ${safeOffset}
   `;
