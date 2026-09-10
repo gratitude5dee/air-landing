@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 
 import { rateLimit, savePreorder } from "@/lib/preorders";
+import { corsHeaders, corsOptions, originAllowed } from "@/lib/cors";
 
 export const runtime = "nodejs";
 
@@ -73,6 +74,7 @@ async function readPayload(request: Request) {
 }
 
 function failure(
+  request: Request,
   code: FailureCode,
   status: 400 | 429 | 503,
   message: string,
@@ -83,15 +85,21 @@ function failure(
     {
       status,
       headers: {
-        "cache-control": "private, no-store",
-        "x-content-type-options": "nosniff",
+        ...corsHeaders(request),
       },
     },
   );
 }
 
+export function OPTIONS(request: Request) {
+  return corsOptions(request);
+}
+
 export async function POST(request: Request) {
   const requestId = randomUUID();
+  if (!originAllowed(request)) {
+    return failure(request, "invalid_request", 400, "This waitlist origin is not allowed.", requestId);
+  }
   const forwarded = request.headers.get("x-forwarded-for");
   const ip = forwarded?.split(",")[0]?.trim() || "anonymous";
 
@@ -100,7 +108,7 @@ export async function POST(request: Request) {
     allowed = await rateLimit(ip);
   } catch {
     console.error("air_preorder_failed", { code: "rate_limit_unavailable", requestId });
-    return failure(
+    return failure(request,
       "storage_unavailable",
       503,
       "Air could not save your preorder yet. Please try again.",
@@ -108,7 +116,7 @@ export async function POST(request: Request) {
     );
   }
   if (!allowed) {
-    return failure(
+    return failure(request,
       "rate_limited",
       429,
       "Too many attempts. Try again in a few minutes.",
@@ -118,7 +126,7 @@ export async function POST(request: Request) {
 
   const parsed = schema.safeParse(await readPayload(request));
   if (!parsed.success) {
-    return failure(
+    return failure(request,
       "invalid_request",
       400,
       parsed.error.issues[0]?.message || "Check your details and try again.",
@@ -132,8 +140,7 @@ export async function POST(request: Request) {
       {
         status: 202,
         headers: {
-          "cache-control": "private, no-store",
-          "x-content-type-options": "nosniff",
+          ...corsHeaders(request),
         },
       },
     );
@@ -146,7 +153,9 @@ export async function POST(request: Request) {
       imessage: parsed.data.imessage.trim(),
       consent: parsed.data.consent,
       createdAt: new Date().toISOString(),
-      source: `air-landing:${parsed.data.interest.toLowerCase().replace(/\s+/g, "-")}`,
+      source: `${request.headers.get("origin")?.includes("wzrd.tech") ? "wzrd" : "air"}:${parsed.data.interest.toLowerCase().replace(/\s+/g, "-")}`,
+      sourceSite: request.headers.get("origin")?.includes("wzrd.tech") ? "wzrd" : "air",
+      interest: parsed.data.interest,
     }, parsed.data.referralCode);
     return NextResponse.json(
       {
@@ -161,14 +170,14 @@ export async function POST(request: Request) {
       },
       {
         headers: {
-          "cache-control": "private, no-store",
-          "x-content-type-options": "nosniff",
+          ...corsHeaders(request),
         },
       },
     );
   } catch {
     console.error("air_preorder_failed", { code: "persistence_unavailable", requestId });
     return failure(
+      request,
       "storage_unavailable",
       503,
       "Air could not save your preorder yet. Please try again.",

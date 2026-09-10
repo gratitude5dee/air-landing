@@ -12,6 +12,8 @@ export type Preorder = {
   consent: boolean;
   createdAt: string;
   source: string;
+  sourceSite?: "air" | "wzrd";
+  interest?: string;
 };
 
 export type WaitlistStatus = {
@@ -190,10 +192,10 @@ export async function savePreorder(preorder: Preorder, referralCode?: string | n
         LIMIT 1
       ), upserted AS (
         INSERT INTO air_preorders (
-          identity_hash, name, email, imessage, consent, source, referral_code, referrer_id, created_at, updated_at
+          identity_hash, name, email, imessage, consent, source, first_source, latest_source, interest, referral_code, referrer_id, created_at, updated_at
         ) VALUES (
           ${identityHash}, ${preorder.name}, ${preorder.email}, ${preorder.imessage},
-          ${preorder.consent}, ${preorder.source}, ${generatedReferralCode}, (SELECT id FROM referrer),
+          ${preorder.consent}, ${preorder.source}, ${preorder.source}, ${preorder.source}, ${preorder.interest || null}, ${generatedReferralCode}, (SELECT id FROM referrer),
           ${preorder.createdAt}, ${preorder.createdAt}
         )
         ON CONFLICT (identity_hash) DO UPDATE SET
@@ -202,6 +204,8 @@ export async function savePreorder(preorder: Preorder, referralCode?: string | n
           imessage = EXCLUDED.imessage,
           consent = EXCLUDED.consent,
           source = EXCLUDED.source,
+          latest_source = EXCLUDED.latest_source,
+          interest = EXCLUDED.interest,
           updated_at = now()
         RETURNING id, (xmax = 0) AS inserted, referrer_id
       ), credited AS (
