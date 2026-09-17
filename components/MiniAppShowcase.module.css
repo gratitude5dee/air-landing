@@ -36,7 +36,20 @@
 .actions { display: flex; align-items: center; flex-wrap: wrap; gap: 1rem; margin-top: 2.25rem; }
 .actions > a:last-child { display: inline-flex; align-items: center; gap: .35rem; color: inherit; font-family: var(--font-mono); font-size: .59rem; letter-spacing: .08em; text-decoration: none; text-transform: uppercase; }
 
-.demo { position: relative; display: grid; place-items: center; min-height: 42rem; overflow: hidden; background: radial-gradient(circle at 50% 72%, color-mix(in srgb, var(--mini-accent) 16%, transparent), transparent 36%); }
+.demo { position: relative; display: grid; place-items: center; height: 42rem; min-height: 42rem; overflow: hidden; background: radial-gradient(circle at 50% 72%, color-mix(in srgb, var(--mini-accent) 16%, transparent), transparent 36%); }
+.demo > :first-child { position: absolute; inset: 0; }
+.demo::after { content:""; position:absolute; z-index:1; inset:0; pointer-events:none; background:radial-gradient(circle at 50% 55%,transparent 0 20%,rgba(229,241,245,.13) 52%,rgba(235,242,241,.42) 100%); }
+.wallAgentCard { position:relative; z-index:4; width:min(24rem,72%); padding:1rem; border:1px solid rgba(255,255,255,.88); border-radius:1.55rem; background:rgba(247,251,251,.78); box-shadow:inset 0 1px #fff,0 28px 70px rgba(30,62,79,.24); backdrop-filter:blur(22px) saturate(1.2); }
+.wallAgentHead { display:grid; grid-template-columns:auto 1fr auto; gap:.65rem; align-items:center; padding:.2rem .2rem .8rem; }
+.wallAgentHead > span { width:2.2rem; aspect-ratio:1; display:grid; place-items:center; border-radius:50%; color:var(--mini-accent); background:color-mix(in srgb,var(--mini-accent) 10%,white); }
+.wallAgentHead strong { font-size:.86rem; }
+.wallAgentHead small { font-family:var(--font-mono); font-size:.46rem; letter-spacing:.08em; text-transform:uppercase; opacity:.55; }
+.wallAgentCard > p,.wallAgentCard > div:not(.wallAgentHead) { display:flex; gap:.6rem; align-items:flex-start; margin:0; padding:.9rem; border-radius:1rem; font-size:.76rem; line-height:1.4; }
+.wallAgentCard > p { background:rgba(255,255,255,.74); }
+.wallAgentCard > div:not(.wallAgentHead) { margin-top:.45rem; color:#fff; background:#11232f; }
+.wallAgentCard > p svg,.wallAgentCard > div svg { flex:0 0 auto; margin-top:.12rem; }
+.wallAgentCard ul { display:flex; flex-wrap:wrap; gap:.35rem; margin:.65rem 0 0; padding:0; list-style:none; }
+.wallAgentCard li { padding:.4rem .5rem; border:1px solid rgba(24,56,75,.1); border-radius:999px; background:rgba(255,255,255,.62); font-family:var(--font-mono); font-size:.45rem; letter-spacing:.04em; text-transform:uppercase; }
 .phoneGlow { position: absolute; width: 28rem; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle, rgba(255,255,255,.98), color-mix(in srgb, var(--mini-accent) 18%, transparent) 42%, transparent 70%); filter: blur(14px); }
 .phone { position: relative; z-index: 2; width: min(20rem, 57%); min-height: 33rem; padding: .75rem; border: 1px solid rgba(255,255,255,.9); border-radius: 2.8rem; background: linear-gradient(145deg, rgba(255,255,255,.8), rgba(214,236,245,.42)); box-shadow: inset 0 2px 1px #fff, inset 0 -24px 42px rgba(85,139,166,.13), 0 30px 70px rgba(34,65,82,.22); backdrop-filter: blur(22px) saturate(1.25); transform: rotate(-2deg); }
 .phone header { height: 3.2rem; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding: 0 1rem; font-family: var(--font-mono); font-size: .55rem; letter-spacing: .09em; text-transform: uppercase; }
@@ -77,7 +90,7 @@
   .productStage { grid-template-columns: 1fr; }
   .productCopy { border-right: 0; border-bottom: 1px solid rgba(40,74,93,.12); }
   .status { margin-bottom: 2rem; }
-  .demo { min-height: 38rem; }
+  .demo { height: 38rem; min-height: 38rem; }
 }
 
 @media (max-width: 700px) {
@@ -92,7 +105,8 @@
   .productCopy { padding: 2rem 1.35rem 2.25rem; }
   .productCopy h3 { font-size: clamp(2.65rem, 12vw, 4rem); }
   .actions { align-items: stretch; flex-direction: column; }
-  .demo { min-height: 35rem; }
+  .demo { height: 35rem; min-height: 35rem; }
+  .wallAgentCard { width:76%; padding:.8rem; }
   .phone { width: 68%; min-width: 15rem; min-height: 29rem; }
   .phoneCanvas { min-height: 21rem; }
   .miniOrb { width: 6.5rem; }

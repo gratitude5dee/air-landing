@@ -6,6 +6,7 @@ import { useCallback, useEffect, useRef, useState, type CSSProperties } from "re
 import { LuArrowDown, LuArrowUpRight, LuCalendarDays, LuMessageCircle, LuRefreshCw, LuSparkles } from "react-icons/lu";
 
 import { PreorderPlasmaButton } from "@/components/Preorder";
+import { AccordionGallery, type AccordionGalleryItem } from "@/components/AccordionGallery";
 import { AppOrbPlayground } from "@/components/AppOrbPlayground";
 import { LandingCloudShader } from "@/components/LandingCloudShader";
 import { MiniAppShowcase } from "@/components/MiniAppShowcase";
@@ -35,6 +36,30 @@ const artifacts = [
   { kind: "spark", label: "Ready to review", x: "47%", y: "58%", size: "5.1rem", rotate: "-4deg", delay: "810ms" },
   { kind: "image", src: "/media/air/v2026-08-19-a/directions/blue-hour/02-hands.webp", label: "Working file", x: "20%", y: "58%", size: "6.2rem", rotate: "7deg", delay: "920ms" },
   { kind: "message", label: "Keep this moving", x: "5%", y: "43%", size: "7.2rem", rotate: "-8deg", delay: "1030ms" },
+] as const;
+
+const workspaceGallery: readonly AccordionGalleryItem[] = [
+  {
+    image: "/media/air/v2026-08-19-a/directions/golden-gate/02-creator.webp",
+    label: "Create",
+    description: "Turn a thought, link, image, or file into a useful next move.",
+    link: "/how-it-works#mini-apps",
+    alt: "Creator working in the Air visual world",
+  },
+  {
+    image: "/media/air/v2026-08-19-a/directions/blue-hour/02-hands.webp",
+    label: "Organize",
+    description: "Keep the context, files, decisions, and tools together as the work changes.",
+    link: "/composable-computer",
+    alt: "Hands shaping a connected creative workspace",
+  },
+  {
+    image: "/media/air/v2026-08-19-a/directions/chrome-launch/03-orbit.webp",
+    label: "Continue",
+    description: "Return to the same workspace and review consequential actions before they happen.",
+    link: "/how-it-works#agent-control-plane",
+    alt: "Orbital interface representing persistent work",
+  },
 ] as const;
 
 type ArtifactStyle = CSSProperties & {
@@ -130,10 +155,8 @@ export function LandingExperience() {
           <p className={styles.eyebrow}>ONE CONTINUOUS WORKSPACE</p>
           <h2 id="why-air-title">Give Air the outcome. Keep your attention on the work.</h2>
         </div>
-        <div className={styles.benefitGrid}>
-          <article><span>01</span><h3>Create</h3><p>Turn a thought, link, image, or file into a useful next move.</p></article>
-          <article><span>02</span><h3>Organize</h3><p>Keep the context, files, decisions, and tools together as the job changes.</p></article>
-          <article><span>03</span><h3>Continue</h3><p>Return to the same workspace and review consequential actions before they happen.</p></article>
+        <div className={styles.workspaceGallery}>
+          <AccordionGallery items={workspaceGallery} defaultIndex={0} height={520} expandRatio={.58} trigger="hover" />
         </div>
         <Link className={styles.storyLink} href="/how-it-works">Walk through the complete Air experience <LuArrowUpRight aria-hidden /></Link>
       </section>

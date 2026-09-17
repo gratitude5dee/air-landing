@@ -191,6 +191,7 @@
 .benefits { padding: clamp(6rem, 10vw, 10rem) var(--gutter); background: #f2efe7; color: #101a21; }
 .benefitsIntro { display: grid; grid-template-columns: .55fr 1.45fr; gap: 2rem; align-items: start; border-top: 1px solid rgba(15,32,43,.2); padding-top: 1.3rem; }
 .benefitsIntro h2 { max-width: 16ch; margin: 0; font-size: clamp(2.6rem, 5vw, 5.3rem); line-height: .98; letter-spacing: -.06em; font-weight: 470; }
+.workspaceGallery { margin-top: clamp(3rem,6vw,5rem); padding:.55rem; border:1px solid rgba(255,255,255,.72); border-radius:2rem; background:rgba(255,255,255,.32); box-shadow:0 28px 80px rgba(37,55,64,.12),inset 0 1px #fff; }
 .benefitGrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; margin-top: 5rem; background: rgba(15,32,43,.18); border: 1px solid rgba(15,32,43,.18); }
 .benefitGrid article { min-height: 18rem; padding: 1.5rem; background: #f2efe7; }
 .benefitGrid span { font-family: var(--font-mono); font-size: .62rem; }

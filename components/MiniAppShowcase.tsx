@@ -6,19 +6,16 @@ import { useRef, useState, type CSSProperties, type KeyboardEvent } from "react"
 import {
   LuArrowUpRight,
   LuCheck,
-  LuImage,
   LuInbox,
   LuMessageCircle,
-  LuPackage,
-  LuPlay,
   LuShoppingBag,
-  LuSparkles,
   LuTrendingUp,
   LuWandSparkles,
   LuZap,
 } from "react-icons/lu";
 import type { IconType } from "react-icons";
 
+import { DriftWall, type DriftWallItem } from "@/components/DriftWall";
 import { PreorderPlasmaButton } from "@/components/Preorder";
 import styles from "./MiniAppShowcase.module.css";
 
@@ -135,6 +132,19 @@ const miniApps: readonly MiniApp[] = [
   },
 ] as const;
 
+const wallItems: readonly DriftWallItem[] = [
+  { image: "/media/air/v2026-08-19-a/directions/blue-hour/01-first.webp", title: "Air blue-hour launch world" },
+  { image: "/media/air/v2026-08-19-a/directions/chrome-launch/02-macro.webp", title: "Chrome launch detail" },
+  { image: "/media/air/v2026-08-19-a/directions/golden-gate/02-creator.webp", title: "Creator working with Air" },
+  { image: "/media/air/v2026-08-19-a/directions/chrome-launch/03-orbit.webp", title: "Air orbital interface" },
+  { image: "/media/air/v2026-08-19-a/directions/blue-hour/02-hands.webp", title: "Creative work in motion" },
+  { image: "/media/air/v2026-08-19-a/directions/golden-gate/03-bridge.webp", title: "Connected work across tools" },
+  { image: "/media/air/v2026-08-19-a/directions/blue-hour/03-city.webp", title: "Persistent workspace at blue hour" },
+  { image: "/media/air/v2026-08-19-a/directions/golden-gate/01-first.webp", title: "Air Golden Gate direction" },
+  { image: "/media/air/v2026-08-19-a/directions/chrome-launch/01-first.webp", title: "Air chrome launch world" },
+  { image: "/media/air/v2026-08-19-a/first-cut/golden-gate-poster.webp", title: "Air launch film" },
+] as const;
+
 type AccentStyle = CSSProperties & { "--mini-accent": string };
 
 export function MiniAppShowcase() {
@@ -206,27 +216,12 @@ export function MiniAppShowcase() {
           </div>
 
           <div className={styles.demo} aria-label={`${active.name} Mini App product preview`}>
-            <div className={styles.phoneGlow} aria-hidden="true" />
-            <div className={styles.fragments} aria-hidden="true">
-              {active.fragments.map((fragment, index) => (
-                <span className={styles[fragment.kind]} style={{ "--fragment-index": index } as CSSProperties} key={fragment.label}>
-                  {fragment.kind === "image" ? <LuImage /> : fragment.kind === "message" ? <LuMessageCircle /> : fragment.kind === "metric" ? <LuTrendingUp /> : <LuSparkles />}
-                  {fragment.label}
-                </span>
-              ))}
-            </div>
-            <div className={styles.phone}>
-              <header>
-                <span>AIR</span>
-                <strong>{active.name}</strong>
-                <i>•••</i>
-              </header>
-              <div className={styles.phoneCanvas}>
-                <div className={styles.miniOrb}><active.Icon aria-hidden="true" /></div>
-                <div className={styles.prompt}><LuMessageCircle aria-hidden="true" /><span>{active.prompt}</span></div>
-                <div className={styles.result}><LuCheck aria-hidden="true" /><span>{active.result}</span></div>
-              </div>
-              <footer><span><LuPlay aria-hidden="true" /> Run with Air</span><LuArrowUpRight aria-hidden="true" /></footer>
+            <DriftWall items={wallItems} columns={4} tileWidth={178} tileHeight={124} gap={14} speed={22} lift={46} dim={.7} fade={.42} />
+            <div className={styles.wallAgentCard}>
+              <div className={styles.wallAgentHead}><span><active.Icon aria-hidden="true" /></span><strong>{active.name}</strong><small>Live surface</small></div>
+              <p><LuMessageCircle aria-hidden="true" />{active.prompt}</p>
+              <div><LuCheck aria-hidden="true" /><span>{active.result}</span></div>
+              <ul>{active.fragments.map((fragment) => <li key={fragment.label}>{fragment.label}</li>)}</ul>
             </div>
           </div>
         </div>
@@ -234,7 +229,7 @@ export function MiniAppShowcase() {
         <div className={styles.trustBar}>
           <div><span>PRIVATE BETA</span><span>PERSISTENT CONTEXT</span><span>APPROVAL REQUIRED WHEN IT MATTERS</span></div>
           <div>
-            <a href="https://agenthunt.dev/" target="_blank" rel="noreferrer">Explore Agent Hunt <LuArrowUpRight aria-hidden="true" /></a>
+            <a href="https://agenthunt.com/" target="_blank" rel="noreferrer">Explore Agent Hunt <LuArrowUpRight aria-hidden="true" /></a>
             <a href="https://www.5-dee.com/" target="_blank" rel="noreferrer">Built by 5DEE Studios <LuArrowUpRight aria-hidden="true" /></a>
           </div>
         </div>
