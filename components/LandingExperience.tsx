@@ -40,25 +40,25 @@ const artifacts = [
 
 const workspaceGallery: readonly AccordionGalleryItem[] = [
   {
-    image: "/media/air/v2026-08-19-a/directions/golden-gate/02-creator.webp",
+    image: "/media/air/v2026-09-17-b/workspace/create.jpg",
     label: "Create",
     description: "Turn a thought, link, image, or file into a useful next move.",
     link: "/how-it-works#mini-apps",
-    alt: "Creator working in the Air visual world",
+    alt: "A creative professional shaping a launch concept with an AI workspace",
   },
   {
-    image: "/media/air/v2026-08-19-a/directions/blue-hour/02-hands.webp",
+    image: "/media/air/v2026-09-17-b/workspace/organize.jpg",
     label: "Organize",
     description: "Keep the context, files, decisions, and tools together as the work changes.",
     link: "/composable-computer",
-    alt: "Hands shaping a connected creative workspace",
+    alt: "A tactile system of project context organized around a blue glass core",
   },
   {
-    image: "/media/air/v2026-08-19-a/directions/chrome-launch/03-orbit.webp",
+    image: "/media/air/v2026-09-17-b/workspace/continue.jpg",
     label: "Continue",
     description: "Return to the same workspace and review consequential actions before they happen.",
     link: "/how-it-works#agent-control-plane",
-    alt: "Orbital interface representing persistent work",
+    alt: "A continuous path of review checkpoints leading toward a luminous gate",
   },
 ] as const;
 

@@ -13,7 +13,14 @@ import {
 
 import styles from "./DriftWall.module.css";
 
-export type DriftWallItem = Readonly<{ image: string; title: string; href?: string }>;
+export type DriftWallItem = Readonly<{
+  image: string;
+  title: string;
+  description?: string;
+  eyebrow?: string;
+  accent?: string;
+  href?: string;
+}>;
 
 type DriftWallProps = {
   items: readonly DriftWallItem[];
@@ -238,11 +245,22 @@ export function DriftWall({
                 {Array.from({ length: meta.copies }).flatMap((_, copyIndex) => column.map((item, itemIndex) => {
                   const id = `${columnIndex}-${copyIndex}-${itemIndex}`;
                   const primaryCopy = copyIndex === 0;
-                  const inner = <span className={styles.inner}><img src={item.image} alt={primaryCopy ? item.title : ""} loading="lazy" decoding="async" draggable={false} /><span className={styles.overlay} aria-hidden="true" /></span>;
+                  const itemStyle = { "--dw-item-accent": item.accent ?? "#168ed1" } as WallStyle;
+                  const inner = (
+                    <span className={styles.inner}>
+                      <img src={item.image} alt={primaryCopy ? item.title : ""} loading="lazy" decoding="async" draggable={false} />
+                      <span className={styles.overlay} aria-hidden="true" />
+                      <span className={styles.caption} aria-hidden="true">
+                        {item.eyebrow && <small>{item.eyebrow}</small>}
+                        <strong>{item.title}</strong>
+                        {item.description && <span>{item.description}</span>}
+                      </span>
+                    </span>
+                  );
                   return item.href ? (
-                    <a className={`${styles.tile} ${activeId === id ? styles.active : ""}`} data-tile-id={id} data-col={columnIndex} href={item.href} key={id} tabIndex={primaryCopy ? 0 : -1} aria-hidden={!primaryCopy} onFocus={() => activate(id, columnIndex)} onBlur={release}>{inner}</a>
+                    <a className={`${styles.tile} ${activeId === id ? styles.active : ""}`} style={itemStyle} data-tile-id={id} data-col={columnIndex} href={item.href} key={id} tabIndex={primaryCopy ? 0 : -1} aria-hidden={!primaryCopy} aria-label={[item.title, item.description].filter(Boolean).join(". ")} onFocus={() => activate(id, columnIndex)} onBlur={release}>{inner}</a>
                   ) : (
-                    <button className={`${styles.tile} ${activeId === id ? styles.active : ""}`} data-tile-id={id} data-col={columnIndex} type="button" key={id} tabIndex={primaryCopy ? 0 : -1} aria-hidden={!primaryCopy} aria-label={item.title} onFocus={() => activate(id, columnIndex)} onBlur={release}>{inner}</button>
+                    <button className={`${styles.tile} ${activeId === id ? styles.active : ""}`} style={itemStyle} data-tile-id={id} data-col={columnIndex} type="button" key={id} tabIndex={primaryCopy ? 0 : -1} aria-hidden={!primaryCopy} aria-label={[item.title, item.description].filter(Boolean).join(". ")} onClick={() => activate(id, columnIndex)} onFocus={() => activate(id, columnIndex)} onBlur={release}>{inner}</button>
                   );
                 }))}
               </div>
