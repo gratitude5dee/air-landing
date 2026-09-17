@@ -8,6 +8,7 @@ import { LuArrowDown, LuArrowUpRight, LuCalendarDays, LuMessageCircle, LuRefresh
 import { PreorderPlasmaButton } from "@/components/Preorder";
 import { AppOrbPlayground } from "@/components/AppOrbPlayground";
 import { LandingCloudShader } from "@/components/LandingCloudShader";
+import { MiniAppShowcase } from "@/components/MiniAppShowcase";
 import { AIR_PRODUCT_DESCRIPTION, AIR_TAGLINE } from "@/lib/air-copy";
 import styles from "./LandingExperience.module.css";
 
@@ -121,6 +122,8 @@ export function LandingExperience() {
       </section>
 
       <div id="app-orbs"><AppOrbPlayground /></div>
+
+      <MiniAppShowcase />
 
       <section id="why-air" className={styles.benefits} aria-labelledby="why-air-title">
         <div className={styles.benefitsIntro}>
