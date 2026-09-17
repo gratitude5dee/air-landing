@@ -223,14 +223,60 @@
 }
 
 @media (max-width: 540px) {
-  .scene { height: 26rem; }
+  .hero {
+    min-height: 100svh;
+    padding: 6.4rem .8rem 4.5rem;
+    background:
+      radial-gradient(circle at 50% 8%, rgba(255,255,255,.96), transparent 28%),
+      linear-gradient(180deg, #aed4e6 0%, #d9ebef 66%, #f1eee7 100%);
+  }
+  .hero::after {
+    content: "";
+    position: absolute;
+    right: 12%;
+    bottom: -3rem;
+    left: 12%;
+    z-index: -1;
+    height: 8rem;
+    opacity: .42;
+    pointer-events: none;
+    background: linear-gradient(90deg,#052541,#1688d5 20%,#eafcff 49%,#ffd66e 66%,#ff74a2 84%,transparent);
+    filter: blur(40px) saturate(1.35);
+  }
+  .sceneWrap { gap: .2rem; }
+  .scene { height: 29rem; }
   .artifact { --artifact-size: 4.25rem !important; }
   .artifact:nth-child(3), .artifact:nth-child(5), .artifact:nth-child(9) { display: none; }
-  .message, .calendar, .spark, .note { font-size: .54rem; padding: .52rem; }
-  .wordmark { font-size: 4.2rem; }
-  .orb { width: 7.5rem; }
-  .heroCopy h1 { font-size: 3.35rem; }
-  .actions { flex-direction: column; }
+  .artifact:nth-child(1) { left: 11%; top: 14%; }
+  .artifact:nth-child(2) { left: 59%; top: 6%; }
+  .artifact:nth-child(4) { left: 70%; top: 38%; }
+  .artifact:nth-child(6) { left: 63%; top: 68%; }
+  .artifact:nth-child(7) { left: 25%; top: 73%; }
+  .artifact:nth-child(8) { left: 7%; top: 46%; }
+  .message, .calendar, .spark, .note {
+    font-size: .54rem;
+    padding: .52rem;
+    border-radius: 1rem;
+    corner-shape: squircle;
+  }
+  .image { border-radius: 50%; }
+  .wordmark {
+    top: 36%;
+    font-size: 5rem;
+    font-weight: 780;
+    background: linear-gradient(150deg,#fff 4%,#91aab7 31%,#f8ffff 49%,#7395a8 68%,#edf9fb 90%);
+    background-clip: text;
+    -webkit-text-stroke: 1px rgba(255,255,255,.88);
+    filter: drop-shadow(0 1rem .8rem rgba(35,69,86,.18));
+    text-shadow: 0 1px 0 #fff,0 3px 0 rgba(87,117,132,.24);
+  }
+  .orbButton { bottom: .65rem; }
+  .orb { width: 7.75rem; }
+  .heroCopy { padding: 1.3rem .35rem 0; }
+  .heroCopy h1 { max-width: 10ch; font-size: 3.25rem; line-height: .9; }
+  .heroCopy > p:not(.eyebrow) { max-width: 27rem; margin-top: 1.15rem; font-size: .94rem; line-height: 1.48; }
+  .actions { flex-direction: column; margin-top: 1.4rem; }
+  .actions > * { width: min(100%, 22rem); justify-content: center; }
 }
 
 @media (prefers-reduced-motion: reduce) {

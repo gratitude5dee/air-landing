@@ -10,6 +10,7 @@ import { AccordionGallery, type AccordionGalleryItem } from "@/components/Accord
 import { AppOrbPlayground } from "@/components/AppOrbPlayground";
 import { LandingCloudShader } from "@/components/LandingCloudShader";
 import { MiniAppShowcase } from "@/components/MiniAppShowcase";
+import { MobileAirIntro } from "@/components/MobileAirIntro";
 import { AIR_PRODUCT_DESCRIPTION, AIR_TAGLINE } from "@/lib/air-copy";
 import styles from "./LandingExperience.module.css";
 
@@ -117,6 +118,7 @@ export function LandingExperience() {
 
   return (
     <main id="main" className={styles.main}>
+      <MobileAirIntro />
       <div id="top" />
       <section className={styles.hero} aria-labelledby="landing-title">
         <LandingCloudShader />
