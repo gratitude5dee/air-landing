@@ -15,6 +15,7 @@ import {
 } from "react-icons/si";
 
 import { SectionAutoplayVideo } from "./SectionAutoplayVideo";
+import { VaultReveal } from "./VaultReveal";
 import styles from "./AppOrbPlayground.module.css";
 
 type AppDefinition = {
@@ -102,21 +103,27 @@ export function AppOrbPlayground() {
 
   return (
     <section className={styles.section} aria-labelledby="app-orbs-title">
-      <SectionAutoplayVideo
-        desktopSrc="/media/air/v2026-09-17-d/demos/airclay-720.mp4"
-        mobileSrc="/media/air/v2026-09-17-d/demos/airclay-540.mp4"
-        poster="/media/air/v2026-09-17-d/demos/airclay-poster.jpg"
-        kicker="Air / Field film 01"
-        title="Step into Air."
-        description="A personal world forms around the work—then stays ready for whatever comes next."
-      />
-      <div className={styles.copy}>
+      <div className={styles.embossMark} aria-hidden="true">ORBIT</div>
+      <div className={styles.chromaticFloor} aria-hidden="true" />
+      <VaultReveal className={styles.filmReveal}>
+        <SectionAutoplayVideo
+          desktopSrc="/media/air/v2026-09-17-d/demos/airclay-720.mp4"
+          mobileSrc="/media/air/v2026-09-17-d/demos/airclay-540.mp4"
+          poster="/media/air/v2026-09-17-d/demos/airclay-poster.jpg"
+          kicker="Air / Field film 01"
+          title="Step into Air."
+          description="A personal world forms around the work—then stays ready for whatever comes next."
+        />
+      </VaultReveal>
+      <VaultReveal className={styles.copy} delay={80}>
         <p>YOUR APPS, IN ORBIT</p>
         <h2 id="app-orbs-title">Pull the tools you love into the same working space.</h2>
         <span>Drag an orb. Use arrow keys when an orb is focused.</span>
-      </div>
+      </VaultReveal>
+      <VaultReveal className={styles.fieldReveal} delay={140}>
       <div ref={fieldRef} className={styles.field} role="group" aria-label="Interactive app orbs">
         <div className={styles.fieldGlow} aria-hidden="true" />
+        <div className={styles.orbitTrack} aria-hidden="true"><span /><span /></div>
         {apps.map(({ name, Icon, color, x, y, size, delay }, index) => {
           const offset = offsets[index];
           const style: OrbStyle = {
@@ -149,6 +156,7 @@ export function AppOrbPlayground() {
         })}
         <div className={styles.centerOrb} aria-hidden="true"><span>AIR</span><small>one context</small></div>
       </div>
+      </VaultReveal>
     </section>
   );
 }

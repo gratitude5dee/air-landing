@@ -6,6 +6,7 @@ import { LuArrowUpRight, LuMove, LuScan } from "react-icons/lu";
 
 import { DriftWall, type DriftWallItem } from "@/components/DriftWall";
 import { PreorderPlasmaButton } from "@/components/Preorder";
+import { VaultReveal } from "@/components/VaultReveal";
 import styles from "./MiniAppShowcase.module.css";
 
 const wallItems: readonly DriftWallItem[] = [
@@ -51,9 +52,11 @@ export function MiniAppShowcase() {
     <section className={styles.section} id="mini-app-showcase" aria-labelledby="mini-app-showcase-title">
       <Image className={styles.cloudBackdrop} src="/images/landing-clouds-v2.webp" alt="" fill sizes="100vw" />
       <div className={styles.skyWash} aria-hidden="true" />
+      <div className={styles.embossMark} aria-hidden="true">MINI APPS</div>
+      <div className={styles.chromaticFloor} aria-hidden="true" />
 
       <div className={styles.shell}>
-        <div className={styles.heading}>
+        <VaultReveal className={styles.heading}>
           <div>
             <p>MINI APPS / YOUR AIR, YOUR WAY</p>
             <h2 id="mini-app-showcase-title">Five focused worlds. One agent already in context.</h2>
@@ -62,9 +65,9 @@ export function MiniAppShowcase() {
             <p>Move through the wall. Every tile opens a focused surface built around the thing you want to finish.</p>
             <span><LuMove aria-hidden="true" /> Hover, focus, or tap through the worlds</span>
           </div>
-        </div>
+        </VaultReveal>
 
-        <div className={styles.wallStage}>
+        <VaultReveal className={styles.wallStage} delay={120}>
           <DriftWall
             className={styles.fullWall}
             items={wallItems}
@@ -82,9 +85,9 @@ export function MiniAppShowcase() {
             depth={72}
           />
           <div className={styles.wallBadge} aria-hidden="true"><LuScan /><span>Five live surfaces</span></div>
-        </div>
+        </VaultReveal>
 
-        <div className={styles.actionRail}>
+        <VaultReveal className={styles.actionRail} delay={180}>
           <div>
             <span>PRIVATE BETA</span>
             <strong>Start with one Mini App. Keep the context as the work changes.</strong>
@@ -93,15 +96,15 @@ export function MiniAppShowcase() {
             <PreorderPlasmaButton label="Try Air for free" />
             <Link href="/how-it-works#mini-apps">Explore every Mini App <LuArrowUpRight aria-hidden="true" /></Link>
           </div>
-        </div>
+        </VaultReveal>
 
-        <div className={styles.trustBar}>
+        <VaultReveal className={styles.trustBar} delay={220}>
           <div><span>PERSISTENT CONTEXT</span><span>APPROVAL REQUIRED WHEN IT MATTERS</span><span>OPTIMIZED FOR PHONE + DESKTOP</span></div>
           <div>
             <a href="https://agenthunt.com/" target="_blank" rel="noreferrer">Explore Agent Hunt <LuArrowUpRight aria-hidden="true" /></a>
             <a href="https://www.5-dee.com/" target="_blank" rel="noreferrer">Built by 5DEE Studios <LuArrowUpRight aria-hidden="true" /></a>
           </div>
-        </div>
+        </VaultReveal>
       </div>
     </section>
   );

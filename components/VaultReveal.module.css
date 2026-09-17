@@ -1,0 +1,37 @@
+.reveal {
+  position: relative;
+}
+
+.reveal[data-ready="true"] {
+  opacity: 0;
+  filter: blur(18px);
+  clip-path: inset(0 0 18% 0 round 2rem);
+  transform: translate3d(0, 2.8rem, 0) scale(.985);
+  transition:
+    opacity 900ms cubic-bezier(.16, 1, .3, 1) var(--vault-delay),
+    filter 1100ms cubic-bezier(.16, 1, .3, 1) var(--vault-delay),
+    clip-path 1100ms cubic-bezier(.16, 1, .3, 1) var(--vault-delay),
+    transform 1100ms cubic-bezier(.16, 1, .3, 1) var(--vault-delay);
+}
+
+.reveal[data-visible="true"] {
+  opacity: 1;
+  filter: blur(0);
+  clip-path: inset(0 0 0 0 round 0);
+  transform: translate3d(0, 0, 0) scale(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal[data-ready="true"] {
+    opacity: 1;
+    filter: none;
+    clip-path: none;
+    transform: none;
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .reveal { filter: none; }
+}

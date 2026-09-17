@@ -11,6 +11,7 @@ import { AppOrbPlayground } from "@/components/AppOrbPlayground";
 import { LandingCloudShader } from "@/components/LandingCloudShader";
 import { MiniAppShowcase } from "@/components/MiniAppShowcase";
 import { MobileAirIntro } from "@/components/MobileAirIntro";
+import { VaultReveal } from "@/components/VaultReveal";
 import { AIR_PRODUCT_DESCRIPTION, AIR_TAGLINE } from "@/lib/air-copy";
 import styles from "./LandingExperience.module.css";
 
@@ -153,14 +154,19 @@ export function LandingExperience() {
       <MiniAppShowcase />
 
       <section id="why-air" className={styles.benefits} aria-labelledby="why-air-title">
-        <div className={styles.benefitsIntro}>
+        <div className={styles.benefitsEmboss} aria-hidden="true">FLOW</div>
+        <div className={styles.benefitsChroma} aria-hidden="true" />
+        <VaultReveal className={styles.benefitsIntro}>
           <p className={styles.eyebrow}>ONE CONTINUOUS WORKSPACE</p>
           <h2 id="why-air-title">Give Air the outcome. Keep your attention on the work.</h2>
-        </div>
-        <div className={styles.workspaceGallery}>
+        </VaultReveal>
+        <VaultReveal className={styles.workspaceGallery} delay={120}>
           <AccordionGallery items={workspaceGallery} defaultIndex={0} height={520} expandRatio={.58} trigger="hover" />
-        </div>
-        <Link className={styles.storyLink} href="/how-it-works">Walk through the complete Air experience <LuArrowUpRight aria-hidden /></Link>
+        </VaultReveal>
+        <VaultReveal className={styles.storyRail} delay={180}>
+          <span>03 / KEEP THE THREAD</span>
+          <Link className={styles.storyLink} href="/how-it-works">Walk through the complete Air experience <LuArrowUpRight aria-hidden /></Link>
+        </VaultReveal>
       </section>
     </main>
   );

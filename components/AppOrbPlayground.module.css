@@ -1,12 +1,56 @@
 .section {
   position: relative;
+  isolation: isolate;
   overflow: hidden;
   padding: clamp(5.5rem, 9vw, 9rem) var(--gutter) 3rem;
   color: #10202b;
   background:
-    radial-gradient(circle at 50% 65%, rgba(132,194,226,.18), transparent 34%),
+    linear-gradient(rgba(21,65,86,.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(21,65,86,.035) 1px, transparent 1px),
+    radial-gradient(circle at 50% 65%, rgba(132,194,226,.2), transparent 34%),
     linear-gradient(180deg, #edf4f3, #f5f1e9 78%);
+  background-size: 72px 72px, 72px 72px, auto, auto;
 }
+
+.section::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at 50% 17%, rgba(255,255,255,.9), transparent 24%);
+}
+
+.embossMark {
+  position: absolute;
+  z-index: -1;
+  top: clamp(38rem, 53vw, 53rem);
+  left: 50%;
+  color: #edf3f0;
+  font-size: clamp(7rem, 20vw, 18rem);
+  font-weight: 760;
+  letter-spacing: -.1em;
+  line-height: .75;
+  text-shadow: -1px -1px 1px rgba(255,255,255,.96), 1px 2px 2px rgba(70,103,116,.16);
+  transform: translateX(-50%);
+  opacity: .68;
+  pointer-events: none;
+}
+
+.chromaticFloor {
+  position: absolute;
+  z-index: -1;
+  right: 14%;
+  bottom: -5rem;
+  left: 14%;
+  height: 12rem;
+  background: linear-gradient(90deg,transparent,#092f50 9%,#1789d4 27%,#effeff 48%,#f8d764 65%,#ff6f99 82%,transparent);
+  filter: blur(46px) saturate(1.45);
+  opacity: .32;
+  pointer-events: none;
+}
+
+.filmReveal { width: min(84rem, 100%); margin-inline: auto; }
 
 .copy {
   position: relative;
@@ -28,11 +72,12 @@
 .copy h2 { margin: 0; font-size: clamp(2.8rem, 6vw, 6rem); line-height: .94; letter-spacing: -.07em; font-weight: 500; }
 .copy span { display: block; margin-top: 1.4rem; color: rgba(16,32,43,.54); }
 
+.fieldReveal { width: min(76rem, 100%); margin: 1rem auto 0; }
+
 .field {
   position: relative;
-  width: min(76rem, 100%);
+  width: 100%;
   height: clamp(33rem, 58vw, 47rem);
-  margin: 1rem auto 0;
   touch-action: none;
   user-select: none;
 }
@@ -48,6 +93,31 @@
   background: radial-gradient(ellipse, rgba(255,255,255,.9), rgba(155,211,237,.16) 42%, transparent 72%);
   filter: blur(18px);
 }
+
+.orbitTrack {
+  position: absolute;
+  left: 50%;
+  top: 47%;
+  width: min(77%, 51rem);
+  aspect-ratio: 1.7;
+  border: 1px solid rgba(41,99,129,.12);
+  border-radius: 50%;
+  transform: translate(-50%, -50%) rotate(-8deg);
+  box-shadow: 0 0 0 1.8rem rgba(255,255,255,.08), 0 0 0 4.2rem rgba(87,155,187,.035);
+  pointer-events: none;
+}
+
+.orbitTrack span {
+  position: absolute;
+  width: .48rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 1.2rem #41a7e3;
+}
+
+.orbitTrack span:first-child { top: 7%; left: 20%; }
+.orbitTrack span:last-child { right: 13%; bottom: 17%; }
 
 .appOrb {
   position: absolute;
@@ -88,13 +158,26 @@
     0 0 0 1px rgba(91,142,169,.09);
   backdrop-filter: blur(5px) saturate(1.25);
   animation: orbFloat 7s ease-in-out var(--float-delay) infinite;
-  transition: transform 320ms cubic-bezier(.16,1,.3,1), box-shadow 320ms ease;
+  transition: transform 320ms cubic-bezier(.16,1,.3,1), box-shadow 320ms ease, filter 320ms ease;
+}
+
+.glass::before {
+  content: "";
+  position: absolute;
+  inset: -35%;
+  z-index: 0;
+  background: conic-gradient(from 180deg,transparent 0 28%,rgba(112,220,255,.4),rgba(255,255,255,.72),rgba(255,177,92,.38),rgba(255,99,172,.3),transparent 68%);
+  mix-blend-mode: screen;
+  opacity: .28;
+  transform: rotate(-24deg);
+  transition: opacity 320ms ease, transform 700ms cubic-bezier(.16,1,.3,1);
 }
 
 .glass::after { content: ""; position: absolute; inset: 5%; border: 1px solid rgba(255,255,255,.58); border-radius: inherit; pointer-events: none; }
-.icon { width: 48%; aspect-ratio: 1; display: grid; place-items: center; border-radius: 28%; background: rgba(255,255,255,.86); color: var(--app-color); box-shadow: 0 8px 20px rgba(39,65,78,.13); }
+.icon { position:relative; z-index:1; width: 48%; aspect-ratio: 1; display: grid; place-items: center; border-radius: 28%; background: rgba(255,255,255,.86); color: var(--app-color); box-shadow: inset 0 1px #fff,0 8px 20px rgba(39,65,78,.13); corner-shape:squircle; }
 .icon svg { width: 60%; height: 60%; }
-.appOrb:hover .glass { transform: scale(1.08); box-shadow: inset 0 2px 1px #fff, 0 26px 38px rgba(45,77,94,.2); }
+.appOrb:hover .glass { transform: translateY(-.35rem) scale(1.08); filter:saturate(1.2); box-shadow: inset 0 2px 1px #fff, 0 26px 38px rgba(45,77,94,.2),0 0 34px color-mix(in srgb,var(--app-color) 20%,transparent); }
+.appOrb:hover .glass::before { opacity:.68; transform:rotate(42deg); }
 .appOrb:focus-visible { outline: 2px solid #174e6f; outline-offset: .7rem; border-radius: 50%; }
 
 .centerOrb {
@@ -113,8 +196,10 @@
   transform: translate(-50%, -50%);
   background: radial-gradient(circle at 40% 28%, rgba(255,255,255,.92), rgba(129,194,224,.2) 52%, rgba(255,255,255,.42));
   box-shadow: inset 0 2px 1px #fff, 0 30px 50px rgba(49,91,112,.13);
+  backdrop-filter: blur(12px) saturate(1.2);
 }
-.centerOrb span { font-size: clamp(2.4rem, 5vw, 4.8rem); font-weight: 660; letter-spacing: -.1em; }
+.centerOrb::after { content:""; position:absolute; inset:9%; border:1px solid rgba(255,255,255,.64); border-radius:inherit; }
+.centerOrb span { color:transparent; font-size: clamp(2.4rem, 5vw, 4.8rem); font-weight: 700; letter-spacing: -.1em; background:linear-gradient(145deg,#fff,#7d9caa 38%,#f8ffff 57%,#7896a3); background-clip:text; -webkit-text-stroke:1px rgba(255,255,255,.82); filter:drop-shadow(0 .55rem .5rem rgba(41,78,95,.18)); }
 .centerOrb small { font-family: var(--font-mono); font-size: .48rem; letter-spacing: .12em; text-transform: uppercase; opacity: .58; }
 
 @keyframes orbFloat {
@@ -127,13 +212,15 @@
   .copy { padding-inline: .65rem; }
   .copy h2 { font-size: clamp(2.7rem, 12vw, 4.5rem); }
   .field { height: 36rem; }
+  .embossMark { top:45rem; font-size:29vw; }
+  .orbitTrack { width:92%; }
   .appOrb { width: calc(var(--orb-size) * .7); }
   .appOrb:nth-of-type(4), .appOrb:nth-of-type(8) { display: none; }
   .centerOrb { width: 9rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .glass { animation: none; transition: none; }
+  .glass,.glass::before { animation: none; transition: none; }
 }
 
 @media (forced-colors: active) {
