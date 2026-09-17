@@ -5,11 +5,11 @@ import { IMessageComputerDemo } from "@/components/IMessageComputerDemo";
 import { resolveAirFeatureFlags } from "@/lib/feature-flags";
 
 export function Hero({ children }: { children?: ReactNode }) {
-  const { cinematicEnabled, memoryEchoEnabled } = resolveAirFeatureFlags();
+  const { memoryEchoEnabled } = resolveAirFeatureFlags();
 
   return (
     <AirExperience
-      cinematicEnabled={cinematicEnabled}
+      cinematicEnabled={false}
       memoryEchoEnabled={memoryEchoEnabled}
       phoneDemo={<IMessageComputerDemo />}
     >

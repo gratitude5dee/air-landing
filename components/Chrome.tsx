@@ -12,8 +12,8 @@ export function Header() {
       <nav aria-label="Primary navigation">
         <Link href="/how-it-works">how it works</Link>
         <Link className="nav-optional" href="/composable-computer">composable computer</Link>
-        <Link className="nav-optional" href="/#mini-apps">mini apps</Link>
-        <Link className="nav-optional" href="/#pricing">pricing</Link>
+        <Link className="nav-optional" href="/how-it-works#mini-apps">mini apps</Link>
+        <Link className="nav-optional" href="/how-it-works#pricing">pricing</Link>
         <Link href="/docs">docs</Link>
         <PreorderPlasmaButton
           className="header-plasma-button"
@@ -37,7 +37,7 @@ export function Footer() {
         </div>
         <nav className="footer-links" aria-label="Explore Air">
           <span>Explore</span>
-          <a href="#top">Top</a>
+          <Link href="/#top">Top</Link>
           <Link href="/how-it-works">How it works</Link>
           <Link href="/composable-computer">Composable computer</Link>
           <Link href="/capabilities">Capabilities</Link>
@@ -45,10 +45,10 @@ export function Footer() {
         </nav>
         <nav className="footer-links" aria-label="Air product navigation">
           <span>Product</span>
-          <a href="/#agent-control-plane">iMessage control plane</a>
-          <a href="/#mini-apps">Mini Apps</a>
-          <a href="/#roadmap">Roadmap</a>
-          <a href="/#pricing">Pricing</a>
+          <Link href="/how-it-works#agent-control-plane">iMessage control plane</Link>
+          <Link href="/how-it-works#mini-apps">Mini Apps</Link>
+          <Link href="/how-it-works#roadmap">Roadmap</Link>
+          <Link href="/how-it-works#pricing">Pricing</Link>
         </nav>
         <div className="footer-meta">
           <span className="footer-status"><LuCircle aria-hidden /> Private beta / availability labeled</span>

@@ -1,145 +1,87 @@
 import type { Metadata } from "next";
 
-import { DetailArrowLink, DetailPageShell } from "@/components/DetailPageShell";
-import styles from "@/components/DetailPageShell.module.css";
+import { Header, Footer } from "@/components/Chrome";
+import { GradualBlur } from "@/components/GradualBlur";
+import {
+  AIR_FAQ_ITEMS,
+  CommunicationLayer,
+  ComposableCapabilities,
+  ComposableClosing,
+  ComposableDefinition,
+  ComposableFaq,
+  IMessageDrop,
+  MiniAppStore,
+  Pricing,
+  PrivacyFirst,
+  ProductSequence,
+  Roadmap,
+} from "@/components/ComposableSections";
+import { Hero } from "@/components/Hero";
+import { IMessageControlPlane } from "@/components/IMessageControlPlane";
+import { MotionEnhancer } from "@/components/MotionEnhancer";
+import { AIR_PRODUCT_DESCRIPTION, AIR_TAGLINE } from "@/lib/air-copy";
 
 export const metadata: Metadata = {
-  title: "How Air works — personal composable AI computer | Air by WZRD",
-  description:
-    "Message the outcome, let Air compose its persistent computer around the task, and review consequential actions in iMessage or the web.",
+  title: "How Air works | Air by WZRD",
+  description: "See how Air turns one message into a persistent, reviewable workspace for your work.",
   alternates: { canonical: "/how-it-works" },
   openGraph: {
     title: "How Air works — one request, one composable computer",
-    description:
-      "Message the outcome, compose the stack, and review what matters in one continuous context.",
+    description: AIR_PRODUCT_DESCRIPTION,
     url: "/how-it-works",
   },
 };
 
-const steps: readonly { number: string; title: string; body: string; status?: string }[] = [
+const structuredData = [
   {
-    number: "01",
-    title: "Text the outcome.",
-    body: "Start the way you already brief a teammate: with a thought, reference, link, or the context that matters.",
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: "Air",
+    applicationCategory: "ProductivityApplication",
+    operatingSystem: "Ubuntu",
+    url: "https://air.wzrd.tech/how-it-works",
+    description: `A ${AIR_TAGLINE.toLowerCase()} ${AIR_PRODUCT_DESCRIPTION}`,
   },
   {
-    number: "02",
-    title: "Air maps the next move.",
-    body: "Air prepares work through the connections you approve and asks for missing context when it needs it.",
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: AIR_FAQ_ITEMS.map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: { "@type": "Answer", text: item.answer },
+    })),
   },
-  {
-    number: "03",
-    title: "Review what matters.",
-    body: "The thread keeps the plan legible. Publishing, spending, and other consequential actions remain yours to approve.",
-    status: "Approval required",
-  },
-] as const;
+];
 
 export default function HowItWorksPage() {
   return (
-    <DetailPageShell
-      current="how-it-works"
-      eyebrow="AIR BY WZRD.TECH · PRIVATE BETA"
-      title="Message the outcome. Air composes the computer."
-      description="Start with a message, link, image, or file. Air combines persistent context, compute, skills, and supported connections around the job—and returns the important moments for review."
-    >
-      <section
-        className={styles.chapter}
-        data-air-scene="ink"
-        data-air-cloud-progress="0.74"
-        data-air-cloud-rays="0.12"
-        data-air-cloud-opacity="0.18"
-        data-variant="night"
-        aria-labelledby="thread-start-title"
-      >
-        <div className="shell">
-          <div className={styles.rail}>
-            <span>The composable workflow</span>
-            <span>Private-beta interface preview</span>
-          </div>
-          <div className={styles.chapterHeading}>
-            <h2 id="thread-start-title">One request, not six disconnected tools.</h2>
-            <p>
-              Begin with the outcome. Air assembles the memory, compute, models, skills, files, and
-              approved app connections the job actually needs.
-            </p>
-          </div>
-
-          <article className={styles.threadArtifact} aria-labelledby="thread-artifact-title">
-            <header className={styles.artifactHeader}>
-              <span>Air / private thread</span>
-              <span>Interface preview · 01</span>
-            </header>
-            <div className={styles.threadArtifactGrid}>
-              <div className={styles.threadConversation}>
-                <p className={styles.threadTimestamp}>Today · 9:41</p>
-                <div className={`${styles.threadBubble} ${styles.threadBubbleUser}`}>
-                  <p>Turn the launch notes into a clear creative direction and bring back what needs my review.</p>
-                </div>
-                <div className={`${styles.threadBubble} ${styles.threadBubbleAir}`}>
-                  <span>Air</span>
-                  <p>I’ll map the next move across the connections you approve and keep the decision points here.</p>
-                </div>
-                <div className={styles.threadReaction} aria-label="Direction acknowledged">✦</div>
-              </div>
-
-              <aside className={styles.threadRun} aria-labelledby="thread-artifact-title">
-                <div>
-                  <p className={styles.artifactLabel}>What Air returns</p>
-                  <h3 id="thread-artifact-title">A reviewable next move—not another dashboard.</h3>
-                </div>
-                <ol>
-                  <li><span>01</span><p>Brief received <small>Context stays in the thread</small></p></li>
-                  <li><span>02</span><p>Approved connections mapped <small>Only what you allow</small></p></li>
-                  <li><span>03</span><p>Review ready <small>Action waits for your approval</small></p></li>
-                </ol>
-                <p className={styles.artifactNote}>Illustrative interface state · no connected action is shown as completed.</p>
-              </aside>
-            </div>
-            <footer className={styles.artifactFooter}>
-              <span>Conversation-first direction</span>
-              <span>Visible action state</span>
-              <span>Approval stays with you</span>
-            </footer>
-          </article>
-
-          <ol className={styles.routeSteps} aria-label="How Air works">
-            {steps.map((step) => (
-              <li key={step.number}>
-                <span>{step.number}</span>
-                <div>
-                  <h3>{step.title}</h3>
-                  <p>{step.body}</p>
-                  {step.status && <em>{step.status}</em>}
-                </div>
-              </li>
-            ))}
-          </ol>
-        </div>
-      </section>
-
-      <section
-        className={`${styles.editorialCallout} ${styles.editorialCalloutSky}`}
-        data-air-scene="pearl"
-        data-air-cloud-progress="0.86"
-        data-air-cloud-rays="0.08"
-        data-air-cloud-opacity="0.16"
-        aria-labelledby="behind-thread-title"
-      >
-        <div className="shell">
-          <div>
-            <p className="eyebrow">Behind the thread</p>
-            <h2 id="behind-thread-title">A persistent operating surface, not another disposable chat.</h2>
-          </div>
-          <div className={styles.calloutAside}>
-            <p>
-              The workspace, memory, iMessage access, inbox, scoped secrets, and app-toolkit catalog support
-              the same agent and context.
-            </p>
-            <DetailArrowLink href="/capabilities">See what sits behind the thread</DetailArrowLink>
-          </div>
-        </div>
-      </section>
-    </DetailPageShell>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData).replace(/</g, "\\u003c") }}
+      />
+      <Header />
+      <GradualBlur target="page" position="top" height="3.5rem" strength={0.5} divCount={5} opacity={0.82} zIndex={60} />
+      <GradualBlur target="page" position="bottom" height="3.75rem" strength={0.62} divCount={6} opacity={0.84} zIndex={60} />
+      <main id="main">
+        <div id="top" />
+        <Hero>
+          <CommunicationLayer />
+          <PrivacyFirst />
+          <IMessageDrop />
+          <IMessageControlPlane />
+          <MiniAppStore />
+          <ComposableDefinition />
+          <ComposableCapabilities />
+          <ProductSequence />
+          <Roadmap />
+          <Pricing />
+          <ComposableFaq />
+          <ComposableClosing />
+        </Hero>
+      </main>
+      <Footer />
+      <MotionEnhancer />
+    </>
   );
 }

@@ -124,7 +124,7 @@ export default function ComposableComputerPage() {
               Air’s Mini App rails turn agent work into focused software. Publisher access and paid gates
               are rolling out with explicit availability labels.
             </p>
-            <DetailArrowLink href="/#mini-apps">Explore Mini Apps</DetailArrowLink>
+            <DetailArrowLink href="/how-it-works#mini-apps">Explore Mini Apps</DetailArrowLink>
           </div>
         </div>
       </section>
