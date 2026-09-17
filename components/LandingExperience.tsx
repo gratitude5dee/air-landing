@@ -6,6 +6,8 @@ import { useCallback, useEffect, useRef, useState, type CSSProperties } from "re
 import { LuArrowDown, LuArrowUpRight, LuCalendarDays, LuMessageCircle, LuRefreshCw, LuSparkles } from "react-icons/lu";
 
 import { PreorderPlasmaButton } from "@/components/Preorder";
+import { AppOrbPlayground } from "@/components/AppOrbPlayground";
+import { LandingCloudShader } from "@/components/LandingCloudShader";
 import { AIR_PRODUCT_DESCRIPTION, AIR_TAGLINE } from "@/lib/air-copy";
 import styles from "./LandingExperience.module.css";
 
@@ -91,7 +93,7 @@ export function LandingExperience() {
     <main id="main" className={styles.main}>
       <div id="top" />
       <section className={styles.hero} aria-labelledby="landing-title">
-        <div className={styles.sky} aria-hidden="true" />
+        <LandingCloudShader />
         <div className={styles.sceneWrap}>
           <div ref={sceneRef} className={styles.scene} data-run={run} tabIndex={-1}>
             <div className={styles.wordmark} aria-hidden="true">AIR</div>
@@ -109,14 +111,16 @@ export function LandingExperience() {
             <h1 id="landing-title">{AIR_TAGLINE}</h1>
             <p>{AIR_PRODUCT_DESCRIPTION}</p>
             <div className={styles.actions}>
-              <PreorderPlasmaButton label="Try Air" />
+              <PreorderPlasmaButton label="Try Air for free" />
               <Link href="/how-it-works">See how it works <LuArrowUpRight aria-hidden /></Link>
             </div>
           </div>
         </div>
-        <a className={styles.scrollCue} href="#why-air">See what Air keeps moving <LuArrowDown aria-hidden /></a>
+        <a className={styles.scrollCue} href="#app-orbs">Bring your apps into orbit <LuArrowDown aria-hidden /></a>
         <div className={styles.clouds} aria-hidden="true"><span /><span /><span /><span /></div>
       </section>
+
+      <div id="app-orbs"><AppOrbPlayground /></div>
 
       <section id="why-air" className={styles.benefits} aria-labelledby="why-air-title">
         <div className={styles.benefitsIntro}>

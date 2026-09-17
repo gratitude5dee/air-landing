@@ -22,7 +22,7 @@ import {
 } from "react-icons/lu";
 
 import { PlasmaButton } from "@/components/PlasmaButton";
-import { AIR_STRIPE_PAYMENT_LINK } from "@/lib/checkout";
+import { AIR_ONBOARDING_LINK } from "@/lib/checkout";
 
 export type PreorderInterest =
   | "General"
@@ -292,29 +292,10 @@ export function PreorderProvider({ children }: { children: ReactNode }) {
     await copyReferral();
   }
 
-  async function startCheckout() {
-    if (!waitlist?.receipt) {
-      setError("Your waitlist session has expired. Please join again.");
-      setStage("form");
-      return;
-    }
+  function startOnboarding() {
     setStage("checking-out");
     setError("");
-    try {
-      const response = await fetch("/api/preorder/checkout-intent", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ receipt: waitlist.receipt }),
-      });
-      const result = (await response.json().catch(() => null)) as { ok?: boolean; checkoutUrl?: string; message?: string } | null;
-      if (!response.ok || !result?.ok || !result.checkoutUrl) {
-        throw new Error(result?.message || "Air could not open checkout right now. Please try again.");
-      }
-      window.location.assign(result.checkoutUrl);
-    } catch (checkoutError) {
-      setStage("joined");
-      setError(checkoutError instanceof Error ? checkoutError.message : "Please try again.");
-    }
+    window.location.assign(AIR_ONBOARDING_LINK);
   }
 
   const saving = stage === "saving";
@@ -358,7 +339,7 @@ export function PreorderProvider({ children }: { children: ReactNode }) {
                 <span className="eyebrow">Private beta access</span>
                 <h2 id="preorder-title">Save your place in Air.</h2>
                 <p>
-                  Join the waitlist, invite collaborators, then continue to Stripe when you are ready to start.
+                  Join the waitlist, then book a free onboarding session with the Air team.
                 </p>
                 <div className="waitlist-total" aria-live="polite">
                   <LuUsers aria-hidden />
@@ -366,8 +347,8 @@ export function PreorderProvider({ children }: { children: ReactNode }) {
                 </div>
                 <ul className="dialog-proof" aria-label="Waitlist benefits">
                   <li><LuCheck aria-hidden /> One referral moves you one place forward</li>
-                  <li><LuCheck aria-hidden /> Stripe redirects to Cal.com onboarding</li>
-                  <li><LuCheck aria-hidden /> Stripe handles all payment details</li>
+                  <li><LuCheck aria-hidden /> Book a free Air onboarding session</li>
+                  <li><LuCheck aria-hidden /> Choose a time directly on Cal.com</li>
                 </ul>
               </div>
 
@@ -419,7 +400,7 @@ export function PreorderProvider({ children }: { children: ReactNode }) {
                   {!saving && <LuArrowUpRight aria-hidden />}
                 </button>
                 <p className="privacy-note">
-                  We use these details only to run the waitlist and Air onboarding. Payment stays with Stripe.
+                  We use these details only to run the waitlist and Air onboarding.
                 </p>
               </form>
             </div>
@@ -432,7 +413,7 @@ export function PreorderProvider({ children }: { children: ReactNode }) {
                   <span className="eyebrow">You’re on the Air waitlist</span>
                   <h2 ref={successHeadingRef} id="preorder-title" tabIndex={-1}>Your place is saved.</h2>
                   <p>
-                    Invite people to move forward, or continue to Stripe to schedule Air onboarding after payment.
+                    Invite people to move forward, or book your free Air onboarding session now.
                   </p>
                 </div>
               </div>
@@ -461,11 +442,11 @@ export function PreorderProvider({ children }: { children: ReactNode }) {
 
               {error && <p className="form-error" role="alert">{error}</p>}
               <div className="checkout-row">
-                <button className="button button-primary checkout-button" type="button" onClick={() => void startCheckout()} disabled={checkingOut}>
-                  {checkingOut ? "opening Stripe…" : "buy now and start onboarding"}
+                <button className="button button-primary checkout-button" type="button" onClick={startOnboarding} disabled={checkingOut}>
+                  {checkingOut ? "opening Cal.com…" : "book free Air onboarding"}
                   {!checkingOut && <LuArrowUpRight aria-hidden />}
                 </button>
-                <p>Checkout opens in this tab. After payment, Stripe takes you to Air onboarding on Cal.com.</p>
+                <p>Choose a time with the Air team on Cal.com. No payment is required to book.</p>
               </div>
               <p className="privacy-note" role="status" aria-live="polite">
                 {celebrate ? "Your waitlist update is saved." : "Your position and referral count update from durable waitlist data."}
@@ -507,7 +488,7 @@ export function PreorderButton({
   return (
     <a
       className={`button button-primary ${compact ? "button-compact" : ""} ${className}`}
-      href={AIR_STRIPE_PAYMENT_LINK}
+      href={AIR_ONBOARDING_LINK}
       onClick={open}
       aria-haspopup="dialog"
     >
@@ -531,7 +512,7 @@ export function PreorderPlasmaButton({
   return (
     <PlasmaButton
       className={className}
-      href={AIR_STRIPE_PAYMENT_LINK}
+      href={AIR_ONBOARDING_LINK}
       label={label}
       onClick={open}
       aria-haspopup="dialog"
