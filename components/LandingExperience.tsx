@@ -27,14 +27,14 @@ const LEGACY_HASHES = new Set([
 ]);
 
 const artifacts = [
-  { kind: "image", src: "/media/air/v2026-08-19-a/directions/blue-hour/01-first.webp", label: "Creative reference", x: "15%", y: "20%", size: "5.6rem", rotate: "-11deg", delay: "80ms" },
+  { kind: "image", src: "/media/air/v2026-09-17-c/hero/capture.jpg", label: "Capture an idea", x: "15%", y: "20%", size: "5.6rem", rotate: "-11deg", delay: "80ms" },
   { kind: "note", label: "Launch plan", x: "35%", y: "7%", size: "5.2rem", rotate: "8deg", delay: "210ms" },
   { kind: "message", label: "Bring back what needs my review", x: "59%", y: "16%", size: "8.2rem", rotate: "4deg", delay: "330ms" },
-  { kind: "image", src: "/media/air/v2026-08-19-a/directions/golden-gate/02-creator.webp", label: "Project image", x: "79%", y: "8%", size: "5rem", rotate: "12deg", delay: "460ms" },
+  { kind: "image", src: "/media/air/v2026-09-17-c/hero/approve.jpg", label: "Approve the next move", x: "79%", y: "8%", size: "5rem", rotate: "12deg", delay: "460ms" },
   { kind: "calendar", label: "Review · 2:30", x: "82%", y: "36%", size: "6.6rem", rotate: "-7deg", delay: "560ms" },
-  { kind: "image", src: "/media/air/v2026-08-19-a/directions/chrome-launch/03-orbit.webp", label: "Visual direction", x: "71%", y: "60%", size: "5.7rem", rotate: "9deg", delay: "690ms" },
+  { kind: "image", src: "/media/air/v2026-09-17-c/hero/organize.jpg", label: "Organize the context", x: "71%", y: "60%", size: "5.7rem", rotate: "9deg", delay: "690ms" },
   { kind: "spark", label: "Ready to review", x: "47%", y: "58%", size: "5.1rem", rotate: "-4deg", delay: "810ms" },
-  { kind: "image", src: "/media/air/v2026-08-19-a/directions/blue-hour/02-hands.webp", label: "Working file", x: "20%", y: "58%", size: "6.2rem", rotate: "7deg", delay: "920ms" },
+  { kind: "image", src: "/media/air/v2026-09-17-c/hero/create.jpg", label: "Create the work", x: "20%", y: "58%", size: "6.2rem", rotate: "7deg", delay: "920ms" },
   { kind: "message", label: "Keep this moving", x: "5%", y: "43%", size: "7.2rem", rotate: "-8deg", delay: "1030ms" },
 ] as const;
 
