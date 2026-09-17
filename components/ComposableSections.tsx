@@ -35,6 +35,7 @@ import { ChromaGrid } from "@/components/ChromaGrid";
 import { PixelCard } from "@/components/PixelCard";
 import { ShinyText } from "@/components/ShinyText";
 import { IMessageWorkflowDemo } from "@/components/IMessageWorkflowDemo";
+import { SectionAutoplayVideo } from "@/components/SectionAutoplayVideo";
 import { AIR_AGENT_MARKS } from "@/lib/agent-marks";
 import { AIR_MINI_APPS } from "@/lib/mini-apps";
 
@@ -701,6 +702,14 @@ export function CommunicationLayer() {
       aria-labelledby="communication-title"
     >
       <div className="shell">
+        <SectionAutoplayVideo
+          desktopSrc="/media/air/v2026-09-17-d/demos/air-launch-720.mp4"
+          mobileSrc="/media/air/v2026-09-17-d/demos/air-launch-540.mp4"
+          poster="/media/air/v2026-09-17-d/demos/air-launch-poster.jpg"
+          kicker="Air / System film 02"
+          title="See the composable computer take shape."
+          description="One agent, three computer options, and a private workspace built around the way you work."
+        />
         <div className="section-rail">
           <span>Communication layer</span>
           <span>Private beta</span>

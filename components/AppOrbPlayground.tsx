@@ -14,6 +14,7 @@ import {
   SiYoutube,
 } from "react-icons/si";
 
+import { SectionAutoplayVideo } from "./SectionAutoplayVideo";
 import styles from "./AppOrbPlayground.module.css";
 
 type AppDefinition = {
@@ -101,6 +102,14 @@ export function AppOrbPlayground() {
 
   return (
     <section className={styles.section} aria-labelledby="app-orbs-title">
+      <SectionAutoplayVideo
+        desktopSrc="/media/air/v2026-09-17-d/demos/airclay-720.mp4"
+        mobileSrc="/media/air/v2026-09-17-d/demos/airclay-540.mp4"
+        poster="/media/air/v2026-09-17-d/demos/airclay-poster.jpg"
+        kicker="Air / Field film 01"
+        title="Step into Air."
+        description="A personal world forms around the work—then stays ready for whatever comes next."
+      />
       <div className={styles.copy}>
         <p>YOUR APPS, IN ORBIT</p>
         <h2 id="app-orbs-title">Pull the tools you love into the same working space.</h2>
