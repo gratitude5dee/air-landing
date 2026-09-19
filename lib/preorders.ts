@@ -27,6 +27,10 @@ export type WaitlistSaveResult = WaitlistStatus & {
   referralCredited: boolean;
 };
 
+// Air is opening with a founding cohort already in motion. This keeps the
+// public counter honest about that cohort without creating fake signup rows.
+export const WAITLIST_BASE_COUNT = 100;
+
 export type AdminWaitlistEntry = {
   id: string;
   name: string;
@@ -116,7 +120,7 @@ function sortedLocalEntries(store: Map<string, LocalWaitlistEntry>) {
 function localStatus(entry: LocalWaitlistEntry, store: Map<string, LocalWaitlistEntry>): WaitlistStatus {
   const entries = sortedLocalEntries(store);
   return {
-    totalWaiting: entries.length,
+    totalWaiting: WAITLIST_BASE_COUNT + entries.length,
     position: Math.max(1, entries.findIndex(({ receipt }) => receipt === entry.receipt) + 1),
     referralCode: entry.referralCode,
     referralCount: entry.referralCount,
@@ -146,7 +150,7 @@ async function databaseStatusById(
   const row = rows[0];
   if (!row?.referral_code) return null;
   return {
-    totalWaiting: Math.max(0, Number(row.total_waiting ?? 0)),
+    totalWaiting: WAITLIST_BASE_COUNT + Math.max(0, Number(row.total_waiting ?? 0)),
     position: Math.max(1, Number(row.position ?? 1)),
     referralCode: String(row.referral_code),
     referralCount: Math.max(0, Number(row.referral_count ?? 0)),
@@ -271,10 +275,10 @@ export async function getWaitlistSummary() {
   const db = database();
   if (db) {
     const rows = await db`SELECT count(*)::integer AS total_waiting FROM air_preorders`;
-    return { totalWaiting: Math.max(0, Number(rows[0]?.total_waiting ?? 0)) };
+    return { totalWaiting: WAITLIST_BASE_COUNT + Math.max(0, Number(rows[0]?.total_waiting ?? 0)) };
   }
   if (requiresDurableStorage()) throw new Error("database_unavailable");
-  return { totalWaiting: (globalThis.airLocalPreorders ?? new Map()).size };
+  return { totalWaiting: WAITLIST_BASE_COUNT + (globalThis.airLocalPreorders ?? new Map()).size };
 }
 
 export async function getAdminWaitlistEntries(): Promise<AdminWaitlistEntry[]> {

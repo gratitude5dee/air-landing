@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
 import { AIR_ADMIN_COOKIE, verifyAdminSession } from "@/lib/admin-auth";
-import { getAdminWaitlistEntries } from "@/lib/preorders";
+import { getAdminWaitlistEntries, WAITLIST_BASE_COUNT } from "@/lib/preorders";
 
 export const runtime = "nodejs";
 
@@ -15,7 +15,7 @@ export async function GET() {
   try {
     const entries = await getAdminWaitlistEntries();
     return NextResponse.json(
-      { entries, total: entries.length },
+      { entries, total: WAITLIST_BASE_COUNT + entries.length },
       { headers: { "Cache-Control": "private, no-store" } },
     );
   } catch (error) {

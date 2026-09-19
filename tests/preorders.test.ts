@@ -4,6 +4,7 @@ import {
   getWaitlistStatusByReferralCode,
   rateLimit,
   savePreorder,
+  WAITLIST_BASE_COUNT,
 } from "@/lib/preorders";
 
 const preorder = {
@@ -68,7 +69,7 @@ describe("preorder storage contract", () => {
 
     expect(invited.referralCredited).toBe(true);
     expect(duplicate.referralCredited).toBe(false);
-    expect(inviterStatus).toMatchObject({ referralCount: 1, position: 1, totalWaiting: 2 });
+    expect(inviterStatus).toMatchObject({ referralCount: 1, position: 1, totalWaiting: WAITLIST_BASE_COUNT + 2 });
   });
 
   it("ranks people by referral count and then join time", async () => {

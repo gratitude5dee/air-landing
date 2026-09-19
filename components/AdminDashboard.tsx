@@ -20,6 +20,7 @@ const dateFormatter = new Intl.DateTimeFormat("en-US", { dateStyle: "medium", ti
 
 export function AdminDashboard() {
   const [entries, setEntries] = useState<Entry[]>([]);
+  const [totalWaiting, setTotalWaiting] = useState(100);
   const [password, setPassword] = useState("");
   const [query, setQuery] = useState("");
   const [authenticated, setAuthenticated] = useState<boolean | null>(null);
@@ -40,8 +41,9 @@ export function AdminDashboard() {
       setLoading(false);
       return;
     }
-    const data = (await response.json()) as { entries: Entry[] };
+    const data = (await response.json()) as { entries: Entry[]; total: number };
     setEntries(data.entries);
+    setTotalWaiting(data.total);
     setAuthenticated(true);
     setLoading(false);
   }, []);
@@ -104,7 +106,7 @@ export function AdminDashboard() {
         <div><div className={styles.eyebrow}>AIR / PRIVATE CONTROL ROOM</div><h1>Waitlist</h1></div>
         <div className={styles.actions}><button className={styles.ghostButton} onClick={() => void loadEntries()} disabled={loading}>↻ Refresh</button><button className={styles.ghostButton} onClick={() => void logout()}>Lock</button></div>
       </header>
-      <section className={styles.stats}><div><span>Total signups</span><strong>{entries.length}</strong></div><div><span>Showing</span><strong>{filteredEntries.length}</strong></div><div><span>Onboarding email</span><strong className={styles.muted}>Later</strong></div></section>
+      <section className={styles.stats}><div><span>People waiting</span><strong>{totalWaiting}</strong></div><div><span>Showing signups</span><strong>{filteredEntries.length}</strong></div><div><span>Onboarding email</span><strong className={styles.muted}>Later</strong></div></section>
       <div className={styles.toolbar}><input aria-label="Search signups" placeholder="Search name, email, phone, source" value={query} onChange={(event) => setQuery(event.target.value)} /><span>{loading ? "Syncing…" : "Live database view"}</span></div>
       {error && <p className={styles.error} role="alert">{error}</p>}
       <section className={styles.list} aria-label="Waitlist signups">
