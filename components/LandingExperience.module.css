@@ -40,6 +40,7 @@
   min-height: 37rem;
   outline: none;
 }
+.scene[data-intro-complete="false"] .wordmark,.scene[data-intro-complete="false"] .artifactField,.scene[data-intro-complete="false"] .orbButton{visibility:hidden}
 
 .wordmark {
   position: absolute;

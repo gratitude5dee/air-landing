@@ -73,6 +73,7 @@
 .copy span { display: block; margin-top: 1.4rem; color: rgba(16,32,43,.54); }
 
 .fieldReveal { width: min(76rem, 100%); margin: 1rem auto 0; }
+.orbDetail{max-width:34rem;margin:.5rem auto 0;color:rgba(16,32,43,.65);font-size:.9rem;line-height:1.45;text-align:center}.orbDetail strong{color:#123d57}
 
 .field {
   position: relative;
@@ -211,12 +212,12 @@
   .section { padding-inline: .75rem; }
   .copy { padding-inline: .65rem; }
   .copy h2 { font-size: clamp(2.7rem, 12vw, 4.5rem); }
-  .field { height: 36rem; }
+  .field { height: 29rem; margin-top:.8rem; }
   .embossMark { top:45rem; font-size:29vw; }
   .orbitTrack { width:92%; }
-  .appOrb { width: calc(var(--orb-size) * .7); }
-  .appOrb:nth-of-type(4), .appOrb:nth-of-type(8) { display: none; }
-  .centerOrb { width: 9rem; }
+  .appOrb { width: calc(var(--orb-size) * .66); }
+  .appOrb:nth-of-type(1){left:17%!important;top:25%!important}.appOrb:nth-of-type(2){left:73%!important;top:23%!important}.appOrb:nth-of-type(3){left:86%!important;top:53%!important}.appOrb:nth-of-type(4),.appOrb:nth-of-type(8){display:none}.appOrb:nth-of-type(5){left:15%!important;top:57%!important}.appOrb:nth-of-type(6){left:50%!important;top:48%!important}.appOrb:nth-of-type(7){left:68%!important;top:76%!important}.appOrb:nth-of-type(9){left:34%!important;top:78%!important}
+  .centerOrb { width: 8.6rem; top:49%; }.orbDetail{padding:0 1rem;font-size:.82rem}
 }
 
 @media (prefers-reduced-motion: reduce) {

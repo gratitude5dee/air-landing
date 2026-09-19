@@ -45,6 +45,7 @@ type DriftWallProps = {
   grayscale?: boolean;
   overlayColor?: string;
   className?: string;
+  onSelect?: (item: DriftWallItem) => void;
 };
 
 type WallStyle = CSSProperties & Record<`--dw-${string}`, string | number>;
@@ -77,6 +78,7 @@ export function DriftWall({
   grayscale = false,
   overlayColor = "#dceef5",
   className = "",
+  onSelect,
 }: DriftWallProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const planeRef = useRef<HTMLDivElement>(null);
@@ -262,9 +264,9 @@ export function DriftWall({
                     </span>
                   );
                   return item.href ? (
-                    <a className={`${styles.tile} ${activeId === id ? styles.active : ""}`} style={itemStyle} data-tile-id={id} data-col={columnIndex} href={item.href} key={id} tabIndex={primaryCopy ? 0 : -1} aria-hidden={!primaryCopy} aria-label={[item.title, item.description].filter(Boolean).join(". ")} onFocus={() => activate(id, columnIndex)} onBlur={release}>{inner}</a>
+                    <a className={`${styles.tile} ${activeId === id ? styles.active : ""}`} style={itemStyle} data-tile-id={id} data-col={columnIndex} href={item.href} key={id} tabIndex={primaryCopy ? 0 : -1} aria-hidden={!primaryCopy} aria-label={[item.title, item.description].filter(Boolean).join(". ")} onFocus={() => { activate(id, columnIndex); onSelect?.(item); }} onBlur={release}>{inner}</a>
                   ) : (
-                    <button className={`${styles.tile} ${activeId === id ? styles.active : ""}`} style={itemStyle} data-tile-id={id} data-col={columnIndex} type="button" key={id} tabIndex={primaryCopy ? 0 : -1} aria-hidden={!primaryCopy} aria-label={[item.title, item.description].filter(Boolean).join(". ")} onClick={() => activate(id, columnIndex)} onFocus={() => activate(id, columnIndex)} onBlur={release}>{inner}</button>
+                    <button className={`${styles.tile} ${activeId === id ? styles.active : ""}`} style={itemStyle} data-tile-id={id} data-col={columnIndex} type="button" key={id} tabIndex={primaryCopy ? 0 : -1} aria-hidden={!primaryCopy} aria-label={[item.title, item.description].filter(Boolean).join(". ")} onClick={() => { activate(id, columnIndex); onSelect?.(item); }} onFocus={() => { activate(id, columnIndex); onSelect?.(item); }} onBlur={release}>{inner}</button>
                   );
                 }))}
               </div>

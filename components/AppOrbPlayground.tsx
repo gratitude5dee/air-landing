@@ -55,6 +55,7 @@ export function AppOrbPlayground() {
   const dragRef = useRef<Drag | null>(null);
   const zRef = useRef(10);
   const [offsets, setOffsets] = useState<Offset[]>(() => apps.map(() => ({ x: 0, y: 0, z: 1 })));
+  const [activeApp, setActiveApp] = useState<AppDefinition>(apps[0]);
 
   const beginDrag = (event: ReactPointerEvent<HTMLButtonElement>, index: number) => {
     const offset = offsets[index];
@@ -148,6 +149,8 @@ export function AppOrbPlayground() {
               onPointerUp={endDrag}
               onPointerCancel={endDrag}
               onKeyDown={(event) => moveWithKeys(event, index)}
+              onClick={() => setActiveApp(apps[index])}
+              onFocus={() => setActiveApp(apps[index])}
             >
               <span className={styles.glass}><span className={styles.icon}><Icon aria-hidden="true" /></span></span>
               <strong>{name}</strong>
@@ -156,6 +159,7 @@ export function AppOrbPlayground() {
         })}
         <div className={styles.centerOrb} aria-hidden="true"><span>AIR</span><small>one context</small></div>
       </div>
+      <p className={styles.orbDetail}><strong>{activeApp.name}</strong> stays in the same thread—so Air can pick up the work without another handoff.</p>
       </VaultReveal>
     </section>
   );

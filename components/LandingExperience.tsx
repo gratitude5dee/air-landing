@@ -100,6 +100,7 @@ function Artifact({ artifact }: { artifact: (typeof artifacts)[number] }) {
 
 export function LandingExperience() {
   const [run, setRun] = useState(0);
+  const [introComplete, setIntroComplete] = useState(false);
   const sceneRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -110,6 +111,16 @@ export function LandingExperience() {
     redirectLegacyHash();
     window.addEventListener("hashchange", redirectLegacyHash);
     return () => window.removeEventListener("hashchange", redirectLegacyHash);
+  }, []);
+
+  useEffect(() => {
+    const complete = () => setIntroComplete(true);
+    const fallback = window.setTimeout(complete, 4200);
+    window.addEventListener("air:intro-complete", complete);
+    return () => {
+      window.clearTimeout(fallback);
+      window.removeEventListener("air:intro-complete", complete);
+    };
   }, []);
 
   const replay = useCallback(() => {
@@ -124,7 +135,7 @@ export function LandingExperience() {
       <section className={styles.hero} aria-labelledby="landing-title">
         <LandingCloudShader />
         <div className={styles.sceneWrap}>
-          <div ref={sceneRef} className={styles.scene} data-run={run} tabIndex={-1}>
+          <div ref={sceneRef} className={styles.scene} data-run={run} data-intro-complete={introComplete} tabIndex={-1}>
             <div className={styles.wordmark} aria-hidden="true">AIR</div>
             <div className={styles.artifactField} key={run}>
               {artifacts.map((artifact) => <Artifact artifact={artifact} key={`${artifact.label}-${run}`} />)}

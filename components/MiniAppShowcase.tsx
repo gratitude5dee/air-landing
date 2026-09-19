@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 import { LuArrowUpRight, LuMove, LuScan } from "react-icons/lu";
 
 import { DriftWall, type DriftWallItem } from "@/components/DriftWall";
@@ -48,6 +49,7 @@ const wallItems: readonly DriftWallItem[] = [
 ] as const;
 
 export function MiniAppShowcase() {
+  const [activeApp, setActiveApp] = useState<DriftWallItem>(wallItems[0]);
   return (
     <section className={styles.section} id="mini-app-showcase" aria-labelledby="mini-app-showcase-title">
       <Image className={styles.cloudBackdrop} src="/images/landing-clouds-v2.webp" alt="" fill sizes="100vw" />
@@ -83,8 +85,12 @@ export function MiniAppShowcase() {
             tilt={9}
             turn={-7}
             depth={72}
+            onSelect={setActiveApp}
           />
           <div className={styles.wallBadge} aria-hidden="true"><LuScan /><span>Five live surfaces</span></div>
+          <aside className={styles.activePanel} aria-live="polite">
+            <small>{activeApp.eyebrow}</small><strong>{activeApp.title}</strong><p>{activeApp.description}</p>
+          </aside>
         </VaultReveal>
 
         <VaultReveal className={styles.actionRail} delay={180}>
