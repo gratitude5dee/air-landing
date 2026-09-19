@@ -2,13 +2,12 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
-import { LuArrowDown, LuArrowUpRight, LuCalendarDays, LuMessageCircle, LuRefreshCw, LuSparkles } from "react-icons/lu";
+import { useEffect, useState } from "react";
+import { LuArrowDown, LuArrowUpRight } from "react-icons/lu";
 
 import { PreorderPlasmaButton } from "@/components/Preorder";
 import { AccordionGallery, type AccordionGalleryItem } from "@/components/AccordionGallery";
 import { AppOrbPlayground } from "@/components/AppOrbPlayground";
-import { LandingCloudShader } from "@/components/LandingCloudShader";
 import { MiniAppShowcase } from "@/components/MiniAppShowcase";
 import { MobileAirIntro } from "@/components/MobileAirIntro";
 import { VaultReveal } from "@/components/VaultReveal";
@@ -27,18 +26,6 @@ const LEGACY_HASHES = new Set([
   "roadmap",
   "what-is-air",
 ]);
-
-const artifacts = [
-  { kind: "image", src: "/media/air/v2026-09-17-c/hero/capture.jpg", label: "Capture an idea", x: "15%", y: "20%", size: "5.6rem", rotate: "-11deg", delay: "80ms" },
-  { kind: "note", label: "Launch plan", x: "35%", y: "7%", size: "5.2rem", rotate: "8deg", delay: "210ms" },
-  { kind: "message", label: "Bring back what needs my review", x: "59%", y: "16%", size: "8.2rem", rotate: "4deg", delay: "330ms" },
-  { kind: "image", src: "/media/air/v2026-09-17-c/hero/approve.jpg", label: "Approve the next move", x: "79%", y: "8%", size: "5rem", rotate: "12deg", delay: "460ms" },
-  { kind: "calendar", label: "Review · 2:30", x: "82%", y: "36%", size: "6.6rem", rotate: "-7deg", delay: "560ms" },
-  { kind: "image", src: "/media/air/v2026-09-17-c/hero/organize.jpg", label: "Organize the context", x: "71%", y: "60%", size: "5.7rem", rotate: "9deg", delay: "690ms" },
-  { kind: "spark", label: "Ready to review", x: "47%", y: "58%", size: "5.1rem", rotate: "-4deg", delay: "810ms" },
-  { kind: "image", src: "/media/air/v2026-09-17-c/hero/create.jpg", label: "Create the work", x: "20%", y: "58%", size: "6.2rem", rotate: "7deg", delay: "920ms" },
-  { kind: "message", label: "Keep this moving", x: "5%", y: "43%", size: "7.2rem", rotate: "-8deg", delay: "1030ms" },
-] as const;
 
 const workspaceGallery: readonly AccordionGalleryItem[] = [
   {
@@ -64,44 +51,8 @@ const workspaceGallery: readonly AccordionGalleryItem[] = [
   },
 ] as const;
 
-type ArtifactStyle = CSSProperties & {
-  "--artifact-x": string;
-  "--artifact-y": string;
-  "--artifact-size": string;
-  "--artifact-rotate": string;
-  "--artifact-delay": string;
-};
-
-function Artifact({ artifact }: { artifact: (typeof artifacts)[number] }) {
-  const style: ArtifactStyle = {
-    "--artifact-x": artifact.x,
-    "--artifact-y": artifact.y,
-    "--artifact-size": artifact.size,
-    "--artifact-rotate": artifact.rotate,
-    "--artifact-delay": artifact.delay,
-  };
-
-  return (
-    <div className={`${styles.artifact} ${styles[artifact.kind]}`} style={style} aria-hidden="true">
-      {artifact.kind === "image" && "src" in artifact ? (
-        <Image src={artifact.src} alt="" fill sizes="112px" />
-      ) : artifact.kind === "note" ? (
-        <><span>Notes</span><strong>{artifact.label}</strong><i /></>
-      ) : artifact.kind === "calendar" ? (
-        <><LuCalendarDays /><span>{artifact.label}</span></>
-      ) : artifact.kind === "spark" ? (
-        <><LuSparkles /><span>{artifact.label}</span></>
-      ) : (
-        <><LuMessageCircle /><span>{artifact.label}</span></>
-      )}
-    </div>
-  );
-}
-
 export function LandingExperience() {
-  const [run, setRun] = useState(0);
   const [introComplete, setIntroComplete] = useState(false);
-  const sceneRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const redirectLegacyHash = () => {
@@ -123,29 +74,21 @@ export function LandingExperience() {
     };
   }, []);
 
-  const replay = useCallback(() => {
-    setRun((current) => current + 1);
-    sceneRef.current?.focus({ preventScroll: true });
-  }, []);
-
   return (
     <main id="main" className={styles.main}>
       <MobileAirIntro />
       <div id="top" />
-      <section className={styles.hero} aria-labelledby="landing-title">
-        <LandingCloudShader />
+      <section className={styles.hero} data-intro-complete={introComplete} aria-labelledby="landing-title">
+        <div className={styles.heroArtwork} aria-hidden="true">
+          <Image
+            src="/media/air/v2026-09-19/hero/air-sanctuary.png"
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+          />
+        </div>
         <div className={styles.sceneWrap}>
-          <div ref={sceneRef} className={styles.scene} data-run={run} data-intro-complete={introComplete} tabIndex={-1}>
-            <div className={styles.wordmark} aria-hidden="true">AIR</div>
-            <div className={styles.artifactField} key={run}>
-              {artifacts.map((artifact) => <Artifact artifact={artifact} key={`${artifact.label}-${run}`} />)}
-            </div>
-            <button className={styles.orbButton} type="button" onClick={replay} aria-label="Replay the Air workspace animation">
-              <span className={styles.orb} aria-hidden="true"><LuRefreshCw /></span>
-              <span>replay</span>
-            </button>
-          </div>
-
           <div className={styles.heroCopy}>
             <p className={styles.eyebrow}>AIR BY WZRD.TECH · PRIVATE BETA</p>
             <h1 id="landing-title">{AIR_TAGLINE}</h1>
@@ -157,7 +100,6 @@ export function LandingExperience() {
           </div>
         </div>
         <a className={styles.scrollCue} href="#app-orbs">Bring your apps into orbit <LuArrowDown aria-hidden /></a>
-        <div className={styles.clouds} aria-hidden="true"><span /><span /><span /><span /></div>
       </section>
 
       <div id="app-orbs"><AppOrbPlayground /></div>
