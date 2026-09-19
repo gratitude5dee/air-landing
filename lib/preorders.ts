@@ -27,6 +27,20 @@ export type WaitlistSaveResult = WaitlistStatus & {
   referralCredited: boolean;
 };
 
+export type AdminWaitlistEntry = {
+  id: string;
+  name: string;
+  email: string;
+  imessage: string;
+  consent: boolean;
+  source: string;
+  referralCode: string;
+  referralCount: number;
+  position: number;
+  createdAt: string;
+  updatedAt: string;
+};
+
 type LocalWaitlistEntry = {
   preorder: Preorder;
   receipt: string;
@@ -261,6 +275,54 @@ export async function getWaitlistSummary() {
   }
   if (requiresDurableStorage()) throw new Error("database_unavailable");
   return { totalWaiting: (globalThis.airLocalPreorders ?? new Map()).size };
+}
+
+export async function getAdminWaitlistEntries(): Promise<AdminWaitlistEntry[]> {
+  const db = database();
+  if (db) {
+    const rows = await db`
+      WITH ranked AS (
+        SELECT
+          id, name, email, imessage, consent, source, referral_code, referral_count,
+          created_at, updated_at,
+          row_number() OVER (ORDER BY referral_count DESC, created_at ASC, id ASC)::integer AS position
+        FROM air_preorders
+      )
+      SELECT id, name, email, imessage, consent, source, referral_code, referral_count,
+             position, created_at, updated_at
+      FROM ranked
+      ORDER BY position ASC
+    `;
+    return rows.map((row) => ({
+      id: String(row.id),
+      name: String(row.name ?? ""),
+      email: String(row.email ?? ""),
+      imessage: String(row.imessage ?? ""),
+      consent: Boolean(row.consent),
+      source: String(row.source ?? "unknown"),
+      referralCode: String(row.referral_code ?? ""),
+      referralCount: Math.max(0, Number(row.referral_count ?? 0)),
+      position: Math.max(1, Number(row.position ?? 1)),
+      createdAt: new Date(row.created_at as string | Date).toISOString(),
+      updatedAt: new Date(row.updated_at as string | Date).toISOString(),
+    }));
+  }
+  if (requiresDurableStorage()) throw new Error("database_unavailable");
+
+  const store = globalThis.airLocalPreorders ?? new Map();
+  return sortedLocalEntries(store).map((entry, index) => ({
+    id: entry.receipt,
+    name: entry.preorder.name,
+    email: entry.preorder.email,
+    imessage: entry.preorder.imessage,
+    consent: entry.preorder.consent,
+    source: entry.preorder.source,
+    referralCode: entry.referralCode,
+    referralCount: entry.referralCount,
+    position: index + 1,
+    createdAt: entry.preorder.createdAt,
+    updatedAt: entry.preorder.createdAt,
+  }));
 }
 
 export async function getWaitlistStatusByReferralCode(code: string) {

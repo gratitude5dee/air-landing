@@ -5,7 +5,7 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: "/",
-      disallow: ["/api/", "/internal/"],
+      disallow: ["/admin", "/api/", "/internal/"],
     },
     sitemap: "https://air.wzrd.tech/sitemap.xml",
     host: "https://air.wzrd.tech",
