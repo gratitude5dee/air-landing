@@ -1,8 +1,8 @@
 import Link from "next/link";
-import { LuArrowUpRight, LuCircle, LuSparkles } from "react-icons/lu";
+import { LuArrowUpRight, LuCircle } from "react-icons/lu";
 
 import { HomeHeroLink } from "@/components/HomeHeroLink";
-import { PreorderButton, PreorderPlasmaButton } from "@/components/Preorder";
+import { PreorderPlasmaButton } from "@/components/Preorder";
 import { AIR_TAGLINE } from "@/lib/air-copy";
 
 export function Header() {
@@ -31,9 +31,6 @@ export function Footer() {
         <div className="footer-lead">
           <HomeHeroLink className="brand footer-brand" />
           <p>{AIR_TAGLINE}</p>
-          <PreorderButton className="footer-checkout" label="Start Air at $50 / month">
-            <LuSparkles aria-hidden /> Start Air at $50 / month <LuArrowUpRight aria-hidden />
-          </PreorderButton>
         </div>
         <nav className="footer-links" aria-label="Explore Air">
           <span>Explore</span>
