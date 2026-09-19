@@ -1,3 +1,94 @@
-.intro{position:fixed;inset:0;z-index:2000;overflow:hidden;color:#0a1821;background:radial-gradient(circle at 50% 22%,rgba(255,255,255,.95),transparent 26%),linear-gradient(180deg,#9ccce3 0%,#d8edf0 60%,#f3f0e9 100%);isolation:isolate;transition:opacity .55s ease,filter .55s ease,transform .6s cubic-bezier(.16,1,.3,1)}
-.intro[data-exiting="true"]{opacity:0;filter:blur(12px);transform:scale(1.025);pointer-events:none}.canvas{position:absolute;inset:0;width:100%;height:100%;mix-blend-mode:screen}.grid{position:absolute;inset:0;opacity:.18;background:linear-gradient(rgba(23,71,96,.16) 1px,transparent 1px),linear-gradient(90deg,rgba(23,71,96,.16) 1px,transparent 1px);background-size:clamp(3.5rem,8vw,6rem) clamp(3.5rem,8vw,6rem);mask-image:linear-gradient(transparent,black 20%,black 70%,transparent)}
-.meta{position:absolute;top:max(1.25rem,env(safe-area-inset-top));left:clamp(1rem,3vw,2.25rem);display:flex;gap:1rem;margin:0;color:rgba(10,38,53,.62);font:500 .56rem/1.3 var(--font-mono,"Azeret Mono",monospace);letter-spacing:.14em}.meta span{opacity:.7}.skip,.enter{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;border:1px solid rgba(255,255,255,.7);font-family:var(--font-mono,"Azeret Mono",monospace);letter-spacing:.11em;text-transform:uppercase;cursor:pointer}.skip{position:absolute;top:max(1rem,env(safe-area-inset-top));right:clamp(1rem,3vw,2.25rem);min-height:2.65rem;padding:0 .85rem;border-radius:999px;color:rgba(9,31,45,.72);background:rgba(255,255,255,.28);backdrop-filter:blur(12px);font-size:.54rem}.skip svg{width:.8rem}.artifacts i{position:absolute;display:block;border:1px solid rgba(255,255,255,.86);background:rgba(249,253,255,.68);box-shadow:0 1rem 2rem rgba(24,67,91,.14),inset 0 1px #fff;backdrop-filter:blur(10px)}.artifacts i:nth-child(1){top:20%;left:17%;width:clamp(3.1rem,7vw,5rem);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 32% 20%,#fff,rgba(99,180,228,.42) 32%,rgba(249,253,255,.42) 68%)}.artifacts i:nth-child(2){top:16%;right:20%;width:clamp(4.4rem,10vw,6.5rem);height:clamp(3rem,6vw,4rem);border-radius:1rem;transform:rotate(7deg)}.artifacts i:nth-child(3){top:46%;left:11%;width:clamp(5rem,10vw,7rem);height:clamp(3rem,6vw,4rem);border-radius:1.2rem;transform:rotate(-8deg);background:#101b24}.artifacts i:nth-child(4){top:41%;right:13%;width:clamp(3.7rem,8vw,5.8rem);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 50% 72%,rgba(21,122,255,.78),transparent 32%),rgba(234,249,255,.5)}.artifacts i:nth-child(5){top:61%;right:31%;width:clamp(4rem,9vw,6rem);height:clamp(2.8rem,5vw,3.6rem);border-radius:.85rem;transform:rotate(-6deg)}.copy{position:absolute;right:1.5rem;bottom:clamp(8.5rem,16vh,11rem);left:1.5rem;text-align:center;animation:introCopy 1s cubic-bezier(.16,1,.3,1) 1.45s both}.copy p{max-width:11ch;margin:0 auto;font-size:clamp(2.05rem,5.2vw,4.8rem);font-weight:570;letter-spacing:-.07em;line-height:.9}.copy span{display:block;max-width:28rem;margin:.9rem auto 0;color:rgba(10,35,49,.66);font-size:clamp(.77rem,1.25vw,1rem);line-height:1.45}.enter{position:absolute;right:clamp(1.25rem,4vw,3rem);bottom:calc(2rem + env(safe-area-inset-bottom));left:clamp(1.25rem,4vw,3rem);min-height:3.35rem;border-radius:1.3rem;color:#f8fcff;background:linear-gradient(125deg,#062a4b,#0979c2 54%,#0473b9);box-shadow:inset 0 1px rgba(255,255,255,.42),0 1rem 3rem rgba(13,67,102,.23);font-size:.62rem;animation:introCopy .8s cubic-bezier(.16,1,.3,1) 1.8s both}.enter svg{width:.9rem}.skip:focus-visible,.enter:focus-visible{outline:2px solid #003e70;outline-offset:.22rem}@keyframes introCopy{from{opacity:0;transform:translateY(1.2rem)}to{opacity:1;transform:none}}@media(max-width:700px){.meta{font-size:.47rem}.meta span{display:none}.artifacts i:nth-child(1){top:19%;left:13%}.artifacts i:nth-child(2){top:16%;right:15%}.artifacts i:nth-child(3){top:44%;left:9%}.artifacts i:nth-child(4){top:40%;right:11%}.artifacts i:nth-child(5){top:59%;right:28%}.copy{bottom:8.2rem}.enter{bottom:calc(1.15rem + env(safe-area-inset-bottom))}}@media(prefers-reduced-motion:reduce){.canvas{display:none}.copy,.enter{animation:none}.intro{transition:opacity .18s ease}.artifacts i{opacity:1}}@media(forced-colors:active){.intro{background:Canvas;color:CanvasText}.artifacts i,.skip,.enter{border:2px solid CanvasText;background:Canvas;color:CanvasText}}
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  overflow: hidden;
+  isolation: isolate;
+  background: #dcecf4;
+  transition: opacity .65s ease, filter .65s ease, transform .75s cubic-bezier(.16, 1, .3, 1);
+}
+
+.intro[data-exiting="true"] {
+  opacity: 0;
+  filter: blur(8px);
+  transform: scale(1.018);
+  pointer-events: none;
+}
+
+.poster,
+.video,
+.vignette {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.poster {
+  background: url("/media/air/v2026-09-19/hero/air-sanctuary-2x.jpg") 36% center / cover no-repeat;
+  transform: scale(1.01);
+}
+
+.video {
+  z-index: 1;
+  display: block;
+  border: 0;
+  object-fit: cover;
+  object-position: 36% center;
+  background: transparent;
+}
+
+.vignette {
+  z-index: 2;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(4, 24, 40, .12), transparent 18%, transparent 76%, rgba(4, 24, 40, .08)),
+    radial-gradient(circle at 50% 47%, transparent 50%, rgba(11, 48, 69, .08) 100%);
+}
+
+.skip {
+  position: absolute;
+  z-index: 3;
+  top: max(1rem, env(safe-area-inset-top));
+  right: max(1rem, env(safe-area-inset-right));
+  min-height: 2.65rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .45rem;
+  padding: 0 .85rem;
+  border: 1px solid rgba(255, 255, 255, .75);
+  border-radius: 999px;
+  color: rgba(7, 28, 42, .76);
+  background: rgba(246, 251, 253, .52);
+  box-shadow: inset 0 1px rgba(255, 255, 255, .8), 0 .6rem 2rem rgba(27, 65, 86, .12);
+  backdrop-filter: blur(16px) saturate(1.15);
+  font: 600 .55rem/1 var(--font-mono, "Azeret Mono", monospace);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.skip svg { width: .8rem; }
+.skip:focus-visible { outline: 2px solid #006db4; outline-offset: .25rem; }
+
+@media (max-width: 700px) {
+  .poster { background-position: 45% center; }
+  .video { object-position: 45% center; }
+  .skip {
+    top: max(.8rem, env(safe-area-inset-top));
+    right: max(.8rem, env(safe-area-inset-right));
+    min-height: 2.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .intro { transition: opacity .18s ease; }
+  .intro[data-exiting="true"] { filter: none; transform: none; }
+  .video { display: none; }
+}
+
+@media (forced-colors: active) {
+  .intro { background: Canvas; }
+  .skip { border: 2px solid CanvasText; color: CanvasText; background: Canvas; }
+}

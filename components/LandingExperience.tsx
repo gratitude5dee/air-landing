@@ -66,7 +66,7 @@ export function LandingExperience() {
 
   useEffect(() => {
     const complete = () => setIntroComplete(true);
-    const fallback = window.setTimeout(complete, 4200);
+    const fallback = window.setTimeout(complete, 7000);
     window.addEventListener("air:intro-complete", complete);
     return () => {
       window.clearTimeout(fallback);
@@ -81,7 +81,7 @@ export function LandingExperience() {
       <section className={styles.hero} data-intro-complete={introComplete} aria-labelledby="landing-title">
         <div className={styles.heroArtwork} aria-hidden="true">
           <Image
-            src="/media/air/v2026-09-19/hero/air-sanctuary.png"
+            src="/media/air/v2026-09-19/hero/air-sanctuary-2x.jpg"
             alt=""
             fill
             priority
