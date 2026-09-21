@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 
 import { Footer, Header } from "@/components/Chrome";
+import { ConnectionBanner } from "@/components/ConnectionBanner";
 import { LandingExperience } from "@/components/LandingExperience";
+import { MuseConnection } from "@/components/MuseConnection";
 import { AIR_PRODUCT_DESCRIPTION, AIR_TAGLINE } from "@/lib/air-copy";
 
 export const metadata: Metadata = {
@@ -58,7 +60,9 @@ export default function Home() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData).replace(/</g, "\\u003c") }}
       />
       <Header />
+      <ConnectionBanner />
       <LandingExperience />
+      <MuseConnection />
       <Footer />
     </>
   );

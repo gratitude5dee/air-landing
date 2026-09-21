@@ -12,6 +12,7 @@ The runtime derivatives intentionally remove nonessential source metadata and us
 | Air master film | `/Users/gratitud3/Downloads/airfinal(fin) (1).mov` | Golden Gate stills at 20.0s and 23.5s; silent 8.0s first-cut excerpt from 17.0–25.0s. Runtime video is 1280×720, 30fps, ≤0.5s keyframe cadence. | Source remains outside this repository. |
 | iMessage reference | `/Users/gratitud3/Downloads/chat_imessage_air-by-wzrd-tech.png` | Existing runtime supporting image at `public/images/air-imessage-reference.png`. | Preserved separately from this release manifest. |
 | TextLab fragments | `/Users/gratitud3/Downloads/textlab_hey-air-lets-run-a-wzrd-workflow/` | Existing transparent workflow fragments under `public/images/textlab/`. | Preserved separately from this release manifest. |
+| Muse logo | `/Users/gratitud3/Downloads/muse.png` | Exact source preserved at `public/images/integrations/muse.png` for the Muse connection showcase. | `faea5cf194dc3fb61421c52b96200416295397d8d77094771626284770a87b17` |
 
 ## OpenAI-generated storyboard sources
 
