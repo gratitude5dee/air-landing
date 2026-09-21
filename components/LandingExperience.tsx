@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { LuArrowDown, LuArrowUpRight } from "react-icons/lu";
+import { LuArrowUpRight } from "react-icons/lu";
 
 import { PreorderPlasmaButton } from "@/components/Preorder";
 import { AccordionGallery, type AccordionGalleryItem } from "@/components/AccordionGallery";
@@ -99,7 +99,7 @@ export function LandingExperience() {
             </div>
           </div>
         </div>
-        <a className={styles.scrollCue} href="#app-orbs">Bring your apps into orbit <LuArrowDown aria-hidden /></a>
+        <a className={styles.scrollCue} href="https://avatar.wzrd.tech">Play the Air mini-game <LuArrowUpRight aria-hidden /></a>
       </section>
 
       <div id="app-orbs"><AppOrbPlayground /></div>
