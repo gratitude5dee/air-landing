@@ -14,7 +14,7 @@ import {
   SiYoutube,
 } from "react-icons/si";
 
-import { SectionAutoplayVideo } from "./SectionAutoplayVideo";
+import { SectionVideo } from "./SectionVideo";
 import { VaultReveal } from "./VaultReveal";
 import styles from "./AppOrbPlayground.module.css";
 
@@ -107,10 +107,10 @@ export function AppOrbPlayground() {
       <div className={styles.embossMark} aria-hidden="true">ORBIT</div>
       <div className={styles.chromaticFloor} aria-hidden="true" />
       <VaultReveal className={styles.filmReveal}>
-        <SectionAutoplayVideo
-          desktopSrc="/media/air/v2026-09-17-d/demos/airclay-720.mp4"
-          mobileSrc="/media/air/v2026-09-17-d/demos/airclay-540.mp4"
-          poster="/media/air/v2026-09-17-d/demos/airclay-poster.jpg"
+        <SectionVideo
+          desktopSrc="/media/air/v2026-09-25-launch/airintro-1080.mp4"
+          mobileSrc="/media/air/v2026-09-25-launch/airintro-540.mp4"
+          poster="/media/air/v2026-09-25-launch/airintro-poster.jpg"
           kicker="Air / Field film 01"
           title="Step into Air."
           description="A personal world forms around the work—then stays ready for whatever comes next."

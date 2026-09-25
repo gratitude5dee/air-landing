@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { LuAppWindow, LuBrainCircuit, LuMonitorCog, LuShieldCheck, LuWorkflow } from "react-icons/lu";
 
 import { DetailArrowLink, DetailPageShell } from "@/components/DetailPageShell";
+import { SectionVideo } from "@/components/SectionVideo";
 import styles from "@/components/DetailPageShell.module.css";
 import { AIR_PRODUCT_DESCRIPTION, AIR_TAGLINE } from "@/lib/air-copy";
 
@@ -67,6 +68,16 @@ export default function ComposableComputerPage() {
       eyebrow="YOUR PERSONAL, COMPOSABLE COMPUTER"
       title="One agent. One computer. Composed around you."
       description="Air gives one persistent AI agent a durable workspace, memory, skills, supported connections, and Mini Apps—then keeps the important decisions with you."
+      heroMedia={
+        <SectionVideo
+          desktopSrc="/media/air/v2026-09-17-d/demos/airclay-720.mp4"
+          mobileSrc="/media/air/v2026-09-17-d/demos/airclay-540.mp4"
+          poster="/media/air/v2026-09-17-d/demos/airclay-poster.jpg"
+          kicker="Air / Field film 01"
+          title="Step into Air."
+          description="A personal world forms around the work—then stays ready for whatever comes next."
+        />
+      }
     >
       <section
         className={`${styles.chapter} ${styles.capabilityChapter}`}

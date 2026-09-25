@@ -3,15 +3,16 @@ import type { Metadata } from "next";
 import { Footer, Header } from "@/components/Chrome";
 import { ConnectionBanner } from "@/components/ConnectionBanner";
 import { LandingExperience } from "@/components/LandingExperience";
+import { LaunchFilm } from "@/components/LaunchFilm";
 import { MuseConnection } from "@/components/MuseConnection";
-import { AIR_PRODUCT_DESCRIPTION, AIR_TAGLINE } from "@/lib/air-copy";
+import { AIR_HERO_TITLE, AIR_PRODUCT_DESCRIPTION } from "@/lib/air-copy";
 
 export const metadata: Metadata = {
-  title: "Air by WZRD | Your personal assistant for your work",
+  title: `Air by WZRD | ${AIR_HERO_TITLE}`,
   description: AIR_PRODUCT_DESCRIPTION,
   alternates: { canonical: "/" },
   openGraph: {
-    title: `Air — ${AIR_TAGLINE}`,
+    title: `Air — ${AIR_HERO_TITLE}`,
     description: AIR_PRODUCT_DESCRIPTION,
     url: "/",
   },
@@ -23,7 +24,7 @@ const structuredData = [
     "@type": "WebSite",
     name: "Air by WZRD",
     url: "https://air.wzrd.tech",
-    description: `Air is ${AIR_TAGLINE.toLowerCase()}`,
+    description: `Air is ${AIR_HERO_TITLE.toLowerCase()}`,
     publisher: { "@id": "https://air.wzrd.tech/#organization" },
   },
   {
@@ -40,7 +41,7 @@ const structuredData = [
     applicationCategory: "ProductivityApplication",
     operatingSystem: "Ubuntu",
     url: "https://air.wzrd.tech",
-    description: `A ${AIR_TAGLINE.toLowerCase()} ${AIR_PRODUCT_DESCRIPTION}`,
+    description: `${AIR_HERO_TITLE}. ${AIR_PRODUCT_DESCRIPTION}`,
     featureList: [
       "Persistent managed Ubuntu workspace",
       "Context continuity across iMessage and web",
@@ -63,6 +64,7 @@ export default function Home() {
       <ConnectionBanner />
       <LandingExperience />
       <MuseConnection />
+      <LaunchFilm />
       <Footer />
     </>
   );
