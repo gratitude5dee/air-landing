@@ -13,6 +13,7 @@ type DetailPageShellProps = {
   eyebrow: string;
   title: string;
   description: string;
+  heroMedia?: ReactNode;
   children: ReactNode;
 };
 
@@ -28,6 +29,7 @@ export function DetailPageShell({
   eyebrow,
   title,
   description,
+  heroMedia,
   children,
 }: DetailPageShellProps) {
   const route = routes.find((item) => item.key === current) ?? routes[0];
@@ -47,21 +49,26 @@ export function DetailPageShell({
         >
           <div className={styles.heroHorizon} aria-hidden />
           <div className={styles.heroGrid} aria-hidden />
-          <div className={`shell ${styles.heroInner}`}>
+          <div className={`shell ${styles.heroInner}${heroMedia ? ` ${styles.heroInnerWithMedia}` : ""}`}>
             <div className={styles.heroRail}>
               <span>Air / WZRD.tech</span>
               <span>{route.number} / 03 · {route.label}</span>
             </div>
-            <p className="eyebrow">{eyebrow}</p>
-            <h1 id="detail-page-title">{title}</h1>
-            <p className={styles.heroDescription}>{description}</p>
-            <div className={styles.heroActions}>
-              <PreorderButton />
-              <a className={styles.jumpLink} href="#page-story">
-                Explore the proof <span aria-hidden>↓</span>
-              </a>
+            <div className={styles.heroContent}>
+              <div className={styles.heroCopy}>
+                <p className="eyebrow">{eyebrow}</p>
+                <h1 id="detail-page-title">{title}</h1>
+                <p className={styles.heroDescription}>{description}</p>
+                <div className={styles.heroActions}>
+                  <PreorderButton />
+                  <a className={styles.jumpLink} href="#page-story">
+                    Explore the proof <span aria-hidden>↓</span>
+                  </a>
+                </div>
+                <p className={styles.heroFootnote}>Private beta · availability labeled · approval stays in the loop</p>
+              </div>
+              {heroMedia && <div className={styles.heroMedia}>{heroMedia}</div>}
             </div>
-            <p className={styles.heroFootnote}>Private beta · availability labeled · approval stays in the loop</p>
           </div>
         </section>
 

@@ -1,5 +1,6 @@
 /** The product promise is intentionally shared by the hero, metadata, and JSON-LD. */
 export const AIR_TAGLINE = "Your personal assistant for your work";
+export const AIR_HERO_TITLE = "Your personal creative assistant";
 
 /** Intentional hero line breaks that preserve the canonical tagline. */
 export const AIR_TAGLINE_LINES = [

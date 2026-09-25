@@ -58,6 +58,17 @@
   margin-inline: auto;
 }
 
+.heroInnerWithMedia { width: min(100% - 2.5rem, 86rem); }
+.heroInnerWithMedia .heroRail { max-width: none; }
+.heroInnerWithMedia .heroContent {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  align-items: center;
+  gap: clamp(2rem, 4vw, 4.5rem);
+}
+.heroMedia { min-width: 0; }
+.heroMedia figure { width: 100%; margin: 0; }
+
 .heroRail,
 .rail,
 .artifactHeader,
@@ -103,6 +114,8 @@
   font-size: clamp(3.6rem, 7.1vw, 7.1rem);
   line-height: 0.88;
 }
+
+.heroInnerWithMedia h1 { font-size: clamp(3.5rem, 5.1vw, 5.7rem); }
 
 .heroDescription {
   max-width: 45rem;
@@ -1060,6 +1073,8 @@
 
 @media (max-width: 900px) {
   .hero { min-height: 43rem; padding-top: 9.4rem; }
+  .heroInnerWithMedia .heroContent { grid-template-columns: 1fr; }
+  .heroInnerWithMedia .heroMedia { width: min(100%, 46rem); }
   .chapterHeading,
   .editorialCallout > :global(.shell),
   .ctaInner { grid-template-columns: 1fr; }
@@ -1087,6 +1102,9 @@
 @media (max-width: 680px) {
   .hero { min-height: 39rem; padding-top: 8.4rem; }
   .heroInner h1 { font-size: clamp(3.15rem, 13.4vw, 4.8rem); }
+  .heroInnerWithMedia h1 { font-size: clamp(3.15rem, 13.4vw, 4.8rem); }
+  .heroInnerWithMedia .heroContent { gap: 2.25rem; }
+  .heroMedia figure { aspect-ratio: 16 / 9; }
   .heroRail { align-items: flex-start; flex-direction: column; gap: 0.45rem; }
   .heroActions,
   .heroActions :global(.button) { width: 100%; }

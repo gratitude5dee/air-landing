@@ -62,6 +62,10 @@
 .actions > a { min-height: 3rem; display: inline-flex; align-items: center; gap: .4rem; color: #0a2739; font-family: var(--font-mono); font-size: .66rem; letter-spacing: .08em; text-transform: uppercase; }
 .actions > a svg { width: .9rem; }
 .actions > a:hover { text-decoration: underline; text-underline-offset: .35rem; }
+.productHuntBadge { display: inline-flex; width: min(250px, 100%); margin-top: 1.3rem; border-radius: .45rem; transition: transform .2s ease, filter .2s ease; }
+.productHuntBadge img { display: block; width: 100%; height: auto; }
+.productHuntBadge:hover { transform: translateY(-2px); filter: drop-shadow(0 5px 10px rgba(8, 28, 40, .13)); }
+.productHuntBadge:focus-visible { outline: 2px solid #082b60; outline-offset: 4px; }
 
 .scrollCue { position: absolute; z-index: 10; left: max(1.25rem,4vw); bottom: 1.6rem; display: inline-flex; align-items: center; gap: .45rem; color: rgba(8,28,40,.7); font-family: var(--font-mono); font-size: .56rem; letter-spacing: .1em; text-transform: uppercase; }
 
@@ -89,6 +93,7 @@
   .heroCopy h1 { max-width: 11ch; margin-inline: auto; font-size: clamp(3rem, 12vw, 5rem); }
   .heroCopy > p:not(.eyebrow) { margin-inline: auto; }
   .actions { justify-content: center; flex-wrap: wrap; }
+  .productHuntBadge { margin-inline: auto; }
   .scrollCue { display: none; }
   .benefitsIntro { grid-template-columns: 1fr; }
   .storyRail { align-items:flex-start; flex-direction:column; }

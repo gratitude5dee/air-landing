@@ -11,7 +11,7 @@ import { AppOrbPlayground } from "@/components/AppOrbPlayground";
 import { MiniAppShowcase } from "@/components/MiniAppShowcase";
 import { MobileAirIntro } from "@/components/MobileAirIntro";
 import { VaultReveal } from "@/components/VaultReveal";
-import { AIR_PRODUCT_DESCRIPTION, AIR_TAGLINE } from "@/lib/air-copy";
+import { AIR_HERO_TITLE, AIR_PRODUCT_DESCRIPTION } from "@/lib/air-copy";
 import styles from "./LandingExperience.module.css";
 
 const LEGACY_HASHES = new Set([
@@ -91,12 +91,25 @@ export function LandingExperience() {
         <div className={styles.sceneWrap}>
           <div className={styles.heroCopy}>
             <p className={styles.eyebrow}>AIR BY WZRD.TECH · PRIVATE BETA</p>
-            <h1 id="landing-title">{AIR_TAGLINE}</h1>
+            <h1 id="landing-title">{AIR_HERO_TITLE}</h1>
             <p>{AIR_PRODUCT_DESCRIPTION}</p>
             <div className={styles.actions}>
               <PreorderPlasmaButton label="Try Air for free" />
               <Link href="/how-it-works">See how it works <LuArrowUpRight aria-hidden /></Link>
             </div>
+            <a
+              className={styles.productHuntBadge}
+              href="https://www.producthunt.com/products/air-by-wzrd-tech?embed=true&utm_source=badge-featured&utm_medium=badge&utm_campaign=badge-air-by-wzrd-tech"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img
+                alt="air by WZRD.tech - your personal creative assistant | Product Hunt"
+                width="250"
+                height="54"
+                src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1260479&theme=light&t=1790346847861"
+              />
+            </a>
           </div>
         </div>
         <a className={styles.scrollCue} href="https://avatar.wzrd.tech">Play the Air mini-game <LuArrowUpRight aria-hidden /></a>

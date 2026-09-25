@@ -10,7 +10,7 @@ const contentSecurityPolicy = [
   // keeps hydration functional without opening any third-party script origin.
   "script-src 'self' 'unsafe-inline'",
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' blob: data:",
+  "img-src 'self' https://api.producthunt.com blob: data:",
   "font-src 'self' data:",
   "media-src 'self'",
   "connect-src 'self' https://vitals.vercel-insights.com",
