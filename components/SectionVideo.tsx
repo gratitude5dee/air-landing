@@ -35,39 +35,47 @@ export function SectionVideo({
   };
 
   return (
-    <figure className={`${styles.frame}${className ? ` ${className}` : ""}`}>
-      <video
-        ref={videoRef}
-        className={styles.video}
-        poster={poster}
-        preload="none"
-        playsInline
-        controls={hasStarted}
-        aria-label={`${title}. ${description}`}
-        onPlay={() => setHasStarted(true)}
-      >
-        <source media="(max-width: 640px)" src={mobileSrc} type="video/mp4" />
-        <source src={desktopSrc} type="video/mp4" />
-      </video>
+    <figure
+      className={`${styles.frame}${className ? ` ${className}` : ""}`}
+      data-playing={hasStarted}
+    >
+      <div className={styles.stage}>
+        <video
+          ref={videoRef}
+          className={styles.video}
+          poster={poster}
+          preload="none"
+          playsInline
+          controls={hasStarted}
+          aria-label={`${title}. ${description}`}
+          onPlay={() => setHasStarted(true)}
+        >
+          <source media="(max-width: 640px)" src={mobileSrc} type="video/mp4" />
+          <source src={desktopSrc} type="video/mp4" />
+        </video>
+
+        {!hasStarted && (
+          <>
+            <div className={styles.veil} aria-hidden="true" />
+            <button
+              className={styles.control}
+              type="button"
+              onClick={startPlayback}
+              aria-label={`Play ${title}`}
+            >
+              <LuPlay aria-hidden />
+              <span>Play film</span>
+            </button>
+          </>
+        )}
+      </div>
 
       {!hasStarted && (
-        <>
-          <div className={styles.veil} aria-hidden="true" />
-          <figcaption className={styles.caption}>
-            <span>{kicker}</span>
-            <strong>{title}</strong>
-            <p>{description}</p>
-          </figcaption>
-          <button
-            className={styles.control}
-            type="button"
-            onClick={startPlayback}
-            aria-label={`Play ${title}`}
-          >
-            <LuPlay aria-hidden />
-            <span>Play film</span>
-          </button>
-        </>
+        <figcaption className={styles.caption}>
+          <span>{kicker}</span>
+          <strong>{title}</strong>
+          <p>{description}</p>
+        </figcaption>
       )}
     </figure>
   );

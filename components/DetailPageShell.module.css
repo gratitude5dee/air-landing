@@ -1104,7 +1104,6 @@
   .heroInner h1 { font-size: clamp(3.15rem, 13.4vw, 4.8rem); }
   .heroInnerWithMedia h1 { font-size: clamp(3.15rem, 13.4vw, 4.8rem); }
   .heroInnerWithMedia .heroContent { gap: 2.25rem; }
-  .heroMedia figure { aspect-ratio: 16 / 9; }
   .heroRail { align-items: flex-start; flex-direction: column; gap: 0.45rem; }
   .heroActions,
   .heroActions :global(.button) { width: 100%; }

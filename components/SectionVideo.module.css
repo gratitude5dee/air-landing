@@ -14,7 +14,14 @@
   isolation: isolate;
 }
 
-.frame::before {
+.stage {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+}
+
+.stage::before {
   content: "";
   position: absolute;
   inset: 0;
@@ -111,15 +118,35 @@
 
 @media (max-width: 640px) {
   .frame {
-    aspect-ratio: 4 / 5;
+    display: flex;
+    flex-direction: column;
+    aspect-ratio: auto;
     margin-bottom: 3.5rem;
     border-radius: 1.4rem;
   }
 
-  .video { object-fit: contain; }
-  .caption { bottom: 1.2rem; }
-  .caption strong { max-width: 11ch; }
-  .caption p { max-width: 25rem; font-size: 0.76rem; }
+  .frame[data-playing="true"] { aspect-ratio: 16 / 9; }
+
+  .stage {
+    position: relative;
+    flex: none;
+    aspect-ratio: 16 / 9;
+    border-radius: 1.3rem 1.3rem 0 0;
+  }
+
+  .video { object-fit: cover; }
+
+  .caption {
+    position: relative;
+    inset: auto;
+    flex: 1;
+    max-width: none;
+    padding: 1rem 1.15rem 1.1rem;
+    background: #071421;
+  }
+
+  .caption strong { max-width: none; margin-top: 0.35rem; font-size: 1.35rem; }
+  .caption p { max-width: 34rem; margin-top: 0.4rem; font-size: 0.76rem; }
   .control span { display: none; }
   .control { width: 2.75rem; justify-content: center; padding: 0; }
 }
