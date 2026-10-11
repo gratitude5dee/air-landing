@@ -7,3 +7,7 @@ node_modules
 npm-debug.log*
 .DS_Store
 *.tsbuildinfo
+
+# OpenNext / Wrangler
+.open-next
+.wrangler
