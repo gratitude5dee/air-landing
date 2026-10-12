@@ -72,6 +72,14 @@ export const docPages: readonly DocPage[] = [
     section: "channels",
   },
   {
+    slug: "create",
+    file: "create",
+    href: "/docs/create",
+    title: "Air Create",
+    summary: "Build your own mini-apps — from a prompt, a file, or a GitHub repo — and publish them to the store.",
+    section: "channels",
+  },
+  {
     slug: "faq",
     file: "faq",
     href: "/docs/faq",
